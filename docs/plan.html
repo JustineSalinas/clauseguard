@@ -274,6 +274,50 @@ td strong{font-weight:600}
 .task-title{font-size:.9375rem;font-weight:600;line-height:1.4}
 .task-why{font-size:.8125rem;color:var(--slate);max-width:70ch}
 
+/* ---------- figure / diagram ---------- */
+.figure{margin:0;display:flex;flex-direction:column;gap:.75rem}
+.figwrap{
+  overflow-x:auto;background:var(--surface);
+  border:1px solid var(--rule);border-radius:3px;padding:1.25rem 1rem;
+}
+.figwrap svg{display:block;width:100%;min-width:34rem;max-width:100%;height:auto;color:var(--ink)}
+figcaption{
+  font-size:.8125rem;color:var(--slate);max-width:70ch;
+  font-family:Spectral,Georgia,serif;font-style:italic;line-height:1.5;
+}
+.d-node rect{fill:var(--surface);stroke:var(--rule-strong);stroke-width:1.25}
+.d-stage rect{fill:var(--surface-2)}
+.d-reject rect{stroke:var(--slate-soft);stroke-dasharray:4 3}
+.d-low rect{fill:var(--low-bg);stroke:var(--low)}
+.d-med rect{fill:var(--med-bg);stroke:var(--med)}
+.d-high rect{fill:var(--high-bg);stroke:var(--high)}
+.d-container{fill:none;stroke:var(--rule-strong);stroke-width:1;stroke-dasharray:5 4}
+.d-t{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:13px;font-weight:600;
+  fill:var(--ink);text-anchor:middle;
+}
+.d-low .d-t{fill:var(--low)}
+.d-med .d-t{fill:var(--med)}
+.d-high .d-t{fill:var(--high)}
+.d-s{
+  font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:10.5px;
+  fill:var(--slate);text-anchor:middle;
+}
+.d-e{stroke:var(--slate);stroke-width:1.25;fill:none;color:var(--slate)}
+.d-lbl{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.04em;
+  fill:var(--slate-soft);text-anchor:middle;
+}
+.d-band{
+  font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+  fill:var(--slate-soft);
+}
+.d-live{stroke:var(--oxblood);stroke-width:1.5;fill:none;stroke-dasharray:6 4;color:var(--oxblood)}
+.d-livelbl{
+  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.05em;
+  fill:var(--oxblood);text-anchor:middle;
+}
+
 /* ---------- schema ---------- */
 pre{
   margin:0;padding:1rem 1.125rem;overflow-x:auto;
@@ -332,12 +376,13 @@ footer{
     <a href="#blocker"><span class="n">00</span>Blocker</a>
     <a href="#team"><span class="n">01</span>Team</a>
     <a href="#objectives"><span class="n">02</span>Objectives</a>
-    <a href="#week"><span class="n">03</span>The week</a>
-    <a href="#risks"><span class="n">04</span>Risk register</a>
-    <a href="#findings"><span class="n">05</span>Key findings</a>
-    <a href="#schema"><span class="n">06</span>Schema</a>
-    <a href="#tasks"><span class="n">07</span>Tasks</a>
-    <a href="#open"><span class="n">08</span>Open</a>
+    <a href="#flow"><span class="n">03</span>User flow</a>
+    <a href="#week"><span class="n">04</span>The week</a>
+    <a href="#risks"><span class="n">05</span>Risk register</a>
+    <a href="#findings"><span class="n">06</span>Key findings</a>
+    <a href="#schema"><span class="n">07</span>Schema</a>
+    <a href="#tasks"><span class="n">08</span>Tasks</a>
+    <a href="#open"><span class="n">09</span>Open</a>
   </nav>
 
   <main>
@@ -422,9 +467,140 @@ footer{
       </div>
     </section>
 
-    <section id="week">
+    <section id="flow">
       <div class="sec-head">
         <p class="eyebrow">03</p>
+        <h2>User flow</h2>
+        <p class="lede">One contract, end to end. The two things worth reading off the drawing: a clause has three possible fates rather than one, and results fill in as stages complete instead of arriving as a single response.</p>
+      </div>
+
+      <figure class="figure">
+        <div class="figwrap">
+        <svg viewBox="0 0 880 700" role="img" aria-label="ClauseGuard user flow. A user uploads a contract, which is validated and either rejected for being encrypted, unreadable, or oversized, or passed to the server pipeline. The pipeline runs four stages in order: extract, segment, ground, and score. Each clause then reaches one of three outcomes: scored with a confidence value, routed to human review when confidence is low, or marked unanalyzed after a model refusal, parse error, or safety block. All three outcomes converge on the results screen, which is updated live by Supabase Realtime as each stage completes rather than after the pipeline finishes.">
+          <defs>
+            <marker id="cg-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+            <marker id="cg-live" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--oxblood)"/>
+            </marker>
+          </defs>
+
+          <g class="d-node">
+            <rect x="230" y="28" width="220" height="48" rx="3"/>
+            <text class="d-t" x="340" y="49">Upload contract</text>
+            <text class="d-s" x="340" y="65">PDF, DOCX, or scanned image</text>
+          </g>
+          <line class="d-e" x1="340" y1="76" x2="340" y2="106" marker-end="url(#cg-a)"/>
+
+          <g class="d-node">
+            <rect x="230" y="112" width="220" height="48" rx="3"/>
+            <text class="d-t" x="340" y="133">Validate</text>
+            <text class="d-s" x="340" y="149">before any job is created</text>
+          </g>
+
+          <line class="d-e" x1="450" y1="136" x2="539" y2="136" marker-end="url(#cg-a)"/>
+          <text class="d-lbl" x="494" y="128">rejects</text>
+          <g class="d-node d-reject">
+            <rect x="545" y="105" width="300" height="62" rx="3"/>
+            <text class="d-t" x="695" y="130">Rejected at upload</text>
+            <text class="d-s" x="695" y="147">encrypted &middot; no readable text &middot; oversized</text>
+            <text class="d-s" x="695" y="160">user gets the fix, not an error code</text>
+          </g>
+
+          <line class="d-e" x1="340" y1="160" x2="340" y2="194" marker-end="url(#cg-a)"/>
+
+          <text class="d-band" x="150" y="192">SERVER PIPELINE</text>
+          <rect class="d-container" x="150" y="200" width="380" height="250" rx="4"/>
+
+          <g class="d-node d-stage">
+            <rect x="178" y="216" width="324" height="44" rx="3"/>
+            <text class="d-t" x="340" y="235">Extract</text>
+            <text class="d-s" x="340" y="250">tokens + bounding boxes + page geometry</text>
+          </g>
+          <line class="d-e" x1="340" y1="260" x2="340" y2="266" marker-end="url(#cg-a)"/>
+
+          <g class="d-node d-stage">
+            <rect x="178" y="272" width="324" height="44" rx="3"/>
+            <text class="d-t" x="340" y="291">Segment</text>
+            <text class="d-s" x="340" y="306">clause spans + clause_type</text>
+          </g>
+          <line class="d-e" x1="340" y1="316" x2="340" y2="322" marker-end="url(#cg-a)"/>
+
+          <g class="d-node d-stage">
+            <rect x="178" y="328" width="324" height="44" rx="3"/>
+            <text class="d-t" x="340" y="347">Ground</text>
+            <text class="d-s" x="340" y="362">arm: none | static | rag</text>
+          </g>
+          <line class="d-e" x1="340" y1="372" x2="340" y2="378" marker-end="url(#cg-a)"/>
+
+          <g class="d-node d-stage">
+            <rect x="178" y="384" width="324" height="44" rx="3"/>
+            <text class="d-t" x="340" y="403">Score</text>
+            <text class="d-s" x="340" y="418">batched, 5&ndash;10 clauses per call</text>
+          </g>
+
+          <line class="d-e" x1="340" y1="428" x2="340" y2="478"/>
+          <line class="d-e" x1="145" y1="478" x2="705" y2="478"/>
+          <text class="d-lbl" x="352" y="470">every clause lands in exactly one</text>
+          <line class="d-e" x1="145" y1="478" x2="145" y2="504" marker-end="url(#cg-a)"/>
+          <line class="d-e" x1="425" y1="478" x2="425" y2="504" marker-end="url(#cg-a)"/>
+          <line class="d-e" x1="705" y1="478" x2="705" y2="504" marker-end="url(#cg-a)"/>
+
+          <g class="d-node d-low">
+            <rect x="20" y="510" width="250" height="64" rx="3"/>
+            <text class="d-t" x="145" y="534">Scored</text>
+            <text class="d-s" x="145" y="550">risk level + confidence</text>
+            <text class="d-s" x="145" y="564">+ statute citation</text>
+          </g>
+          <g class="d-node d-med">
+            <rect x="300" y="510" width="250" height="64" rx="3"/>
+            <text class="d-t" x="425" y="534">Human review</text>
+            <text class="d-s" x="425" y="550">confidence below threshold</text>
+            <text class="d-s" x="425" y="564">never a silent score</text>
+          </g>
+          <g class="d-node d-high">
+            <rect x="580" y="510" width="250" height="64" rx="3"/>
+            <text class="d-t" x="705" y="534">Unanalyzed</text>
+            <text class="d-s" x="705" y="550">refusal &middot; parse error</text>
+            <text class="d-s" x="705" y="564">safety block &middot; counted per model</text>
+          </g>
+
+          <line class="d-e" x1="145" y1="574" x2="145" y2="600"/>
+          <line class="d-e" x1="425" y1="574" x2="425" y2="600"/>
+          <line class="d-e" x1="705" y1="574" x2="705" y2="600"/>
+          <line class="d-e" x1="145" y1="600" x2="705" y2="600"/>
+          <line class="d-e" x1="425" y1="600" x2="425" y2="624" marker-end="url(#cg-a)"/>
+
+          <g class="d-node">
+            <rect x="205" y="630" width="440" height="56" rx="3"/>
+            <text class="d-t" x="425" y="653">Results screen</text>
+            <text class="d-s" x="425" y="670">document risk &middot; clauses by severity &middot; heat-map overlay</text>
+          </g>
+
+          <path class="d-live" d="M530,325 H825 Q845,325 845,345 V638 Q845,658 825,658 H651" marker-end="url(#cg-live)"/>
+          <text class="d-livelbl" x="862" y="490" transform="rotate(-90 862 490)">Realtime &mdash; fills in per stage</text>
+        </svg>
+        </div>
+        <figcaption>Every clause reaches exactly one of three outcomes, and the results screen is written to as each stage completes rather than after the pipeline finishes.</figcaption>
+      </figure>
+
+      <div class="stack">
+        <div class="callout med">
+          <h3>Why the three-way fan is the whole design</h3>
+          <p>A pipeline that only produces scores has to treat a model refusal as a crash. This one does not. <strong>Unanalyzed is a clause at maximum uncertainty</strong>, so it routes down the same path Objective 2 already built for low confidence. One mechanism serves both, the user sees &ldquo;could not analyze&rdquo; instead of a blank cell, and the unanalyzed count becomes a per-model statistic that goes straight into the ablation table.</p>
+          <p>It is also why <code>partial</code> is a real document state. Eighteen of twenty clauses scored is a result worth showing, not a failed job.</p>
+        </div>
+        <div class="callout">
+          <h3>Why the flow loops back instead of ending</h3>
+          <p>The red path is Supabase Realtime. The user is not waiting on a response; they are watching a screen that fills in as extract, segment, ground, and score each commit their rows. Navigating away does not cancel anything, and returning resumes mid-pipeline because the state lives in Postgres rather than in the request.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="week">
+      <div class="sec-head">
+        <p class="eyebrow">04</p>
         <h2>The week</h2>
         <p class="lede">Each day ends on a gate. If a gate does not close, the following day is renegotiated rather than silently absorbed. Filter to see only your own work.</p>
       </div>
@@ -539,7 +715,7 @@ footer{
 
     <section id="risks">
       <div class="sec-head">
-        <p class="eyebrow">04</p>
+        <p class="eyebrow">05</p>
         <h2>Risk register</h2>
         <p class="lede">Each risk is tied to the day it becomes unrecoverable, not the day it is noticed.</p>
       </div>
@@ -560,7 +736,7 @@ footer{
 
     <section id="findings">
       <div class="sec-head">
-        <p class="eyebrow">05</p>
+        <p class="eyebrow">06</p>
         <h2>Key findings from the review</h2>
         <p class="lede">Four findings that change what gets built, in order of consequence.</p>
       </div>
@@ -595,7 +771,7 @@ footer{
 
     <section id="schema">
       <div class="sec-head">
-        <p class="eyebrow">06</p>
+        <p class="eyebrow">07</p>
         <h2>Evaluation schema</h2>
         <p class="lede">Day 1 deliverable. Freeze it before annotation begins.</p>
       </div>
@@ -624,7 +800,7 @@ footer{
 
     <section id="tasks">
       <div class="sec-head">
-        <p class="eyebrow">07</p>
+        <p class="eyebrow">08</p>
         <h2>Task list</h2>
         <p class="lede">Fifteen tasks derived from specific review findings. P1 blocks the week; P2 should land inside it; P3 is a follow-up.</p>
       </div>
@@ -710,7 +886,7 @@ footer{
 
     <section id="open">
       <div class="sec-head">
-        <p class="eyebrow">08</p>
+        <p class="eyebrow">09</p>
         <h2>Still open</h2>
       </div>
       <div class="stack">
