@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+/* Tailwind v4: @theme must be top level. Dark values are plain custom-property
+   overrides below, which is what keeps the generated utilities intact. */
+@theme {
+  --color-paper: #f5f6f2;
+  --color-surface: #ffffff;
+  --color-raised: #eef1ea;
+  --color-ink: #14201b;
+  --color-ink-2: #4a5a52;
+  --color-ink-3: #7c8a82;
+  --color-rule: #dde2da;
+  --color-rule-2: #c5cec1;
+
+  --color-flag: #bc3a28;
+  --color-flag-wash: #f7e3df;
+  --color-caution: #a8721a;
+  --color-caution-wash: #f6ecd9;
+  --color-clear: #2c6a4f;
+  --color-clear-wash: #dfede5;
+
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-instrument-sans), system-ui, -apple-system, sans-serif;
+  --font-contract: var(--font-tinos), "Times New Roman", Times, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #0f1613;
+    --color-surface: #17201c;
+    --color-raised: #1e2823;
+    --color-ink: #eaede6;
+    --color-ink-2: #a3b0a8;
+    --color-ink-3: #6f7c74;
+    --color-rule: #26312b;
+    --color-rule-2: #35423b;
+
+    --color-flag: #e8806e;
+    --color-flag-wash: #2f1d18;
+    --color-caution: #d9a85c;
+    --color-caution-wash: #2b2317;
+    --color-clear: #6fbf9b;
+    --color-clear-wash: #16281f;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-flag);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-flag);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---- the markup effect: a highlighter drawn left to right ----
+   Text stays ink-coloured, the way a real highlighter works. The wash and the
+   rule underneath carry the signal, so the clause still reads as a document. */
+.mark {
+  padding: 0.05em 0.1em;
+  background-image: linear-gradient(
+    var(--color-flag-wash),
+    var(--color-flag-wash)
+  );
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 0% 100%;
+  box-shadow: inset 0 -2px 0 0 transparent;
+  color: var(--color-ink);
+}
+
+.seq .mark {
+  animation: draw 460ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.seq .mark-1 {
+  animation-delay: 520ms;
+}
+.seq .mark-2 {
+  animation-delay: 840ms;
+}
+
+@keyframes draw {
+  to {
+    background-size: 100% 100%;
+    box-shadow: inset 0 -2px 0 0 var(--color-flag);
+  }
+}
+
+.seq .rise {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: rise 520ms cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+.seq .rise-doc {
+  animation-delay: 60ms;
+}
+.seq .rise-note {
+  animation-delay: 1180ms;
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .seq .mark {
+    animation: none;
+    background-size: 100% 100%;
+    box-shadow: inset 0 -2px 0 0 var(--color-flag);
+  }
+  .seq .rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

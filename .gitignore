@@ -72,3 +72,6 @@ __pycache__/
 .venv/
 venv/
 .ipynb_checkpoints/
+
+# playwright mcp scratch
+.playwright-mcp/
