@@ -166,113 +166,171 @@ instead of being assembled by hand at the end. Pipeline-first looks faster for
 three weeks and then costs four, because accuracy numbers arrive too late to
 react to.
 
-## ONE WEEK TIMELINE (authoritative schedule)
+## TWO WEEK TIMELINE (authoritative schedule)
 
-Seven working days, three people. This supersedes the phase structure below,
-which is kept as the reasoning behind the ordering.
+Revised from one week. Fourteen days, three people. This supersedes the phase
+structure below, which is kept as the reasoning behind the ordering.
 
-### What genuinely does not compress
+The extra week is not slack. It goes to the three things a one-week plan was
+quietly under-resourcing: annotation, retrieval, and the usability study.
 
-**Objective 5 depends on other people's calendars.** Usability sessions need
-participants recruited on Day 1 to run on Day 7. If the institution requires
-ethics review for human subjects, that lead time is measured in weeks and no
-amount of engineering speed fixes it. Salinas resolves this on Day 1 before
-anything else. If review is required, Objective 5 moves outside the week and
-the adviser is told immediately.
+| What one week forced | What two weeks allows |
+|---|---|
+| Annotation compressed into a single team day | Two days, with agreement measured rather than assumed |
+| RAG built and evaluated in one sitting | A day to build retrieval, a day to evaluate it |
+| Usability sessions on the final day, unrehearsed | Protocol drafted in week 1, sessions on day 12, analysis on day 13 |
+| No recovery room | Day 7 and day 14 are deliberate buffer |
 
-**Annotation is the tightest engineering constraint.** Day 3 is a full-team
-annotation day. Using CUAD for the classification baseline is what makes this
-survivable; only the Philippine subset is hand-annotated, and it stays small.
-Two annotators per clause minimum, or Cohen's kappa is not computable.
+### What still does not compress
+
+**Objective 5 depends on other people's calendars.** Two weeks helps, but if the
+institution requires ethics review for human subjects, the lead time is measured
+in weeks and no schedule fixes it. Salinas resolves this on Day 1. Participants
+are recruited in week 1 and confirmed on Day 10, not on Day 12.
+
+## Week 1 — foundation and measurement
 
 ### Day 1 — Foundations
 
 | Owner | Work |
 |---|---|
-| Salinas | Confirm ethics requirement. Recruit 5 usability participants for Day 7. Design the evaluation schema (T1): documents, extractions, clauses, ground_truth_labels, scoring_runs, clause_scores. Define the clause taxonomy. |
-| Navarro | OCR spike (T3). Pick an engine that returns per-token bounding boxes and page geometry. Build the upload route. |
-| Zallen | Supabase and Vercel projects. Auth. RLS policies plus guard triggers (T4). Private storage buckets with signed URLs. CI skeleton. |
+| Salinas | Confirm the ethics requirement. Begin recruiting five usability participants. Design the evaluation schema: documents, extractions, clauses, ground_truth_labels, scoring_runs, clause_scores. Define the clause taxonomy. |
+| Navarro | OCR spike. Pick an engine that returns per-token bounding boxes and page geometry. Build the upload route. |
+| Zallen | Supabase and Vercel projects. RLS policies plus guard triggers. Private storage buckets with signed URLs. CI skeleton. |
 
-Gate: schema merged before anyone writes a pipeline stage. Everything downstream
-keys off it.
+Gate: schema merged before anyone writes a pipeline stage.
 
 ### Day 2 — Walking skeleton
 
 | Owner | Work |
 |---|---|
-| Salinas | Risk scoring stage. Prompt v1 in a versioned file. Model config module keyed by stage, so a model swap is a config change. |
+| Salinas | Risk scoring stage. Prompt v1 in a versioned file. Model config keyed by stage. |
 | Navarro | Extraction stage, then segmentation stage. Document state machine with guarded transitions. |
-| Zallen | Cross-tenant enumeration suite in CI (T5). Per-call observability logging (T6): model, prompt_version, grounding_arm, tokens, latency, outcome. |
+| Zallen | Cross-tenant enumeration suite in CI. Per-call observability logging: model, prompt_version, grounding_arm, tokens, latency, outcome. |
 
-Gate: one contract goes upload to crude score end to end. Crude is fine. It
-exists to be measured.
+Gate: one contract goes upload to crude score, end to end.
 
-### Day 3 — Ground truth (full team)
+### Day 3 — Auth and harness
 
 | Owner | Work |
 |---|---|
 | Salinas | Evaluation harness: run a corpus under a config, write scoring_run and clause_scores. |
+| Navarro | Auth screens wired to Supabase. Email, password, Google. Email verification. |
+| Zallen | Pre-provision the five participant accounts now, not on Day 12. Verify RLS holds for a real signed-in user. |
+
+Gate: a real account can upload a document and see a crude result.
+
+### Days 4 and 5 — Ground truth
+
+| Owner | Work |
+|---|---|
 | Navarro | CUAD subset ingestion, mapped onto the taxonomy. |
 | Zallen | Two-annotator flow and Cohen's kappa computation. |
-| All three | Annotate the Philippine subset. This is the bottleneck; protect the day. |
+| All three | Annotate the Philippine subset across both days. |
+| Salinas | Draft the usability protocol and instrument (SUS plus a TAM-derived construct) in parallel. |
 
 Gate: harness produces a full scoring_run over the eval set, and kappa is
-reportable.
+reportable. Two days here is the single biggest gain from the extra week.
 
-### Day 4 — Objectives 1 and 2
-
-| Owner | Work |
-|---|---|
-| Navarro | Bounding box mapping and heatmap overlay (Objective 1). List-view fallback (T12). |
-| Salinas | Confidence field in prompt and schema, human-review routing, calibration correlation query (Objective 2). |
-| Zallen | Low-confidence visual treatment (T13). Stalled-stage sweeper (T11). |
-
-Gate: Objectives 1 and 2 demonstrable and measured. The UI must be stable enough
-to put in front of a stranger on Day 7.
-
-### Day 5 — Objective 4 (grounding)
+### Day 6 — Objectives 1 and 2
 
 | Owner | Work |
 |---|---|
-| Salinas | Static provision mapping, ARM 2 (T8). Clause type to 2-4 Civil Code / Labor Code provisions. |
-| Navarro | Provision corpus embedding, pgvector index, retrieval path, ARM 3. |
-| Zallen | Build the adversarial injection suite (T10). |
+| Navarro | Bounding box mapping and heat-map overlay. List-view fallback. |
+| Salinas | Confidence field, human-review routing, calibration correlation query. |
+| Zallen | Low-confidence visual treatment. Stalled-stage sweeper. |
 
-Gate: all three grounding arms runnable from config. ARM 2 banked, so a slip in
-ARM 3 degrades the finding rather than missing the objective.
+Gate: Objectives 1 and 2 demonstrable and measured.
 
-### Day 6 — Objective 3 (ablation) and robustness
+### Day 7 — Buffer
 
-| Owner | Work |
-|---|---|
-| Navarro | Batched scoring, 5-10 clauses per call (T9). Execute 3 models x 3 arms. |
-| Salinas | Results queries. Accuracy, cost, and latency organized per pipeline stage, not per model. |
-| Zallen | Run the injection suite across all three models. Susceptibility becomes a fourth ablation column. |
+Deliberate slack. If days 1 to 6 held, use it to extract components properly and
+harden the results screen before strangers see it on Day 12. If they slipped,
+this is where you catch up. Do not fill it with new scope.
 
-Gate: the ablation table exists with real numbers. This is the single strongest
-artifact for the award.
+## Week 2 — the objectives that need room
 
-### Day 7 — Objective 5 and defense readiness
+### Day 8 — Provision corpus and static grounding
 
 | Owner | Work |
 |---|---|
-| Salinas | Run usability sessions. SUS plus a TAM-derived construct. Analyze. |
-| Zallen | Pre-score the demo corpus. Record the walkthrough (T14). Freeze the deployment. |
-| Navarro | Bug fixes and polish against what Day 7 sessions surface. |
-| All three | Results writeup. Rehearse the pipeline walkthrough; every member must be able to explain the whole system. |
+| Salinas | Curate the corpus and map clause types to provisions, by hand against primary sources. ARM 2. |
+| Navarro | Batched scoring, 5-10 clauses per call. |
+| Zallen | Build the adversarial injection suite. |
 
-Gate: full demo runs with the network disabled.
+Gate: ARM 2 runnable from config, so a grounded result is banked early.
 
-### Risk register for the week
+### Day 9 — Retrieval
+
+| Owner | Work |
+|---|---|
+| Navarro | Provision embedding, pgvector index, retrieval path. ARM 3. |
+| Salinas | Results queries and table shapes for both studies. |
+| Zallen | Injection payload variants, including Filipino-language payloads. |
+
+### Day 10 — Objective 4
+
+| Owner | Work |
+|---|---|
+| All three | Run the three-arm grounding comparison across the eval set. |
+| Salinas | Confirm participants for Day 12. |
+
+Gate: ungrounded versus static versus retrieval, with numbers.
+
+### Day 11 — Objective 3
+
+| Owner | Work |
+|---|---|
+| Navarro | Execute three models across the arms. |
+| Salinas | Accuracy, cost, and latency organised per pipeline stage, not per model. |
+| Zallen | Run the injection suite across all three models. Susceptibility becomes a fourth column. |
+
+Gate: the ablation table exists with real numbers.
+
+### Day 12 — Objective 5
+
+| Owner | Work |
+|---|---|
+| Salinas | Run the usability sessions. |
+| Zallen | Observe and take notes. Two people in a session beats one. |
+| Navarro | Fix what the sessions surface, same day. |
+
+### Day 13 — Results and writing
+
+| Owner | Work |
+|---|---|
+| Salinas | Analyse usability data. Assemble results tables and figures. |
+| Navarro | Bug fixes from Day 12. |
+| Zallen | Failure mode table for the Limitations chapter. |
+
+### Day 14 — Defence readiness
+
+| Owner | Work |
+|---|---|
+| Zallen | Pre-score the demo corpus. Record the walkthrough. Freeze the deployment. |
+| All three | Rehearse. Every member must be able to explain the whole pipeline, because Q and A does not respect role boundaries. |
+
+Gate: the full demo runs with the network disabled.
+
+## If you are ahead after Day 11
+
+In that order: negotiation message generator (#6), then missing clause detection
+(#5). Both are outside the five objectives and earn no academic credit, so
+neither starts until all five are met. The negotiation generator is the better
+of the two: it closes the loop from diagnosis to action and it is the strongest
+demo moment available.
+
+## Risk register
 
 | Risk | Day | Mitigation |
 |---|---|---|
-| Ethics review required | 1 | Resolve first thing. If required, Objective 5 leaves the week; tell the adviser same day. |
-| Participants not recruited | 1 | Recruit on Day 1, confirm Day 5, not Day 7. |
-| Annotation overruns | 3 | Shrink the Philippine subset before extending the day. Small and kappa-reportable beats large and unmeasured. |
-| Schema churn | 2+ | Schema is frozen after Day 1. Changes after that cost re-annotation. |
-| Provider rate limits | 6 | The ablation is the heaviest call day. Batch first, request quota ahead, run overnight if needed. |
-| Demo depends on a live call | 7 | Pre-scored corpus and recorded walkthrough. Non-negotiable. |
+| Ethics review required | 1 | Resolve first thing. If required, Objective 5 leaves the fortnight; tell the adviser the same day. |
+| Participants not recruited | 1-10 | Recruit in week 1, confirm Day 10. Never leave it to Day 12. |
+| Annotation overruns | 4-5 | Shrink the Philippine subset before extending. Small and kappa-reportable beats large and unmeasured. |
+| Schema churn | 2+ | Frozen after Day 1. Changes later cost re-annotation. |
+| Provider rate limits | 10-11 | The heaviest call days. Batch first, request quota ahead, run overnight if needed. |
+| Demo depends on a live call | 14 | Pre-scored corpus and recorded walkthrough. Non-negotiable. |
+| Buffer eaten by new scope | 7, 14 | Buffer is for recovery, not features. Protect it. |
 
 ### Phase 0 — weeks 1-2, two tracks in parallel
 
