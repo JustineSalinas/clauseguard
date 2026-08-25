@@ -71,6 +71,42 @@ body {
   border-radius: 2px;
 }
 
+/* ---- verdict marks ----
+   The three verdicts differ in form, not only in colour. A solid wash means
+   we are confident. Hatching means we read the clause and will not call it.
+   Nothing at all means we could not read it. A colour-blind reader, or one
+   glancing at a phone in daylight, still gets the distinction. */
+.mk {
+  padding: 0.05em 0.1em;
+  border-radius: 1px;
+  color: var(--color-ink);
+}
+.mk-high {
+  background: var(--color-flag-wash);
+  box-shadow: inset 0 -2px 0 0 var(--color-flag);
+}
+.mk-medium {
+  background: var(--color-caution-wash);
+  box-shadow: inset 0 -2px 0 0 var(--color-caution);
+}
+.mk-low {
+  background: var(--color-clear-wash);
+  box-shadow: inset 0 -2px 0 0 var(--color-clear);
+}
+.mk-review {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-caution-wash) 0 6px,
+    transparent 6px 12px
+  );
+  box-shadow: inset 0 -2px 0 0 var(--color-caution);
+}
+.mk-unreadable {
+  background: none;
+  box-shadow: inset 0 -1px 0 0 var(--color-rule-2);
+  color: var(--color-ink-3);
+}
+
 /* ---- the markup effect: a highlighter drawn left to right ----
    Text stays ink-coloured, the way a real highlighter works. The wash and the
    rule underneath carry the signal, so the clause still reads as a document. */
