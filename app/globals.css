@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /* Tailwind v4: @theme must be top level. Dark values are plain custom-property
    overrides below, which is what keeps the generated utilities intact. */
@@ -132,5 +136,78 @@ body {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+}
+
+@theme inline {
+  /* shadcn reads these. Literal family names: @theme inline resolves at parse
+     time, so a var() pointing at a next/font runtime variable would not work
+     here. Keep the fallback names next/font generates. */
+  --font-sans: "Instrument Sans", "Instrument Sans Fallback", system-ui, sans-serif;
+  --font-heading: "Newsreader", "Newsreader Fallback", Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+/* shadcn's tokens point at the ClauseGuard palette above. Because those flip
+   under prefers-color-scheme, every shadcn component follows the page theme
+   with no .dark class and no toggle to keep in sync. */
+:root {
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-ink);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-ink);
+
+  --primary: var(--color-ink);
+  --primary-foreground: var(--color-paper);
+  --secondary: var(--color-raised);
+  --secondary-foreground: var(--color-ink);
+
+  --muted: var(--color-raised);
+  --muted-foreground: var(--color-ink-2);
+  --accent: var(--color-raised);
+  --accent-foreground: var(--color-ink);
+
+  --destructive: var(--color-flag);
+  --destructive-foreground: #ffffff;
+
+  --border: var(--color-rule);
+  --input: var(--color-rule-2);
+  --ring: var(--color-flag);
+
+  /* Flatter than the shadcn default. This is a document product, not a
+     consumer app, and the landing page is built on 2-4px corners. */
+  --radius: 0.25rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
 }

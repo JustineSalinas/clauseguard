@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -21,12 +22,9 @@ export default function Home() {
             >
               Sign in
             </Link>
-            <Link
-              href="/signup"
-              className="rounded bg-ink px-4 py-2 font-medium text-paper transition-opacity hover:opacity-85"
-            >
-              Get started
-            </Link>
+            <Button asChild size="lg">
+              <Link href="/signup">Get started</Link>
+            </Button>
           </nav>
         </div>
       </header>
@@ -45,18 +43,12 @@ export default function Home() {
               lawyer on call.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                href="/sample"
-                className="rounded bg-flag px-5 py-3 font-medium text-white transition-opacity hover:opacity-90"
-              >
-                See a marked-up contract
-              </Link>
-              <Link
-                href="/signup"
-                className="rounded border border-rule-2 px-5 py-3 font-medium transition-colors hover:bg-raised"
-              >
-                Upload your own
-              </Link>
+              <Button asChild variant="flag" size="hero">
+                <Link href="/sample">See a marked-up contract</Link>
+              </Button>
+              <Button asChild variant="outline" size="hero">
+                <Link href="/signup">Upload your own</Link>
+              </Button>
             </div>
           </div>
 
@@ -314,18 +306,12 @@ export default function Home() {
             Read the contract before you sign it.
           </h2>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/sample"
-              className="rounded bg-flag px-5 py-3 font-medium text-white transition-opacity hover:opacity-90"
-            >
-              See a marked-up contract
-            </Link>
-            <Link
-              href="/signup"
-              className="rounded border border-rule-2 px-5 py-3 font-medium transition-colors hover:bg-raised"
-            >
-              Upload your own
-            </Link>
+            <Button asChild variant="flag" size="hero">
+              <Link href="/sample">See a marked-up contract</Link>
+            </Button>
+            <Button asChild variant="outline" size="hero">
+              <Link href="/signup">Upload your own</Link>
+            </Button>
           </div>
         </div>
       </section>
