@@ -133,10 +133,13 @@ the same permissive policy with no trigger, leaving user-writable fields that
 should not have been. When auditing here, pair every FOR UPDATE policy with a
 check for its guard trigger.
 
-Zallen owns proving isolation holds. This is not a code review item, it is an
-adversarial test: authenticate as user A, enumerate user B's document ids,
-attempt every read and mutation path, expect denial on all of them. That test
-existing and passing is a Chapter 3 claim rather than an assertion.
+Salinas writes these policies. Navarro writes the adversarial test that attacks
+them: authenticate as user A, enumerate user B's document ids, attempt every
+read and mutation path, expect denial on all of them. Zallen runs it and logs
+what it finds. Nobody both builds and clears the highest-severity control in the
+project, which is the point.
+
+That test existing and passing is a Chapter 3 claim rather than an assertion.
 
 ### Stack shape
 
@@ -194,9 +197,9 @@ are recruited in week 1 and confirmed on Day 10, not on Day 12.
 
 | Owner | Work |
 |---|---|
-| Salinas | Confirm the ethics requirement. Begin recruiting five usability participants. Design the evaluation schema: documents, extractions, clauses, ground_truth_labels, scoring_runs, clause_scores. Define the clause taxonomy. |
+| Salinas | Confirm the ethics requirement. Begin recruiting participants. Supabase and Vercel projects, migration applied, RLS policies and guard triggers. Define the clause taxonomy. |
 | Navarro | OCR spike. Pick an engine that returns per-token bounding boxes and page geometry. Build the upload route. |
-| Zallen | Supabase and Vercel projects. RLS policies plus guard triggers. Private storage buckets with signed URLs. CI skeleton. |
+| Zallen | Assemble synthetic demo contracts and begin the adversarial corpus. No blockers, no dependencies. |
 
 Gate: schema merged before anyone writes a pipeline stage.
 
@@ -205,8 +208,8 @@ Gate: schema merged before anyone writes a pipeline stage.
 | Owner | Work |
 |---|---|
 | Salinas | Risk scoring stage. Prompt v1 in a versioned file. Model config keyed by stage. |
-| Navarro | Extraction stage, then segmentation stage. Document state machine with guarded transitions. |
-| Zallen | Cross-tenant enumeration suite in CI. Per-call observability logging: model, prompt_version, grounding_arm, tokens, latency, outcome. |
+| Navarro | Extraction stage, then segmentation stage. Document state machine with guarded transitions. Cross-tenant enumeration suite in CI. Per-call observability logging. |
+| Zallen | Run the cross-tenant suite Navarro writes and log every failure. Transcribe Civil Code and Labor Code source text into the corpus. |
 
 Gate: one contract goes upload to crude score, end to end.
 
@@ -216,7 +219,7 @@ Gate: one contract goes upload to crude score, end to end.
 |---|---|
 | Salinas | Evaluation harness: run a corpus under a config, write scoring_run and clause_scores. |
 | Navarro | Auth screens wired to Supabase. Email, password, Google. Email verification. |
-| Zallen | Pre-provision the five participant accounts now, not on Day 12. Verify RLS holds for a real signed-in user. |
+| Zallen | Pre-provision the five participant accounts now, not on Day 12. Continue the statutory corpus. |
 
 Gate: a real account can upload a document and see a crude result.
 
@@ -225,7 +228,7 @@ Gate: a real account can upload a document and see a crude result.
 | Owner | Work |
 |---|---|
 | Navarro | CUAD subset ingestion, mapped onto the taxonomy. |
-| Zallen | Two-annotator flow and Cohen's kappa computation. |
+| Zallen | Annotate alongside the team. Keep the annotation log and flag disagreements for Salinas to adjudicate. |
 | All three | Annotate the Philippine subset across both days. |
 | Salinas | Draft the usability protocol and instrument (SUS plus a TAM-derived construct) in parallel. |
 
@@ -238,7 +241,7 @@ reportable. Two days here is the single biggest gain from the extra week.
 |---|---|
 | Navarro | Bounding box mapping and heat-map overlay. List-view fallback. |
 | Salinas | Confidence field, human-review routing, calibration correlation query. |
-| Zallen | Low-confidence visual treatment. Stalled-stage sweeper. |
+| Zallen | Test the three verdict treatments against the checklist and log anything unclear at a glance. |
 
 Gate: Objectives 1 and 2 demonstrable and measured.
 
@@ -256,7 +259,7 @@ this is where you catch up. Do not fill it with new scope.
 |---|---|
 | Salinas | Curate the corpus and map clause types to provisions, by hand against primary sources. ARM 2. |
 | Navarro | Batched scoring, 5-10 clauses per call. |
-| Zallen | Build the adversarial injection suite. |
+| Zallen | Finish the adversarial corpus: hidden-text variants, reworded traps, obfuscated clauses. |
 
 Gate: ARM 2 runnable from config, so a grounded result is banked early.
 
@@ -266,7 +269,7 @@ Gate: ARM 2 runnable from config, so a grounded result is banked early.
 |---|---|
 | Navarro | Provision embedding, pgvector index, retrieval path. ARM 3. |
 | Salinas | Results queries and table shapes for both studies. |
-| Zallen | Injection payload variants, including Filipino-language payloads. |
+| Zallen | Add Filipino-language injection payloads to the corpus. |
 
 ### Day 10 — Objective 4
 
@@ -283,7 +286,7 @@ Gate: ungrounded versus static versus retrieval, with numbers.
 |---|---|
 | Navarro | Execute three models across the arms. |
 | Salinas | Accuracy, cost, and latency organised per pipeline stage, not per model. |
-| Zallen | Run the injection suite across all three models. Susceptibility becomes a fourth column. |
+| Zallen | Run the injection corpus across all three models and record raw results. Salinas interprets them. |
 
 Gate: the ablation table exists with real numbers.
 
@@ -301,7 +304,7 @@ Gate: the ablation table exists with real numbers.
 |---|---|
 | Salinas | Analyse usability data. Assemble results tables and figures. |
 | Navarro | Bug fixes from Day 12. |
-| Zallen | Failure mode table for the Limitations chapter. |
+| Zallen | Assemble the failure mode table from the test logs, for the Limitations chapter. |
 
 ### Day 14 — Defence readiness
 
@@ -501,30 +504,68 @@ this claim.
 
 | Person | Role | Owns |
 |---|---|---|
-| Salinas | Project manager + backend developer | Schema design, evaluation harness, risk scoring stage, confidence calibration, results queries, paper framing, adviser and participant coordination |
-| Navarro | Backend developer | Extraction and segmentation stages, OCR integration, LLM calls and batching, pgvector retrieval, heatmap rendering |
-| Zallen | Security, QA, systems | Supabase and Vercel setup, auth, RLS and guard triggers, CI, test suites, adversarial injection work, deploy and demo hardening |
+| Salinas | Project manager + backend developer | Supabase and Vercel setup, schema, RLS policies and guard triggers, evaluation harness, risk scoring stage, prompts, confidence calibration, results queries, statistics, paper framing, adviser and participant coordination |
+| Navarro | Backend developer | Extraction and segmentation stages, OCR integration, LLM calls and batching, pgvector retrieval, heatmap rendering, cross-tenant test suite, CI |
+| Zallen | QA, research support, documentation | Adversarial contract corpus, statutory source text, annotation, test execution and failure logs, usability session notes, demo recording, consent and retention documentation |
 
-Two backend developers and one security/QA/systems engineer.
+### How the work is split, and why
 
-Salinas carries the PM load on top of a build role. Schedule the coordination
-work explicitly rather than assuming it fits in the gaps: participant recruiting
-and the ethics question are Day 1 items that block Day 7, and they will not
-happen if they are treated as background tasks.
+The split is by **failure visibility**, not by seniority.
 
-Zallen's remit covers three things that map onto the panel's hardest questions,
-so treat them as owned deliverables rather than end-of-term cleanup:
+Work whose failure is **silent** sits with Salinas. A wrong RLS policy throws no
+error; it quietly returns rows it should not, and the system looks healthy until
+someone reads another tenant's contract. A wrong kappa figure invalidates
+Chapter 4 and nothing flags it. Neither belongs anywhere except with the most
+experienced member, regardless of who holds the security job title.
 
-1. **Tenant isolation.** Postgres RLS is the boundary. A prior project in this
-   codebase family shipped a cross-tenant read because the rules layer only
-   checked that a user was authenticated. ClauseGuard holds third party
-   contracts, so this is the highest severity failure available to it. The
-   deliverable is an adversarial test in CI, not a code review note.
-2. **Adversarial robustness.** Obfuscated clauses, reworded traps, and embedded
-   prompt injection. Output is a documented failure mode table for the
-   Limitations chapter and a susceptibility column on the ablation table.
-3. **Systems and demo hardening.** Deploy freeze, pre-scored demo corpus,
-   recorded walkthrough. The defense demo must not depend on a live model call.
+Work whose failure is **visible** sits with Zallen. A malformed adversarial PDF
+can be opened and checked. A mistranscribed provision can be compared against
+the source. A missing session note is obviously missing. These are real
+deliverables where a mistake surfaces immediately and costs an hour, not a
+chapter.
+
+There is also a separation-of-duties reason that has nothing to do with
+experience: **the person who writes the security must not be the only person
+testing it.** Salinas writes the RLS policies. Navarro writes the cross-tenant
+enumeration suite that attacks them. Zallen runs it, extends it, and records
+what it finds. No single person both builds and clears the highest-severity
+control in the project.
+
+### Zallen's deliverables
+
+These are contributions with his name on them, not leftovers:
+
+1. **The adversarial contract corpus.** Obfuscated clauses, reworded traps, and
+   contracts carrying hidden instructions aimed at the analyser: 1pt text,
+   white on white, positioned off page. This is the raw material for the most
+   distinctive finding in the paper, because nothing in the cited literature
+   treats the contract itself as hostile input. Building it needs care, not
+   seniority.
+2. **The statutory source text.** Accurate transcription of the Civil Code and
+   Labor Code provisions into the corpus, checked against primary sources.
+   Salinas decides which provisions map to which clause type, because that is a
+   judgment call. Getting the text itself right is verifiable work and it is
+   load-bearing for Objective 4.
+3. **Test execution and the failure log.** Running the suites, recording what
+   breaks and under what conditions. This becomes the Limitations chapter.
+4. **Usability session notes.** Two observers in a session beats one. Salinas
+   runs the session, Zallen records what actually happened.
+5. **Demo hardening.** Pre-scored corpus and a recorded walkthrough, so the
+   defence never depends on a live model call.
+
+### Review requirement
+
+Anything touching `supabase/`, `app/auth/`, `lib/supabase/`, or storage needs a
+second pair of eyes before it merges. Enable branch protection on `main` with
+one required approval. Work in progress goes on branches and arrives by pull
+request, which gives the author a review loop and the reviewer a checkpoint.
+
+Salinas carries the PM load on top of the heaviest build role. Schedule the
+coordination work explicitly rather than assuming it fits in the gaps:
+participant recruiting and the ethics question are Day 1 items that gate Day 12,
+and they will not happen if treated as background tasks. If Salinas is
+overloaded by Day 3, Supabase and Vercel setup is the piece to hand to Navarro,
+not the RLS work.
 
 ## Critical path risks
 
