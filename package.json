@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:security": "node --env-file-if-exists=.env.local --test \"tests/security/**/*.test.mjs\""
   },
   "dependencies": {
     "@supabase/ssr": "0.12.5",

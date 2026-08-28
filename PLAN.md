@@ -506,7 +506,7 @@ this claim.
 |---|---|---|
 | Salinas | Project manager + backend developer | Supabase and Vercel setup, schema, RLS policies and guard triggers, evaluation harness, risk scoring stage, prompts, confidence calibration, results queries, statistics, paper framing, adviser and participant coordination |
 | Navarro | Backend developer | Extraction and segmentation stages, OCR integration, LLM calls and batching, pgvector retrieval, heatmap rendering, cross-tenant test suite, CI |
-| Zallen | QA, research support, documentation | Adversarial contract corpus, statutory source text, annotation, test execution and failure logs, usability session notes, demo recording, consent and retention documentation |
+| Zallen | Security and QA | Security verification: runs and extends the isolation suite, works the audit checklist, keeps the findings log. Owns the adversarial injection research end to end. Plus annotation, usability session notes, demo hardening, and consent documentation |
 
 ### How the work is split, and why
 
@@ -517,6 +517,11 @@ error; it quietly returns rows it should not, and the system looks healthy until
 someone reads another tenant's contract. A wrong kappa figure invalidates
 Chapter 4 and nothing flags it. Neither belongs anywhere except with the most
 experienced member, regardless of who holds the security job title.
+
+Zallen owns security and QA as a function: verification, attack, and evidence.
+Salinas owns implementation of the parts whose failure is silent. That is how
+the role works on a real team, and on a team of three it is the only way to
+avoid one person both writing and clearing the same control.
 
 Work whose failure is **visible** sits with Zallen. A malformed adversarial PDF
 can be opened and checked. A mistranscribed provision can be compared against
