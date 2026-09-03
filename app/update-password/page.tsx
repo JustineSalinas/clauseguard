@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { UpdatePasswordForm } from "@/components/auth/password-forms";
 
-export const metadata: Metadata = { title: "New password — ClauseGuard" };
+export const metadata: Metadata = { title: "New password" };
 
 export default function UpdatePassword() {
   return (

@@ -1,6 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Newsreader, Instrument_Sans, Tinos } from "next/font/google";
 import "./globals.css";
+
+// Not deployed yet -- swap for the real Vercel URL once it exists, or set
+// NEXT_PUBLIC_SITE_URL in the environment and this picks it up with no code
+// change. Without a base, Next.js cannot resolve openGraph/icon URLs to
+// absolute ones, and a link shared before this is set may render with a
+// broken preview image.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://clauseguard.vercel.app";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -24,16 +32,52 @@ const tinos = Tinos({
   display: "swap",
 });
 
+const TITLE = "ClauseGuard — Know what you're signing";
+const DESCRIPTION =
+  "Upload a contract and see which clauses shift risk onto you, in plain language, checked against the Philippine Civil Code and Labor Code. Built for freelancers and small businesses without a lawyer on call.";
+
 export const metadata: Metadata = {
-  title: "ClauseGuard — Know what you're signing",
-  description:
-    "Upload a contract and see which clauses shift risk onto you, in plain language, checked against the Philippine Civil Code and Labor Code. Built for freelancers and small businesses without a lawyer on call.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: TITLE, template: "%s — ClauseGuard" },
+  description: DESCRIPTION,
+  applicationName: "ClauseGuard",
+  keywords: [
+    "contract review",
+    "contract risk",
+    "freelancer contract checker",
+    "Philippine Civil Code",
+    "Labor Code",
+    "AI contract analysis",
+  ],
+  category: "productivity",
+  // Genuinely not ready for indexing while auth points at a placeholder
+  // Supabase project. Flip this the day the site is real and deployed --
+  // an indexed placeholder is worse than a delayed one.
+  robots: { index: false, follow: false },
   openGraph: {
-    title: "ClauseGuard — Know what you're signing",
+    title: TITLE,
     description:
       "See which contract clauses put you at risk, in plain language, checked against Philippine law.",
     type: "website",
+    siteName: "ClauseGuard",
+    locale: "en_PH",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description:
+      "See which contract clauses put you at risk, in plain language, checked against Philippine law.",
+  },
+};
+
+export const viewport: Viewport = {
+  // Matches the two ground tokens in globals.css (--color-paper). Tells the
+  // browser chrome (status bar, PWA splash) which theme is live rather than
+  // leaving it to guess from page content.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F5F6F2" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F1613" },
+  ],
 };
 
 export default function RootLayout({

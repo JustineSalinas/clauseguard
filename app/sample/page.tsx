@@ -5,7 +5,7 @@ import { ReviewView } from "@/components/review/review-view";
 import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Example review — ClauseGuard",
+  title: "Example review",
   description:
     "A freelance design agreement reviewed by ClauseGuard, readable without an account.",
 };

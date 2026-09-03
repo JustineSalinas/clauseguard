@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { AuthForm } from "@/components/auth/auth-form";
 
 export const metadata: Metadata = {
-  title: "Sign in — ClauseGuard",
+  title: "Sign in",
   description: "Sign in to review a contract.",
 };
 

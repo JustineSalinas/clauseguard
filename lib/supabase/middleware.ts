@@ -1,20 +1,29 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-/** Routes a signed-out visitor may reach. Everything else redirects to /login. */
-const PUBLIC_PREFIXES = [
-  "/",
-  "/sample",
-  "/login",
-  "/signup",
-  "/reset-password",
-  "/auth",
-];
+/**
+ * Routes that require a signed-in session. Everything else is public by
+ * default.
+ *
+ * This used to be an allowlist -- every public route had to be added by
+ * hand. It silently broke robots.txt, sitemap.xml, the generated icon and OG
+ * image routes, and the custom 404 page: none were in the list, so a
+ * signed-out visitor hitting any of them, or any nonexistent URL, was
+ * redirected to /login instead of getting the actual response. A denylist
+ * only needs updating when something genuinely new goes behind auth, which is
+ * the rarer and more deliberate event -- the next public page anyone adds
+ * (a metadata route, a future /pricing) just works.
+ *
+ * /update-password is protected on purpose: it is reachable only after the
+ * password-reset link has established a session via /auth/confirm, and
+ * treating it as public would let anyone who guesses the URL land on a form
+ * with no session behind it.
+ */
+const PROTECTED_PREFIXES = ["/dashboard", "/update-password"];
 
-function isPublic(pathname: string) {
-  if (pathname === "/") return true;
-  return PUBLIC_PREFIXES.some(
-    (p) => p !== "/" && (pathname === p || pathname.startsWith(p + "/")),
+function isProtected(pathname: string) {
+  return PROTECTED_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(p + "/"),
   );
 }
 
@@ -27,7 +36,7 @@ export async function updateSession(request: NextRequest) {
   // Not configured yet. Let public pages render rather than 500 the whole site,
   // but never let an unconfigured deployment expose a protected route.
   if (!supabaseUrl || !supabaseKey) {
-    if (isPublic(request.nextUrl.pathname)) return supabaseResponse;
+    if (!isProtected(request.nextUrl.pathname)) return supabaseResponse;
     const to = request.nextUrl.clone();
     to.pathname = "/login";
     return NextResponse.redirect(to);
@@ -68,7 +77,7 @@ export async function updateSession(request: NextRequest) {
     claims = null;
   }
 
-  if (!claims && !isPublic(request.nextUrl.pathname)) {
+  if (!claims && isProtected(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", request.nextUrl.pathname);

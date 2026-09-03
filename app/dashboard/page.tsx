@@ -6,7 +6,7 @@ import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import type { DocumentStatus } from "@/lib/types";
 
-export const metadata: Metadata = { title: "Your contracts — ClauseGuard" };
+export const metadata: Metadata = { title: "Your contracts" };
 
 type DocumentRow = {
   id: string;

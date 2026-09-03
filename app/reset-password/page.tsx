@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { RequestResetForm } from "@/components/auth/password-forms";
 
-export const metadata: Metadata = { title: "Reset password — ClauseGuard" };
+export const metadata: Metadata = { title: "Reset password" };
 
 export default function ResetPassword() {
   return (

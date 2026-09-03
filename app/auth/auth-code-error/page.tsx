@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = { title: "Link didn't work — ClauseGuard" };
+export const metadata: Metadata = { title: "Link didn't work" };
 
 export default function AuthCodeError() {
   return (
