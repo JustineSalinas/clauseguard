@@ -407,14 +407,14 @@ footer{
       <div class="brandline">
         <h1 class="brand">Clause<span class="gd">Guard</span></h1>
       </div>
-      <p class="subtitle">A SaaS contract clause identification and risk flagging platform for Philippine freelancers and small businesses. Seven days, three people, five committed objectives.</p>
+      <p class="subtitle">A SaaS contract clause identification and risk flagging platform for Philippine freelancers and small businesses. Two weeks, three people, five committed objectives.</p>
     </div>
     <div class="stat-strip">
-      <div class="stat"><b>7</b><span>working days</span></div>
+      <div class="stat"><b>14</b><span>working days</span></div>
       <div class="stat"><b>3</b><span>team members</span></div>
       <div class="stat"><b>5</b><span>committed objectives</span></div>
-      <div class="stat"><b>15</b><span>tasks assigned</span></div>
-      <div class="stat"><b>1</b><span>hard external blocker</span></div>
+      <div class="stat" style="border-left:2px solid var(--high)"><b style="color:var(--high)">0</b><span>teammate commits</span></div>
+      <div class="stat"><b>3</b><span>Day&#8209;1 blockers open</span></div>
     </div>
   </div>
 </header>
@@ -422,32 +422,87 @@ footer{
 <div class="shell">
   <nav class="rail" aria-label="Sections">
     <p class="eyebrow rail-h">Contents</p>
-    <a href="#blocker"><span class="n">00</span>Blocker</a>
-    <a href="#team"><span class="n">01</span>Team</a>
-    <a href="#objectives"><span class="n">02</span>Objectives</a>
-    <a href="#flow"><span class="n">03</span>User flow</a>
-    <a href="#worked"><span class="n">04</span>Worked examples</a>
-    <a href="#week"><span class="n">05</span>The week</a>
-    <a href="#risks"><span class="n">06</span>Risk register</a>
-    <a href="#findings"><span class="n">07</span>Key findings</a>
-    <a href="#schema"><span class="n">08</span>Schema</a>
-    <a href="#tasks"><span class="n">09</span>Tasks</a>
-    <a href="#open"><span class="n">10</span>Open</a>
+    <a href="#status"><span class="n">00</span>Status</a>
+    <a href="#blocker"><span class="n">01</span>Blocker</a>
+    <a href="#team"><span class="n">02</span>Team</a>
+    <a href="#objectives"><span class="n">03</span>Objectives</a>
+    <a href="#flow"><span class="n">04</span>User flow</a>
+    <a href="#worked"><span class="n">05</span>Worked examples</a>
+    <a href="#week"><span class="n">06</span>The fortnight</a>
+    <a href="#risks"><span class="n">07</span>Risk register</a>
+    <a href="#findings"><span class="n">08</span>Key findings</a>
+    <a href="#schema"><span class="n">09</span>Schema</a>
+    <a href="#tasks"><span class="n">10</span>Tasks</a>
+    <a href="#open"><span class="n">11</span>Open</a>
   </nav>
 
   <main>
+
+    <section id="status">
+      <div class="sec-head">
+        <p class="eyebrow">Live, as of Sep 3</p>
+        <h2>Where this actually stands</h2>
+        <p class="lede">This section is a snapshot, not a projection. It reflects what is in the repository and what is not, checked directly rather than assumed.</p>
+      </div>
+
+      <div class="callout high">
+        <h3>Five days with zero commits from Navarro or Zallen</h3>
+        <p>Every commit on <code>main</code> so far &mdash; eleven of them &mdash; is from Salinas. The plan, the schema, auth, the review UI, and the security suite are all written. <strong>Nobody else has started their Day&nbsp;1 work yet.</strong></p>
+        <p>This is not a code problem. It is a start problem, and it is recoverable today if all three Day&#8209;1 blockers below get resolved in the same sitting.</p>
+      </div>
+
+      <div class="twrap">
+        <table>
+          <thead><tr><th>Blocker</th><th style="width:7rem">Owner</th><th>Why everything downstream waits on it</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Ethics review answer</strong></td><td><span class="chip sal">Salinas</span></td><td>Still unknown. One email to the adviser. If review is required, the lead time runs weeks and Objective 5 has to leave the fortnight &mdash; that decision needs to be made now, not discovered on Day 12.</td></tr>
+            <tr><td><strong>Supabase project</strong></td><td><span class="chip sal">Salinas</span></td><td><code>.env.local</code> still points at a placeholder project. The migration has never touched a real database. No accounts, no security tests, no upload, no pipeline until this exists.</td></tr>
+            <tr><td><strong>OCR engine choice</strong></td><td><span class="chip nav">Navarro</span></td><td>Decides whether the heat-map (Objective 1) costs about a day or about six. Needs to return per-token bounding boxes, not just text.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ex-h" style="margin-top:2rem"><h3>What exists</h3></div>
+      <div class="stack">
+        <div class="callout low">
+          <h3>Built, working, and pushed</h3>
+          <p>Landing page. Full auth &mdash; sign in, sign up, Google OAuth, email verification, password reset, seven routes. The review UI: severity ordering, and the three verdicts (flagged / needs a person / couldn&rsquo;t analyse) rendered as genuinely different shapes, not just colours. <code>/sample</code>, a seven-clause demo that needs no database and no model call. The dashboard shell. The full schema migration with RLS policies. An eleven-test cross-tenant security suite with an audit checklist for Zallen.</p>
+        </div>
+        <div class="callout med">
+          <h3>Written but unverified</h3>
+          <p>The schema and its RLS policies exist in <code>supabase/migrations/0001_init.sql</code> but have never run against a live database. The security suite cannot go green until Supabase is real, because it needs two verified accounts and an uploaded document to test against.</p>
+        </div>
+        <div class="callout">
+          <h3>Does not exist yet</h3>
+          <p>Every pipeline directory is empty: extraction, segmentation, scoring, grounding, prompts, model config. The evaluation harness. The provision corpus. The Philippine annotated set. Every unit and integration test. <strong>The part that actually reads a contract has not been started.</strong> That is expected at nine days into a fourteen-day plan whose Day 1 has not closed &mdash; but it means the runway from here is genuinely fourteen working days, not fourteen calendar days minus nine already spent.</p>
+        </div>
+      </div>
+
+      <div class="twrap" style="margin-top:1.5rem">
+        <table>
+          <thead><tr><th style="width:2.5rem">#</th><th>Objective</th><th style="width:8rem">Real state</th></tr></thead>
+          <tbody>
+            <tr><td class="num">1</td><td>Heat-map overlay</td><td><span class="chip gap">~40%</span> UI marks clause text; no page-image overlay, no real bounding boxes yet</td></tr>
+            <tr><td class="num">2</td><td>Confidence calibration</td><td><span class="chip gap">~50%</span> full UI mechanism built; nothing produces a real confidence value yet</td></tr>
+            <tr><td class="num">3</td><td>Model ablation</td><td><span class="chip gap">0%</span> schema supports it; nothing has been run</td></tr>
+            <tr><td class="num">4</td><td>RAG grounding</td><td><span class="chip gap">~10%</span> pgvector table exists; provision corpus is empty</td></tr>
+            <tr><td class="num">5</td><td>Usability study</td><td><span class="chip gap">0%</span> gated on the ethics answer above</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
     <section id="blocker">
       <div class="sec-head">
         <p class="eyebrow">Read first</p>
         <h2>The one thing speed cannot fix</h2>
-        <p class="lede">Six of seven days are engineering, and engineering compresses. One objective depends on other people's calendars, and that does not.</p>
+        <p class="lede">Twelve of fourteen days are engineering, and engineering compresses. One objective depends on other people's calendars, and that does not.</p>
       </div>
       <div class="stack">
         <div class="callout high">
           <h3>Objective 5 needs participants, and possibly ethics approval</h3>
-            <p>Usability testing with real freelancers and MSME owners is a committed objective in the approved proposal. It appears nowhere in the original seven-feature list. Participants must be recruited on <strong>Day 1</strong> to run sessions on Day 7.</p>
-            <p>If the institution requires ethics review for human subjects, that lead time is measured in <strong>weeks</strong>, not days. Salinas resolves this before writing any code. If review is required, Objective 5 leaves the week and the adviser is told the same day.</p>
+            <p>Usability testing with real freelancers and MSME owners is a committed objective in the approved proposal. It appears nowhere in the original seven-feature list. Participants must be recruited in <strong>week 1</strong> and confirmed by Day 10 to run sessions on Day 12.</p>
+            <p>If the institution requires ethics review for human subjects, that lead time is measured in <strong>weeks</strong>, not days. Salinas resolves this before writing any code &mdash; still unresolved as of this snapshot. If review is required, Objective 5 leaves the fortnight and the adviser is told the same day.</p>
         </div>
         <div class="callout med">
           <h3>Two corrections to the earlier plan</h3>
@@ -463,9 +518,9 @@ footer{
 
     <section id="team">
       <div class="sec-head">
-        <p class="eyebrow">01</p>
+        <p class="eyebrow">02</p>
         <h2>Team and ownership</h2>
-        <p class="lede">Two backend developers and one security, QA, and systems engineer. Salinas carries the PM load on top of a build role, so coordination work is scheduled explicitly rather than assumed to fit in the gaps.</p>
+        <p class="lede">Split by failure visibility, not by seniority. Work whose failure is silent &mdash; a wrong RLS policy, a wrong statistic &mdash; sits with the most experienced member regardless of title. Work whose failure is visible is a real, ownable deliverable for anyone.</p>
       </div>
       <div class="twrap">
         <table>
@@ -474,26 +529,27 @@ footer{
             <tr>
               <td><span class="chip sal">Salinas</span></td>
               <td>Project manager<br>Backend developer</td>
-              <td>Schema design, evaluation harness, risk scoring stage, confidence calibration, results queries, paper framing, adviser and participant coordination</td>
+              <td>Supabase and Vercel setup, schema, RLS policies and guard triggers, evaluation harness, risk scoring stage, prompts, confidence calibration, results queries, statistics, paper framing, adviser and participant coordination</td>
             </tr>
             <tr>
               <td><span class="chip nav">Navarro</span></td>
               <td>Backend developer</td>
-              <td>Extraction and segmentation stages, OCR integration, LLM calls and batching, pgvector retrieval, heatmap rendering</td>
+              <td>Extraction and segmentation stages, OCR integration, LLM calls and batching, pgvector retrieval, heatmap rendering, cross-tenant test suite, CI</td>
             </tr>
             <tr>
               <td><span class="chip zal">Zallen</span></td>
-              <td>Security, QA, systems</td>
-              <td>Supabase and Vercel setup, auth, RLS and guard triggers, CI, test suites, adversarial injection work, deploy and demo hardening</td>
+              <td>Security and QA</td>
+              <td>Owns security as verification, attack, and evidence &mdash; runs and extends the isolation suite, works the audit checklist. Owns the adversarial injection research end to end. Plus annotation, usability session notes, demo hardening, consent documentation</td>
             </tr>
           </tbody>
         </table>
       </div>
+      <p class="lede" style="margin-top:.75rem">The person who writes a security control is never the person who signs it off. Salinas writes the RLS policies; Navarro writes the test that attacks them; Zallen runs it and keeps the findings log.</p>
     </section>
 
     <section id="objectives">
       <div class="sec-head">
-        <p class="eyebrow">02</p>
+        <p class="eyebrow">03</p>
         <h2>The five committed objectives</h2>
         <p class="lede">From the approved proposal. These, not the seven-feature list, define done. Two features from the original list earn no academic credit and were deferred.</p>
       </div>
@@ -519,7 +575,7 @@ footer{
 
     <section id="flow">
       <div class="sec-head">
-        <p class="eyebrow">03</p>
+        <p class="eyebrow">04</p>
         <h2>User flow</h2>
         <p class="lede">One contract, end to end. The two things worth reading off the drawing: a clause has three possible fates rather than one, and results fill in as stages complete instead of arriving as a single response.</p>
       </div>
@@ -650,7 +706,7 @@ footer{
 
     <section id="worked">
       <div class="sec-head">
-        <p class="eyebrow">04</p>
+        <p class="eyebrow">05</p>
         <h2>Worked examples</h2>
         <p class="lede">Three real clauses traced through every stage, with the actual prompt, the actual JSON, and the actual row that gets stored. One clause the model handles confidently, one it should refuse to call, and one that attacks it.</p>
       </div>
@@ -964,9 +1020,9 @@ flagged it              ?          ?             ?</code></pre>
 
     <section id="week">
       <div class="sec-head">
-        <p class="eyebrow">05</p>
-        <h2>The week</h2>
-        <p class="lede">Each day ends on a gate. If a gate does not close, the following day is renegotiated rather than silently absorbed. Filter to see only your own work.</p>
+        <p class="eyebrow">06</p>
+        <h2>The fortnight</h2>
+        <p class="lede">Revised from one week to two. The extra week did not become slack &mdash; it went to the three things a seven-day plan was quietly under-resourcing: annotation, retrieval, and the usability study. Each day ends on a gate. Filter to see only your own work.</p>
       </div>
 
       <div class="filter" role="group" aria-label="Filter by owner">
@@ -977,122 +1033,199 @@ flagged it              ?          ?             ?</code></pre>
         <button type="button" data-f="zal" aria-pressed="false">Zallen</button>
       </div>
 
+      <p class="eyebrow" style="margin-top:.5rem">Week 1 &mdash; foundation and measurement</p>
       <div class="days">
 
         <article class="day">
           <div class="day-head"><span class="day-n">DAY 1</span><h3 class="day-title">Foundations</h3></div>
           <div class="day-body">
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
-              <p>Confirm the ethics requirement. Recruit five usability participants for Day 7. Design the evaluation schema: documents, extractions, clauses, ground_truth_labels, scoring_runs, clause_scores. Define the clause taxonomy.</p></div>
+              <p>Confirm the ethics requirement. Begin recruiting participants. Supabase and Vercel projects, migration applied, RLS policies and guard triggers. Define the clause taxonomy.</p></div>
             <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
               <p>OCR spike. Pick an engine that returns per-token bounding boxes and page geometry. Build the upload route.</p></div>
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
-              <p>Supabase and Vercel projects. Auth. RLS policies plus guard triggers. Private storage buckets served through short-lived signed URLs. CI skeleton.</p></div>
+              <p>Assemble synthetic demo contracts and begin the adversarial corpus. No blockers, no dependencies &mdash; this can start before Supabase exists.</p></div>
           </div>
-          <p class="gate"><span class="eyebrow">Gate</span><span>Schema merged before anyone writes a pipeline stage. Everything downstream keys off it.</span></p>
+          <p class="gate"><span class="eyebrow">Gate</span><span>Schema merged before anyone writes a pipeline stage.</span></p>
         </article>
 
         <article class="day">
           <div class="day-head"><span class="day-n">DAY 2</span><h3 class="day-title">Walking skeleton</h3></div>
           <div class="day-body">
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
-              <p>Risk scoring stage. Prompt v1 in a versioned file. Model config module keyed by stage, so swapping a model is a config change and never a code change.</p></div>
+              <p>Risk scoring stage. Prompt v1 in a versioned file. Model config keyed by stage.</p></div>
             <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
-              <p>Extraction stage, then segmentation stage. Document state machine with guarded transitions.</p></div>
+              <p>Extraction stage, then segmentation stage. Document state machine with guarded transitions. Cross-tenant enumeration suite in CI. Per-call observability logging.</p></div>
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
-              <p>Cross-tenant enumeration suite in CI. Per-call observability logging: model, prompt_version, grounding_arm, tokens, latency, outcome.</p></div>
+              <p>Run the cross-tenant suite Navarro writes and log every failure. Transcribe Civil Code and Labor Code source text into the corpus.</p></div>
           </div>
-          <p class="gate"><span class="eyebrow">Gate</span><span>One contract goes upload to crude score, end to end. Crude is fine. It exists to be measured, not demoed.</span></p>
+          <p class="gate"><span class="eyebrow">Gate</span><span>One contract goes upload to crude score, end to end.</span></p>
         </article>
 
         <article class="day">
-          <div class="day-head"><span class="day-n">DAY 3</span><h3 class="day-title">Ground truth &middot; full team</h3></div>
+          <div class="day-head"><span class="day-n">DAY 3</span><h3 class="day-title">Auth and harness</h3></div>
           <div class="day-body">
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
               <p>Evaluation harness: run a corpus under a config, write scoring_run and clause_scores.</p></div>
             <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
-              <p>CUAD subset ingestion, mapped onto the clause taxonomy.</p></div>
+              <p>Auth screens wired to Supabase. Email, password, Google. Email verification.</p></div>
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
-              <p>Two-annotator flow and Cohen's kappa computation.</p></div>
+              <p>Pre-provision the five participant accounts now, not on Day 12. Continue the statutory corpus.</p></div>
+          </div>
+          <p class="gate"><span class="eyebrow">Gate</span><span>A real account can upload a document and see a crude result.</span></p>
+        </article>
+
+        <article class="day">
+          <div class="day-head"><span class="day-n">DAYS 4&ndash;5</span><h3 class="day-title">Ground truth &middot; full team</h3></div>
+          <div class="day-body">
+            <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
+              <p>CUAD subset ingestion, mapped onto the taxonomy.</p></div>
+            <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
+              <p>Annotate alongside the team. Keep the annotation log and flag disagreements for Salinas to adjudicate.</p></div>
             <div class="assign" data-own="all"><div><span class="chip all">All three</span></div>
-              <p>Annotate the Philippine subset. This is the bottleneck of the entire week. Protect the day.</p></div>
+              <p>Annotate the Philippine subset across both days. This is the bottleneck of the entire fortnight. Protect these two days.</p></div>
+            <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
+              <p>Draft the usability protocol and instrument (SUS plus a TAM-derived construct) in parallel.</p></div>
           </div>
-          <p class="gate"><span class="eyebrow">Gate</span><span>Harness produces a full scoring_run over the eval set, and inter-annotator agreement is reportable.</span></p>
+          <p class="gate"><span class="eyebrow">Gate</span><span>Harness produces a full scoring_run over the eval set, and kappa is reportable. Two days here is the single biggest gain from the extra week.</span></p>
         </article>
 
         <article class="day">
-          <div class="day-head"><span class="day-n">DAY 4</span><h3 class="day-title">Objectives 1 and 2</h3></div>
+          <div class="day-head"><span class="day-n">DAY 6</span><h3 class="day-title">Objectives 1 and 2</h3></div>
           <div class="day-body">
             <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
-              <p>Bounding box mapping and heat-map overlay. List-view fallback for when geometry is wrong.</p></div>
+              <p>Bounding box mapping and heat-map overlay. List-view fallback.</p></div>
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
-              <p>Confidence field in prompt and schema, human-review routing, calibration correlation query.</p></div>
+              <p>Confidence field, human-review routing, calibration correlation query.</p></div>
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
-              <p>Low-confidence visual treatment. Stalled-stage sweeper.</p></div>
+              <p>Test the three verdict treatments against the checklist and log anything unclear at a glance.</p></div>
           </div>
-          <p class="gate"><span class="eyebrow">Gate</span><span>Objectives 1 and 2 demonstrable and measured. The UI must be stable enough to put in front of a stranger on Day 7.</span></p>
+          <p class="gate"><span class="eyebrow">Gate</span><span>Objectives 1 and 2 demonstrable and measured.</span></p>
         </article>
 
         <article class="day">
-          <div class="day-head"><span class="day-n">DAY 5</span><h3 class="day-title">Objective 4 &middot; grounding</h3></div>
+          <div class="day-head"><span class="day-n">DAY 7</span><h3 class="day-title">Buffer</h3></div>
+          <div class="day-body">
+            <div class="assign" data-own="all"><div><span class="chip all">All three</span></div>
+              <p>Deliberate slack. If days 1 to 6 held, use it to extract components properly and harden the results screen before strangers see it on Day 12. If they slipped, this is where you catch up. <strong>Do not fill it with new scope.</strong></p></div>
+          </div>
+        </article>
+
+      </div>
+
+      <p class="eyebrow" style="margin-top:2rem">Week 2 &mdash; the objectives that need room</p>
+      <div class="days">
+
+        <article class="day">
+          <div class="day-head"><span class="day-n">DAY 8</span><h3 class="day-title">Provision corpus and static grounding</h3></div>
           <div class="day-body">
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
-              <p>Static provision mapping, Arm 2. Every clause type mapped to two to four Civil Code or Labor Code provisions, with citations.</p></div>
+              <p>Curate the corpus and map clause types to provisions, by hand against primary sources. Arm 2.</p></div>
             <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
-              <p>Provision corpus embedding, pgvector index, retrieval path. Arm 3.</p></div>
+              <p>Batched scoring, 5&ndash;10 clauses per call.</p></div>
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
-              <p>Build the adversarial injection suite.</p></div>
+              <p>Finish the adversarial corpus: hidden-text variants, reworded traps, obfuscated clauses.</p></div>
           </div>
-          <p class="gate"><span class="eyebrow">Gate</span><span>All three grounding arms runnable from config. Arm 2 banked, so a slip in Arm 3 degrades the finding rather than missing the objective.</span></p>
+          <p class="gate"><span class="eyebrow">Gate</span><span>Arm 2 runnable from config, so a grounded result is banked early.</span></p>
         </article>
 
         <article class="day">
-          <div class="day-head"><span class="day-n">DAY 6</span><h3 class="day-title">Objective 3 &middot; ablation and robustness</h3></div>
+          <div class="day-head"><span class="day-n">DAY 9</span><h3 class="day-title">Retrieval</h3></div>
           <div class="day-body">
             <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
-              <p>Batched scoring, five to ten clauses per call. Execute three models across three arms.</p></div>
+              <p>Provision embedding, pgvector index, retrieval path. Arm 3.</p></div>
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
-              <p>Results queries. Accuracy, cost, and latency organised per pipeline stage, not per model.</p></div>
+              <p>Results queries and table shapes for both studies.</p></div>
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
-              <p>Run the injection suite across all three models. Susceptibility becomes a fourth ablation column.</p></div>
+              <p>Add Filipino-language injection payloads to the corpus.</p></div>
+          </div>
+        </article>
+
+        <article class="day">
+          <div class="day-head"><span class="day-n">DAY 10</span><h3 class="day-title">Objective 4</h3></div>
+          <div class="day-body">
+            <div class="assign" data-own="all"><div><span class="chip all">All three</span></div>
+              <p>Run the three-arm grounding comparison across the eval set.</p></div>
+            <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
+              <p>Confirm participants for Day 12.</p></div>
+          </div>
+          <p class="gate"><span class="eyebrow">Gate</span><span>Ungrounded versus static versus retrieval, with numbers.</span></p>
+        </article>
+
+        <article class="day">
+          <div class="day-head"><span class="day-n">DAY 11</span><h3 class="day-title">Objective 3</h3></div>
+          <div class="day-body">
+            <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
+              <p>Execute three models across the arms.</p></div>
+            <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
+              <p>Accuracy, cost, and latency organised per pipeline stage, not per model.</p></div>
+            <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
+              <p>Run the injection corpus across all three models and record raw results. Salinas interprets them.</p></div>
           </div>
           <p class="gate"><span class="eyebrow">Gate</span><span>The ablation table exists with real numbers. This is the single strongest artifact for the award.</span></p>
         </article>
 
         <article class="day">
-          <div class="day-head"><span class="day-n">DAY 7</span><h3 class="day-title">Objective 5 and defense readiness</h3></div>
+          <div class="day-head"><span class="day-n">DAY 12</span><h3 class="day-title">Objective 5</h3></div>
           <div class="day-body">
             <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
-              <p>Run the usability sessions. SUS plus a TAM-derived construct for perceived usefulness. Analyse.</p></div>
+              <p>Run the usability sessions.</p></div>
+            <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
+              <p>Observe and take notes. Two people in a session beats one.</p></div>
+            <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
+              <p>Fix what the sessions surface, same day.</p></div>
+          </div>
+        </article>
+
+        <article class="day">
+          <div class="day-head"><span class="day-n">DAY 13</span><h3 class="day-title">Results and writing</h3></div>
+          <div class="day-body">
+            <div class="assign" data-own="sal"><div><span class="chip sal">Salinas</span></div>
+              <p>Analyse usability data. Assemble results tables and figures.</p></div>
+            <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
+              <p>Bug fixes from Day 12.</p></div>
+            <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
+              <p>Assemble the failure mode table from the test logs, for the Limitations chapter.</p></div>
+          </div>
+        </article>
+
+        <article class="day">
+          <div class="day-head"><span class="day-n">DAY 14</span><h3 class="day-title">Defence readiness</h3></div>
+          <div class="day-body">
             <div class="assign" data-own="zal"><div><span class="chip zal">Zallen</span></div>
               <p>Pre-score the demo corpus. Record the walkthrough. Freeze the deployment.</p></div>
-            <div class="assign" data-own="nav"><div><span class="chip nav">Navarro</span></div>
-              <p>Bug fixes and polish against whatever the Day 7 sessions surface.</p></div>
             <div class="assign" data-own="all"><div><span class="chip all">All three</span></div>
-              <p>Results writeup. Rehearse the pipeline walkthrough. Every member must be able to explain the whole system, because Q&amp;A does not respect role boundaries.</p></div>
+              <p>Rehearse. Every member must be able to explain the whole pipeline, because Q&amp;A does not respect role boundaries.</p></div>
           </div>
           <p class="gate"><span class="eyebrow">Gate</span><span>The full demo runs with the network disabled.</span></p>
         </article>
 
       </div>
+
+      <div class="callout" style="margin-top:1.5rem">
+        <h3>If you're ahead after Day 11</h3>
+        <p>In this order: negotiation message generator (#6), then missing clause detection (#5). Both are outside the five objectives and earn no academic credit, so neither starts until all five are met. The negotiation generator is the better of the two &mdash; it closes the loop from diagnosis to action and it is the strongest demo moment available.</p>
+      </div>
     </section>
 
     <section id="risks">
       <div class="sec-head">
-        <p class="eyebrow">06</p>
+        <p class="eyebrow">07</p>
         <h2>Risk register</h2>
-        <p class="lede">Each risk is tied to the day it becomes unrecoverable, not the day it is noticed.</p>
+        <p class="lede">Each risk is tied to the day it becomes unrecoverable, not the day it is noticed. Two rows are already live, not hypothetical.</p>
       </div>
       <div class="twrap">
         <table>
-          <thead><tr><th>Risk</th><th style="width:4rem">Day</th><th>Mitigation</th></tr></thead>
+          <thead><tr><th>Risk</th><th style="width:5rem">Day</th><th>Mitigation</th><th style="width:6rem">Status</th></tr></thead>
           <tbody>
-            <tr><td><strong>Ethics review required</strong></td><td class="num">1</td><td>Resolve first thing. If required, Objective 5 leaves the week and the adviser is told the same day.</td></tr>
-            <tr><td><strong>Participants not recruited</strong></td><td class="num">1</td><td>Recruit on Day 1, confirm on Day 5. Never leave it to Day 7.</td></tr>
-            <tr><td><strong>Annotation overruns</strong></td><td class="num">3</td><td>Shrink the Philippine subset before extending the day. Small and kappa-reportable beats large and unmeasured.</td></tr>
-            <tr><td><strong>Schema churn</strong></td><td class="num">2+</td><td>Schema freezes after Day 1. Changes after that cost re-annotation, which is the expensive kind of migration.</td></tr>
-            <tr><td><strong>Provider rate limits</strong></td><td class="num">6</td><td>The ablation is the heaviest call day. Batch first, request quota ahead, run overnight if needed.</td></tr>
-            <tr><td><strong>Demo depends on a live call</strong></td><td class="num">7</td><td>Pre-scored corpus and recorded walkthrough. Non-negotiable.</td></tr>
+            <tr><td><strong>Ethics review required</strong></td><td class="num">1</td><td>Resolve first thing. If required, Objective 5 leaves the fortnight and the adviser is told the same day.</td><td><span class="chip gap">Live</span></td></tr>
+            <tr><td><strong>Team has not started</strong></td><td class="num">1</td><td>Zero commits from Navarro or Zallen as of this snapshot. Get all three Day-1 blockers closed in one sitting.</td><td><span class="chip gap">Live</span></td></tr>
+            <tr><td><strong>Participants not recruited</strong></td><td class="num">1&ndash;10</td><td>Recruit in week 1, confirm Day 10. Never leave it to Day 12.</td><td><span class="chip all">Ahead</span></td></tr>
+            <tr><td><strong>Annotation overruns</strong></td><td class="num">4&ndash;5</td><td>Shrink the Philippine subset before extending. Small and kappa-reportable beats large and unmeasured.</td><td><span class="chip all">Ahead</span></td></tr>
+            <tr><td><strong>Schema churn</strong></td><td class="num">2+</td><td>Frozen after Day 1. Changes later cost re-annotation.</td><td><span class="chip all">Ahead</span></td></tr>
+            <tr><td><strong>Provider rate limits</strong></td><td class="num">10&ndash;11</td><td>The heaviest call days. Batch first, request quota ahead, run overnight if needed.</td><td><span class="chip all">Ahead</span></td></tr>
+            <tr><td><strong>Demo depends on a live call</strong></td><td class="num">14</td><td>Pre-scored corpus and recorded walkthrough. Non-negotiable.</td><td><span class="chip all">Ahead</span></td></tr>
+            <tr><td><strong>Buffer eaten by new scope</strong></td><td class="num">7, 14</td><td>Buffer is for recovery, not features. Protect it.</td><td><span class="chip all">Ahead</span></td></tr>
           </tbody>
         </table>
       </div>
@@ -1100,7 +1233,7 @@ flagged it              ?          ?             ?</code></pre>
 
     <section id="findings">
       <div class="sec-head">
-        <p class="eyebrow">07</p>
+        <p class="eyebrow">08</p>
         <h2>Key findings from the review</h2>
         <p class="lede">Four findings that change what gets built, in order of consequence.</p>
       </div>
@@ -1135,7 +1268,7 @@ flagged it              ?          ?             ?</code></pre>
 
     <section id="schema">
       <div class="sec-head">
-        <p class="eyebrow">08</p>
+        <p class="eyebrow">09</p>
         <h2>Evaluation schema</h2>
         <p class="lede">Day 1 deliverable. Freeze it before annotation begins.</p>
       </div>
@@ -1164,85 +1297,85 @@ flagged it              ?          ?             ?</code></pre>
 
     <section id="tasks">
       <div class="sec-head">
-        <p class="eyebrow">09</p>
+        <p class="eyebrow">10</p>
         <h2>Task list</h2>
-        <p class="lede">Fifteen tasks derived from specific review findings. P1 blocks the week; P2 should land inside it; P3 is a follow-up.</p>
+        <p class="lede">Fifteen tasks derived from specific review findings. P1 blocks week 1; P2 should land inside the fortnight; P3 is a follow-up. Five are done, three are blocked, the rest have not started.</p>
       </div>
       <div class="tasks">
 
         <div class="task" data-p="P1" data-own="sal"><span class="tid">T1</span><div class="task-main">
           <p class="task-title">Design the evaluation schema before any pipeline code</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip sal">Salinas</span><span class="chip all">Day 1</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip sal">Salinas</span><span class="chip all">Day 1</span><span class="chip ok">Done</span></div>
           <p class="task-why">Objectives 3 and 4 both require multiple scoring passes over identical clauses.</p></div></div>
 
         <div class="task" data-p="P1" data-own="sal"><span class="tid">T2</span><div class="task-main">
           <p class="task-title">Confirm whether ethics review is required for Objective 5</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip sal">Salinas</span><span class="chip all">Day 1</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip sal">Salinas</span><span class="chip all">Day 1</span><span class="chip gap">Blocked</span></div>
           <p class="task-why">Human-subjects lead time gates a committed objective and cannot be compressed.</p></div></div>
 
         <div class="task" data-p="P1" data-own="nav"><span class="tid">T3</span><div class="task-main">
           <p class="task-title">Choose an OCR engine that returns per-token bounding boxes</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip nav">Navarro</span><span class="chip all">Day 1</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip nav">Navarro</span><span class="chip all">Day 1</span><span class="chip gap">Blocked</span></div>
           <p class="task-why">The heat-map costs about a day with geometry supplied, and closer to six days without it.</p></div></div>
 
         <div class="task" data-p="P1" data-own="zal"><span class="tid">T4</span><div class="task-main">
           <p class="task-title">RLS policies plus guard triggers on every user table</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip zal">Zallen</span><span class="chip all">Day 1</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip sal">Salinas</span><span class="chip all">Day 1</span><span class="chip ok">Done</span></div>
           <p class="task-why">A prior project in this codebase family shipped both failure classes. risk_level, confidence, ground_truth_label, and scoring_runs must never be client-writable.</p></div></div>
 
         <div class="task" data-p="P1" data-own="zal"><span class="tid">T5</span><div class="task-main">
           <p class="task-title">Cross-tenant enumeration test suite in CI</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip zal">Zallen</span><span class="chip all">Day 2</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip nav">Navarro</span><span class="chip all">Day 2</span><span class="chip ok">Done</span></div>
           <p class="task-why">Highest severity failure available to a product holding third-party contracts. Authenticate as A, attempt every path against B's ids, expect denial.</p></div></div>
 
         <div class="task" data-p="P1" data-own="zal"><span class="tid">T6</span><div class="task-main">
           <p class="task-title">Log model, prompt_version, grounding_arm, tokens, latency, outcome per call</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip zal">Zallen</span><span class="chip all">Day 2</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip nav">Navarro</span><span class="chip all">Day 2</span><span class="chip all">Not started</span></div>
           <p class="task-why">Objective 3's cost and latency columns cannot be reconstructed retroactively.</p></div></div>
 
         <div class="task" data-p="P1" data-own="all"><span class="tid">T7</span><div class="task-main">
           <p class="task-title">Assemble the evaluation set: CUAD subset plus hand-annotated Philippine set</p>
-          <div class="chiprow"><span class="chip p1">P1</span><span class="chip all">All three</span><span class="chip all">Day 3</span></div>
+          <div class="chiprow"><span class="chip p1">P1</span><span class="chip all">All three</span><span class="chip all">Days 4&ndash;5</span><span class="chip all">Not started</span></div>
           <p class="task-why">Load-bearing input for Objectives 2, 3, and 4. Includes the consent or synthetic sourcing decision and Cohen's kappa.</p></div></div>
 
         <div class="task" data-p="P2" data-own="sal"><span class="tid">T8</span><div class="task-main">
           <p class="task-title">Build the static provision mapping as Arm 2</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip sal">Salinas</span><span class="chip all">Day 5</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip sal">Salinas</span><span class="chip all">Day 8</span><span class="chip all">Not started</span></div>
           <p class="task-why">Turns Objective 4 into a three-arm study and banks a grounded result early.</p></div></div>
 
         <div class="task" data-p="P2" data-own="nav"><span class="tid">T9</span><div class="task-main">
           <p class="task-title">Batch clause scoring, five to ten per call, per-clause confidence preserved</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip nav">Navarro</span><span class="chip all">Day 6</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip nav">Navarro</span><span class="chip all">Day 8</span><span class="chip all">Not started</span></div>
           <p class="task-why">A full evaluation pass is roughly eighteen thousand calls unbatched.</p></div></div>
 
         <div class="task" data-p="P2" data-own="zal"><span class="tid">T10</span><div class="task-main">
           <p class="task-title">Adversarial injection suite and per-model susceptibility measurement</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Days 5&ndash;6</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Days 8&ndash;9, 11</span><span class="chip all">Not started</span></div>
           <p class="task-why">Real attack surface with a motivated attacker, and the strongest available differentiator for the paper.</p></div></div>
 
         <div class="task" data-p="P2" data-own="zal"><span class="tid">T11</span><div class="task-main">
           <p class="task-title">Stalled-stage sweeper</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Day 4</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Day 6</span><span class="chip all">Not started</span></div>
           <p class="task-why">Open gap in the failure modes registry. A job killed mid-stage must reach failed(stage) within the timeout window.</p></div></div>
 
         <div class="task" data-p="P2" data-own="nav"><span class="tid">T12</span><div class="task-main">
           <p class="task-title">Heat-map list-view fallback</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip nav">Navarro</span><span class="chip all">Day 4</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip nav">Navarro</span><span class="chip all">Day 6</span><span class="chip ok">Done</span></div>
           <p class="task-why">Open gap in the failure modes registry. With geometry deliberately corrupted, results must stay readable.</p></div></div>
 
         <div class="task" data-p="P2" data-own="zal"><span class="tid">T13</span><div class="task-main">
           <p class="task-title">Low-confidence visual treatment, not a caption</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Day 4</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip sal">Salinas</span><span class="chip all">Day 6</span><span class="chip ok">Done</span></div>
           <p class="task-why">A confident red badge on a clause the model was unsure about is worse than no tool at all.</p></div></div>
 
         <div class="task" data-p="P2" data-own="zal"><span class="tid">T14</span><div class="task-main">
           <p class="task-title">Pre-scored demo corpus and recorded walkthrough</p>
-          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Day 7</span></div>
+          <div class="chiprow"><span class="chip p2">P2</span><span class="chip zal">Zallen</span><span class="chip all">Day 14</span><span class="chip all">Not started</span></div>
           <p class="task-why">Provider degradation during the defense is the single highest-consequence risk in the project.</p></div></div>
 
         <div class="task" data-p="P3" data-own="zal"><span class="tid">T15</span><div class="task-main">
           <p class="task-title">Retention policy, consent records, PII logging discipline</p>
-          <div class="chiprow"><span class="chip p3">P3</span><span class="chip zal">Zallen</span><span class="chip all">Follow-up</span></div>
+          <div class="chiprow"><span class="chip p3">P3</span><span class="chip zal">Zallen</span><span class="chip all">Follow-up</span><span class="chip all">Not started</span></div>
           <p class="task-why">The panel will ask where the contracts came from. Have the answer written down before annotation starts.</p></div></div>
 
       </div>
@@ -1250,7 +1383,7 @@ flagged it              ?          ?             ?</code></pre>
 
     <section id="open">
       <div class="sec-head">
-        <p class="eyebrow">10</p>
+        <p class="eyebrow">11</p>
         <h2>Still open</h2>
       </div>
       <div class="stack">
@@ -1260,7 +1393,7 @@ flagged it              ?          ?             ?</code></pre>
         </div>
         <div class="callout">
           <h3>Award and billable diverge after this week</h3>
-          <p>Both goals want the same seven days: a working pipeline and a measurement story. They separate afterwards. The award wants evaluation rigour; billable wants onboarding, billing, reliability, and a narrower customer.</p>
+          <p>Both goals want the same fourteen days: a working pipeline and a measurement story. They separate afterwards. The award wants evaluation rigour; billable wants onboarding, billing, reliability, and a narrower customer.</p>
           <p>Resolution: build the award version, and shape the schema and harness so the commercial version is a UI and billing layer on top rather than a rewrite. <strong>Do not build billing during the capstone.</strong> The durable assets are the clause taxonomy, the Philippine annotated set, the provision mapping, and the evaluation harness. The UI is replaceable.</p>
         </div>
         <div class="callout med">
@@ -1276,7 +1409,7 @@ flagged it              ?          ?             ?</code></pre>
 <footer>
   <div class="foot-in">
     <p class="eyebrow">ClauseGuard &middot; Sprint plan</p>
-    <p>Generated from PLAN.md following a HOLD SCOPE plan review. Five committed objectives, fifteen tasks, one external blocker. No outside-model review was run on this pass.</p>
+    <p>Generated from PLAN.md following a HOLD SCOPE plan review, and updated Sep 3 against the live repository. Five committed objectives, fifteen tasks, three open Day-1 blockers, zero commits from Navarro or Zallen. No outside-model review was run on this pass.</p>
   </div>
 </footer>
 
