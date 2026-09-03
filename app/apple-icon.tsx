@@ -15,7 +15,7 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#14201B",
+          background: "#120F0C",
         }}
       >
         <div
@@ -29,14 +29,14 @@ export default function AppleIcon() {
             style={{
               fontSize: 108,
               fontWeight: 700,
-              color: "#F5F6F2",
+              color: "#F3ECE3",
               lineHeight: 1,
               fontFamily: "Georgia, serif",
             }}
           >
             C
           </div>
-          <div style={{ width: 64, height: 14, background: "#E8837B", marginTop: 6, borderRadius: 2 }} />
+          <div style={{ width: 64, height: 14, background: "#F0891F", marginTop: 6, borderRadius: 2 }} />
         </div>
       </div>
     ),

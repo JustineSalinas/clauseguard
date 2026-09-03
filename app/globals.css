@@ -4,47 +4,70 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Tailwind v4: @theme must be top level. Dark values are plain custom-property
-   overrides below, which is what keeps the generated utilities intact. */
-@theme {
-  --color-paper: #f5f6f2;
-  --color-surface: #ffffff;
-  --color-raised: #eef1ea;
-  --color-ink: #14201b;
-  --color-ink-2: #4a5a52;
-  --color-ink-3: #7c8a82;
-  --color-rule: #dde2da;
-  --color-rule-2: #c5cec1;
+/* Tailwind v4: @theme must be top level. Light-theme values are plain
+   custom-property overrides below, which is what keeps the generated
+   utilities intact.
 
-  --color-flag: #bc3a28;
-  --color-flag-wash: #f7e3df;
-  --color-caution: #a8721a;
-  --color-caution-wash: #f6ecd9;
-  --color-clear: #2c6a4f;
-  --color-clear-wash: #dfede5;
+   Dark is the primary/default theme, not an afterthought: the unconditional
+   block below is what every visitor sees unless their OS says otherwise, and
+   `@media (prefers-color-scheme: light)` is the override. This is a deliberate
+   flip from the site's original light-first palette, made when the accent
+   moved from oxblood red to copper/orange -- copper reads as a glow against
+   near-black and reads muddy on white paper.
+
+   Two colour systems live here, kept deliberately separate:
+   --color-flag / --color-caution / --color-clear are RISK SEVERITY -- the
+   verdict a clause gets. --color-brand is the product's own identity -- the
+   wordmark, buttons, links, the logo mark. They cannot share a hue: a primary
+   CTA button in the same colour as a "high risk" clause would read as a
+   warning, and a risk badge in the brand colour would read as decoration
+   instead of danger. Never point a semantic risk class at --color-brand or
+   vice versa. */
+@theme {
+  --color-paper: #120f0c;
+  --color-surface: #1e1915;
+  --color-raised: #29221c;
+  --color-ink: #f3ece3;
+  --color-ink-2: #b7a99b;
+  --color-ink-3: #8a7c6e;
+  --color-rule: #362e27;
+  --color-rule-2: #4a3f35;
+
+  --color-flag: #e2503a;
+  --color-flag-wash: #3a1e17;
+  --color-caution: #d9a758;
+  --color-caution-wash: #332615;
+  --color-clear: #6fbf9b;
+  --color-clear-wash: #16281f;
+
+  --color-brand: #f0891f;
+  --color-brand-wash: #2e1d10;
 
   --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
   --font-body: var(--font-instrument-sans), system-ui, -apple-system, sans-serif;
   --font-contract: var(--font-tinos), "Times New Roman", Times, serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --color-paper: #0f1613;
-    --color-surface: #17201c;
-    --color-raised: #1e2823;
-    --color-ink: #eaede6;
-    --color-ink-2: #a3b0a8;
-    --color-ink-3: #6f7c74;
-    --color-rule: #26312b;
-    --color-rule-2: #35423b;
+    --color-paper: #f5f6f2;
+    --color-surface: #ffffff;
+    --color-raised: #eef1ea;
+    --color-ink: #14201b;
+    --color-ink-2: #4a5a52;
+    --color-ink-3: #7c8a82;
+    --color-rule: #dde2da;
+    --color-rule-2: #c5cec1;
 
-    --color-flag: #e8806e;
-    --color-flag-wash: #2f1d18;
-    --color-caution: #d9a85c;
-    --color-caution-wash: #2b2317;
-    --color-clear: #6fbf9b;
-    --color-clear-wash: #16281f;
+    --color-flag: #c2311d;
+    --color-flag-wash: #f8e1dc;
+    --color-caution: #a8721a;
+    --color-caution-wash: #f6ecd9;
+    --color-clear: #2c6a4f;
+    --color-clear-wash: #dfede5;
+
+    --color-brand: #b04000;
+    --color-brand-wash: #fbe9da;
   }
 }
 
@@ -61,12 +84,12 @@ body {
 }
 
 ::selection {
-  background: var(--color-flag);
+  background: var(--color-brand);
   color: var(--color-paper);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-flag);
+  outline: 2px solid var(--color-brand);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -75,7 +98,9 @@ body {
    The three verdicts differ in form, not only in colour. A solid wash means
    we are confident. Hatching means we read the clause and will not call it.
    Nothing at all means we could not read it. A colour-blind reader, or one
-   glancing at a phone in daylight, still gets the distinction. */
+   glancing at a phone in daylight, still gets the distinction.
+   Risk severity only -- never the brand colour. See the note at the top of
+   this file. */
 .mk {
   padding: 0.05em 0.1em;
   border-radius: 1px;
@@ -109,7 +134,9 @@ body {
 
 /* ---- the markup effect: a highlighter drawn left to right ----
    Text stays ink-coloured, the way a real highlighter works. The wash and the
-   rule underneath carry the signal, so the clause still reads as a document. */
+   rule underneath carry the signal, so the clause still reads as a document.
+   This is the hero's risk demonstration, so it stays on --color-flag (risk),
+   not --color-brand. */
 .mark {
   padding: 0.05em 0.1em;
   background-image: linear-gradient(
@@ -211,7 +238,13 @@ body {
 
 /* shadcn's tokens point at the ClauseGuard palette above. Because those flip
    under prefers-color-scheme, every shadcn component follows the page theme
-   with no .dark class and no toggle to keep in sync. */
+   with no .dark class and no toggle to keep in sync.
+
+   --primary now points at --color-brand rather than --color-ink: the default
+   shadcn Button is the site's main call-to-action colour, which is a brand
+   decision, not a "make it dark" decision. --destructive stays on
+   --color-flag, since a destructive action (delete, revoke) is functionally
+   the same kind of warning as a high-risk clause. */
 :root {
   --background: var(--color-paper);
   --foreground: var(--color-ink);
@@ -220,8 +253,8 @@ body {
   --popover: var(--color-surface);
   --popover-foreground: var(--color-ink);
 
-  --primary: var(--color-ink);
-  --primary-foreground: var(--color-paper);
+  --primary: var(--color-brand);
+  --primary-foreground: #ffffff;
   --secondary: var(--color-raised);
   --secondary-foreground: var(--color-ink);
 
@@ -235,7 +268,7 @@ body {
 
   --border: var(--color-rule);
   --input: var(--color-rule-2);
-  --ring: var(--color-flag);
+  --ring: var(--color-brand);
 
   /* Flatter than the shadcn default. This is a document product, not a
      consumer app, and the landing page is built on 2-4px corners. */

@@ -19,10 +19,11 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
-        // ClauseGuard: a solid risk-red fill. shadcn's `destructive` is a
-        // tinted surface, which is right for a delete action but too quiet for
-        // a primary call to action.
-        flag: "bg-flag text-white hover:opacity-90",
+        // ClauseGuard: a solid brand-colour fill for the site's primary calls
+        // to action. Deliberately never bg-flag -- that is risk severity, and
+        // a button in the same colour as a "high risk" clause would read as a
+        // warning rather than an action.
+        brand: "bg-brand text-white hover:opacity-90",
       },
       size: {
         default:

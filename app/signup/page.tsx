@@ -21,7 +21,7 @@ export default async function Signup({
           href="/"
           className="font-display text-xl font-semibold tracking-tight"
         >
-          Clause<span className="text-flag">Guard</span>
+          Clause<span className="text-brand">Guard</span>
         </Link>
         <h1 className="font-display mt-6 text-3xl font-semibold tracking-tight">
           Create your account
@@ -37,7 +37,7 @@ export default async function Signup({
         Already have an account?{" "}
         <Link
           href="/login"
-          className="text-ink underline underline-offset-4 hover:text-flag"
+          className="text-ink underline underline-offset-4 hover:text-brand"
         >
           Sign in
         </Link>

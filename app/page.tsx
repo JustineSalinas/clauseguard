@@ -7,7 +7,7 @@ export default function Home() {
       <header className="border-b border-rule">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
           <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-            Clause<span className="text-flag">Guard</span>
+            Clause<span className="text-brand">Guard</span>
           </Link>
           <nav className="flex items-center gap-2 text-sm">
             <Link
@@ -43,7 +43,7 @@ export default function Home() {
               lawyer on call.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button asChild variant="flag" size="hero">
+              <Button asChild variant="brand" size="hero">
                 <Link href="/sample">See a marked-up contract</Link>
               </Button>
               <Button asChild variant="outline" size="hero">
@@ -186,7 +186,7 @@ export default function Home() {
 
           <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
             <li>
-              <p className="font-display text-3xl font-semibold text-flag">1</p>
+              <p className="font-display text-3xl font-semibold text-brand">1</p>
               <h3 className="font-display mt-2 text-xl font-semibold">
                 Upload the contract
               </h3>
@@ -196,7 +196,7 @@ export default function Home() {
               </p>
             </li>
             <li>
-              <p className="font-display text-3xl font-semibold text-flag">2</p>
+              <p className="font-display text-3xl font-semibold text-brand">2</p>
               <h3 className="font-display mt-2 text-xl font-semibold">
                 Every clause gets read
               </h3>
@@ -206,7 +206,7 @@ export default function Home() {
               </p>
             </li>
             <li>
-              <p className="font-display text-3xl font-semibold text-flag">3</p>
+              <p className="font-display text-3xl font-semibold text-brand">3</p>
               <h3 className="font-display mt-2 text-xl font-semibold">
                 You see what to push back on
               </h3>
@@ -306,7 +306,7 @@ export default function Home() {
             Read the contract before you sign it.
           </h2>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild variant="flag" size="hero">
+            <Button asChild variant="brand" size="hero">
               <Link href="/sample">See a marked-up contract</Link>
             </Button>
             <Button asChild variant="outline" size="hero">
@@ -331,7 +331,7 @@ export default function Home() {
           </div>
           <div className="mt-8 flex flex-wrap items-baseline justify-between gap-4 border-t border-rule pt-8">
             <p className="font-display text-lg font-semibold">
-              Clause<span className="text-flag">Guard</span>
+              Clause<span className="text-brand">Guard</span>
             </p>
             <p className="text-[0.8125rem] text-ink-3">
               A capstone project &middot; College of Liberal Arts, Sciences, and

@@ -9,7 +9,7 @@ export default function UpdatePassword() {
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center gap-8 px-6 py-16">
       <div>
         <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-          Clause<span className="text-flag">Guard</span>
+          Clause<span className="text-brand">Guard</span>
         </Link>
         <h1 className="font-display mt-6 text-3xl font-semibold tracking-tight">
           Choose a new password

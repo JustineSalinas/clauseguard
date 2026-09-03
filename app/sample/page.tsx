@@ -21,7 +21,7 @@ export default function Sample() {
             href="/"
             className="font-display text-xl font-semibold tracking-tight"
           >
-            Clause<span className="text-flag">Guard</span>
+            Clause<span className="text-brand">Guard</span>
           </Link>
           <Button asChild size="lg">
             <Link href="/signup">Review your own contract</Link>

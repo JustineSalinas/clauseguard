@@ -77,7 +77,7 @@ export const viewport: Viewport = {
   // leaving it to guess from page content.
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#F5F6F2" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F1613" },
+    { media: "(prefers-color-scheme: dark)", color: "#120F0C" },
   ],
 };
 

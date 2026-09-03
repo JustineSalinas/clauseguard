@@ -80,7 +80,7 @@ export default async function Dashboard() {
             href="/"
             className="font-display text-xl font-semibold tracking-tight"
           >
-            Clause<span className="text-flag">Guard</span>
+            Clause<span className="text-brand">Guard</span>
           </Link>
           <div className="flex items-center gap-3">
             <span className="hidden text-[0.875rem] text-ink-2 sm:block">
@@ -100,7 +100,7 @@ export default async function Dashboard() {
           <h1 className="font-display text-4xl font-semibold tracking-tight">
             Your contracts
           </h1>
-          <Button disabled size="hero" variant="flag">
+          <Button disabled size="hero" variant="brand">
             Upload a contract
           </Button>
         </div>
