@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Newsreader, Instrument_Sans, Tinos } from "next/font/google";
+import { SmoothScroll } from "@/components/smooth-scroll";
 import "./globals.css";
 
 // Not deployed yet -- swap for the real Vercel URL once it exists, or set
@@ -93,7 +94,9 @@ export default function RootLayout({
       lang="en"
       className={`${newsreader.variable} ${instrumentSans.variable} ${tinos.variable}`}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }
