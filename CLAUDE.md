@@ -34,10 +34,18 @@ before editing files there. At a glance:
 |---|---|
 | `lib/pipeline/`, extraction, segmentation | Navarro |
 | `lib/models/`, `lib/prompts/`, `lib/db/`, scoring stage, eval harness | Salinas |
-| `supabase/` (migrations, RLS policies), `tests/`, `eval/adversarial/`, `scripts/` | Zallen |
+| `supabase/` (migrations, RLS policies) | Salinas |
+| `tests/security/` cross-tenant suite (written) | Navarro |
+| `tests/security/` (run, extended, logged), `eval/adversarial/`, `scripts/` | Zallen |
 | grounding stage, `corpus/` | Salinas + Navarro |
 
-Security findings go to Salinas, not a self-fix — see "Security model" below.
+Split by failure visibility, not seniority: a wrong RLS policy fails silently
+(returns rows it shouldn't, looks healthy until it isn't), so Salinas writes
+it. Navarro writes the cross-tenant test that attacks it. Zallen runs it,
+extends it, and keeps the findings log — the person who writes a security
+control is deliberately never the only person clearing it. Security findings
+go to Salinas; never push a fix into `supabase/` yourself. Full rationale in
+`PLAN.md` under "Team and ownership."
 
 ## Commands
 
