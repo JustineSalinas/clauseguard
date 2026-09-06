@@ -22,9 +22,20 @@ Most items are a single command or a single look. None require writing code.
       authentication without authorization.
 - [ ] `ground_truth_labels` has RLS on and **no policy**, so it returns nothing
       to a browser session. It is the answer key.
-- [ ] No table has an `UPDATE` policy for `authenticated`. If one appears,
-      check it has both `USING` and `WITH CHECK`, or ownership can be
+      Supabase's advisor reports this as `rls_enabled_no_policy`. That notice
+      is **expected** — record it as intended, not as a finding.
+- [ ] Two advisor warnings are real and worth logging: the `vector` extension
+      is installed in the `public` schema, and leaked-password protection is
+      disabled in Auth.
+- [ ] No table in `public` has an `UPDATE` policy for `authenticated`. If one
+      appears, check it has both `USING` and `WITH CHECK`, or ownership can be
       reassigned.
+- [ ] `storage.objects` has exactly one — `contracts_update_own` — and it is
+      the reviewed exception, not a finding. Upsert needs INSERT, SELECT and
+      UPDATE together or file replacement silently fails. Confirm it still
+      carries both `USING` and `WITH CHECK`; that pairing is the only thing
+      stopping user B from overwriting user A's contract, and
+      `tests/security/storage.test.mjs` asserts it.
 
 **How to check:** Supabase dashboard, Authentication, Policies. Compare against
 `supabase/migrations/0001_init.sql`.
