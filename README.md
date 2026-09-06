@@ -49,7 +49,7 @@ lib/pipeline/     extract, segment, ground, score        Navarro + Salinas
 lib/prompts/      versioned prompt files                 Salinas
 lib/models/       model config keyed by stage            Salinas
 lib/db/           typed schema access                    Salinas
-supabase/         migrations, RLS policies, triggers     Zallen + Salinas
+supabase/         migrations, RLS policies, triggers     Salinas
 eval/             harness, datasets, adversarial suite   Salinas + Zallen
 corpus/           Civil Code, Labor Code, clause mapping Salinas
 tests/            unit, integration, security            Zallen

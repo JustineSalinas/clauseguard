@@ -1144,7 +1144,7 @@ Effort shown as human team time / Claude Code time.
 - [ ] **T4 (P1, human: ~2d / CC: ~3h)** — security — RLS policies plus guard triggers on every user table
   - Surfaced by: Sections 3.1 and 3.5 — prior logged bugs in this codebase family, both classes
   - Verify: risk_level, confidence, ground_truth_label, and scoring_runs are not client-writable under any policy
-  - Owner: Zallen
+  - Owner: Salinas (Zallen verifies via T5; the author of a control never clears it)
 
 - [ ] **T5 (P1, human: ~1d / CC: ~1h)** — security — Cross-tenant enumeration test suite, in CI
   - Surfaced by: Section 3.1 — highest severity failure available to this product

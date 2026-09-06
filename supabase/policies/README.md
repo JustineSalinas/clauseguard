@@ -1,7 +1,10 @@
 # RLS policies and guard triggers
 
-**Owner:** Zallen  
+**Owner:** Salinas  
 **Task:** T4
+
+Zallen does not write or patch anything in this directory — he verifies it and
+reports findings to Salinas. See `tests/security/AUDIT-CHECKLIST.md`.
 
 Postgres RLS is the security boundary for this project. Two rules, both taken
 from bugs already shipped in prior projects by this team.
