@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
+import { UploadForm } from "@/components/upload/upload-form";
 import type { DocumentStatus } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Your contracts" };
@@ -100,9 +101,10 @@ export default async function Dashboard() {
           <h1 className="font-display text-4xl font-semibold tracking-tight">
             Your contracts
           </h1>
-          <Button disabled size="hero" variant="brand">
-            Upload a contract
-          </Button>
+        </div>
+
+        <div className="mt-8 rounded-sm border border-rule bg-surface p-6">
+          <UploadForm />
         </div>
 
         {error ? (
@@ -121,9 +123,8 @@ export default async function Dashboard() {
               Nothing here yet.
             </p>
             <p className="mx-auto mt-2 max-w-md leading-relaxed text-ink-2">
-              Upload a contract and ClauseGuard will mark the clauses that shift
-              risk onto you. Upload isn&rsquo;t wired up yet, but you can read a
-              finished review now.
+              Upload a contract above and ClauseGuard will mark the clauses that
+              shift risk onto you. You can also read a finished review first.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Button asChild size="hero" variant="outline">
