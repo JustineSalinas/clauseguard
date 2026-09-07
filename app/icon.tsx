@@ -4,10 +4,9 @@ export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
 /**
- * Generated at build time so the favicon is never out of sync with the
- * wordmark. "C" on the dark ground that is now the site's primary theme,
- * underlined in the brand copper -- the mark's own identity colour, never the
- * risk-red the product uses for a flagged clause.
+ * ClauseGuard Favicon Mark:
+ * 1:1 match with the website brand logo mark — Mint/Emerald (#0c8c5e) squircle
+ * with a centered white "C" in bold sans-serif.
  */
 export default function Icon() {
   return new ImageResponse(
@@ -19,29 +18,23 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#120F0C",
-          borderRadius: 4,
+          background: "#0c8c5e",
+          borderRadius: 7,
         }}
       >
         <div
           style={{
+            fontSize: 22,
+            fontWeight: 800,
+            color: "#ffffff",
+            lineHeight: 1,
+            fontFamily: "Inter, system-ui, -apple-system, sans-serif",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              fontSize: 20,
-              fontWeight: 700,
-              color: "#F3ECE3",
-              lineHeight: 1,
-              fontFamily: "Georgia, serif",
-            }}
-          >
-            C
-          </div>
-          <div style={{ width: 12, height: 3, background: "#F0891F", marginTop: 1 }} />
+          C
         </div>
       </div>
     ),

@@ -3,8 +3,10 @@ import { ImageResponse } from "next/og";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
 
-/** Same mark as icon.tsx, scaled up for the iOS home-screen tile, which gets
- *  its own square background rather than the browser tab's rounded corner. */
+/**
+ * ClauseGuard Apple Touch Icon:
+ * Scaled 180x180 version of the brand mark matching the favicon and navbar mark.
+ */
 export default function AppleIcon() {
   return new ImageResponse(
     (
@@ -15,28 +17,23 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#120F0C",
+          background: "#0c8c5e",
+          borderRadius: 40,
         }}
       >
         <div
           style={{
+            fontSize: 124,
+            fontWeight: 800,
+            color: "#ffffff",
+            lineHeight: 1,
+            fontFamily: "Inter, system-ui, -apple-system, sans-serif",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              fontSize: 108,
-              fontWeight: 700,
-              color: "#F3ECE3",
-              lineHeight: 1,
-              fontFamily: "Georgia, serif",
-            }}
-          >
-            C
-          </div>
-          <div style={{ width: 64, height: 14, background: "#F0891F", marginTop: 6, borderRadius: 2 }} />
+          C
         </div>
       </div>
     ),

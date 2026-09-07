@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { AuthForm } from "@/components/auth/auth-form";
+import { Logo } from "@/components/brand/logo";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -17,12 +18,7 @@ export default async function Login({
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center gap-8 px-6 py-16">
       <div>
-        <Link
-          href="/"
-          className="font-display text-xl font-semibold tracking-tight"
-        >
-          Clause<span className="text-brand">Guard</span>
-        </Link>
+        <Logo size="md" href="/" />
         <h1 className="font-display mt-6 text-3xl font-semibold tracking-tight">
           Sign in
         </h1>

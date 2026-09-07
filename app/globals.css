@@ -24,51 +24,34 @@
    instead of danger. Never point a semantic risk class at --color-brand or
    vice versa. */
 @theme {
-  --color-paper: #120f0c;
-  --color-surface: #1e1915;
-  --color-raised: #29221c;
-  --color-ink: #f3ece3;
-  --color-ink-2: #b7a99b;
-  --color-ink-3: #8a7c6e;
-  --color-rule: #362e27;
-  --color-rule-2: #4a3f35;
+  --color-paper: #ffffff;
+  --color-surface: #ffffff;
+  --color-raised: #f8f9fa;
+  --color-ink: #000000;
+  --color-ink-2: #525866;
+  --color-ink-3: #868c98;
+  --color-rule: #f2f2f2;
+  --color-rule-2: #dddddd;
 
-  --color-flag: #e2503a;
-  --color-flag-wash: #3a1e17;
-  --color-caution: #d9a758;
-  --color-caution-wash: #332615;
-  --color-clear: #6fbf9b;
-  --color-clear-wash: #16281f;
+  --color-mint: #0c8c5e;
+  --color-mint-wash: #eefaf4;
+  --color-ink-black: #08090a;
+  --color-cloud: #dddddd;
+  --color-mist: #f2f2f2;
 
-  --color-brand: #f0891f;
-  --color-brand-wash: #2e1d10;
+  --color-flag: #dc2626;
+  --color-flag-wash: #fef2f2;
+  --color-caution: #d97706;
+  --color-caution-wash: #fffbeb;
+  --color-clear: #0c8c5e;
+  --color-clear-wash: #eefaf4;
 
-  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
-  --font-body: var(--font-instrument-sans), system-ui, -apple-system, sans-serif;
+  --color-brand: #0c8c5e;
+  --color-brand-wash: #eefaf4;
+
+  --font-display: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-contract: var(--font-tinos), "Times New Roman", Times, serif;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --color-paper: #f5f6f2;
-    --color-surface: #ffffff;
-    --color-raised: #eef1ea;
-    --color-ink: #14201b;
-    --color-ink-2: #4a5a52;
-    --color-ink-3: #7c8a82;
-    --color-rule: #dde2da;
-    --color-rule-2: #c5cec1;
-
-    --color-flag: #c2311d;
-    --color-flag-wash: #f8e1dc;
-    --color-caution: #a8721a;
-    --color-caution-wash: #f6ecd9;
-    --color-clear: #2c6a4f;
-    --color-clear-wash: #dfede5;
-
-    --color-brand: #b04000;
-    --color-brand-wash: #fbe9da;
-  }
 }
 
 html {
@@ -76,22 +59,22 @@ html {
 }
 
 body {
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: #ffffff;
+  color: #000000;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-brand);
-  color: var(--color-paper);
+  background: #0c8c5e;
+  color: #ffffff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-brand);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline: 2px solid #0c8c5e;
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* ---- verdict marks ----
@@ -203,76 +186,62 @@ body {
 }
 
 @theme inline {
-  /* shadcn reads these. Literal family names: @theme inline resolves at parse
-     time, so a var() pointing at a next/font runtime variable would not work
-     here. Keep the fallback names next/font generates. */
-  --font-sans: "Instrument Sans", "Instrument Sans Fallback", system-ui, sans-serif;
-  --font-heading: "Newsreader", "Newsreader Fallback", Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-heading: var(--font-inter), system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
+  --color-ring: #0c8c5e;
+  --color-input: #dddddd;
+  --color-border: #f2f2f2;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-accent-foreground: #000000;
+  --color-accent: #f2f2f2;
+  --color-muted-foreground: #525866;
+  --color-muted: #f8f9fa;
+  --color-secondary-foreground: #08090a;
+  --color-secondary: #f2f2f2;
+  --color-primary-foreground: #ffffff;
+  --color-primary: #08090a;
+  --color-popover-foreground: #000000;
+  --color-popover: #ffffff;
+  --color-card-foreground: #000000;
+  --color-card: #ffffff;
+  --color-foreground: #000000;
+  --color-background: #ffffff;
 
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-sm: 4px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 24px;
 }
 
-/* shadcn's tokens point at the ClauseGuard palette above. Because those flip
-   under prefers-color-scheme, every shadcn component follows the page theme
-   with no .dark class and no toggle to keep in sync.
-
-   --primary now points at --color-brand rather than --color-ink: the default
-   shadcn Button is the site's main call-to-action colour, which is a brand
-   decision, not a "make it dark" decision. --destructive stays on
-   --color-flag, since a destructive action (delete, revoke) is functionally
-   the same kind of warning as a high-risk clause. */
 :root {
-  --background: var(--color-paper);
-  --foreground: var(--color-ink);
-  --card: var(--color-surface);
-  --card-foreground: var(--color-ink);
-  --popover: var(--color-surface);
-  --popover-foreground: var(--color-ink);
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
 
-  --primary: var(--color-brand);
+  --primary: #08090a;
   --primary-foreground: #ffffff;
-  --secondary: var(--color-raised);
-  --secondary-foreground: var(--color-ink);
+  --secondary: #f2f2f2;
+  --secondary-foreground: #08090a;
 
-  --muted: var(--color-raised);
-  --muted-foreground: var(--color-ink-2);
-  --accent: var(--color-raised);
-  --accent-foreground: var(--color-ink);
+  --muted: #f8f9fa;
+  --muted-foreground: #525866;
+  --accent: #f2f2f2;
+  --accent-foreground: #000000;
 
-  --destructive: var(--color-flag);
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
 
-  --border: var(--color-rule);
-  --input: var(--color-rule-2);
-  --ring: var(--color-brand);
+  --border: #f2f2f2;
+  --input: #dddddd;
+  --ring: #0c8c5e;
 
-  /* Flatter than the shadcn default. This is a document product, not a
-     consumer app, and the landing page is built on 2-4px corners. */
-  --radius: 0.25rem;
+  --radius: 4px;
 }
 
 @layer base {

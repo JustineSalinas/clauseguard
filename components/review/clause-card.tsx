@@ -15,13 +15,13 @@ import {
 function frameFor(clause: ScoredClause) {
   const verdict = verdictFor(clause);
   if (verdict === "unreadable")
-    return "border-l-2 border-l-rule-2 border-dashed";
+    return "border-l-4 border-l-[#868c98]";
   if (verdict === "review")
-    return "border-l-2 border-l-caution border-dashed";
+    return "border-l-4 border-l-[#d97706]";
   const risk = clause.riskLevel ?? "low";
-  if (risk === "high") return "border-l-2 border-l-flag";
-  if (risk === "medium") return "border-l-2 border-l-caution";
-  return "border-l-2 border-l-clear";
+  if (risk === "high") return "border-l-4 border-l-[#dc2626]";
+  if (risk === "medium") return "border-l-4 border-l-[#d97706]";
+  return "border-l-4 border-l-[#0c8c5e]";
 }
 
 export function ClauseCard({ clause }: { clause: ScoredClause }) {
@@ -30,38 +30,38 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
   return (
     <article
       id={`clause-${clause.id}`}
-      className={`rounded-sm border border-rule bg-surface p-5 ${frameFor(clause)}`}
+      className={`rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] ${frameFor(clause)}`}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-baseline gap-2">
           {clause.label ? (
-            <span className="font-contract text-[0.9375rem] font-bold">
+            <span className="font-sans text-[15px] font-semibold text-[#08090a]">
               {clause.label}
             </span>
           ) : null}
           {clause.clauseType ? (
-            <span className="font-body text-[0.6875rem] tracking-[0.08em] text-ink-3 uppercase">
+            <span className="font-sans text-[11px] font-semibold tracking-[0.05em] text-[#868c98] uppercase">
               {clause.clauseType.replace(/\./g, " · ")}
             </span>
           ) : null}
-          <span className="text-[0.75rem] text-ink-3">p.{clause.page}</span>
+          <span className="text-xs text-[#868c98] font-mono">p.{clause.page}</span>
         </div>
         <VerdictBadge clause={clause} />
       </div>
 
-      <p className="font-contract mt-3 text-[0.9375rem] leading-[1.75]">
+      <p className="font-contract mt-4 text-[15px] leading-[1.8] text-[#08090a] bg-[#fafbfc] p-4 rounded-[6px] border border-[#f2f2f2]">
         <ClauseText clause={clause} />
       </p>
 
       {verdict === "unreadable" ? (
-        <p className="mt-4 border-t border-rule pt-3 text-[0.875rem] leading-relaxed text-ink-2">
+        <p className="mt-4 border-t border-[#f2f2f2] pt-3 text-sm leading-relaxed text-[#525866]">
           {outcomeCopy(clause.outcome)} It hasn&rsquo;t been checked, so
           don&rsquo;t treat the silence as approval.
         </p>
       ) : (
-        <div className="mt-4 flex flex-col gap-3 border-t border-rule pt-3">
+        <div className="mt-4 flex flex-col gap-3.5 border-t border-[#f2f2f2] pt-3.5">
           {clause.rationale ? (
-            <p className="text-[0.9375rem] leading-relaxed">
+            <p className="text-sm leading-relaxed text-[#08090a]">
               {clause.rationale}
             </p>
           ) : null}
@@ -69,17 +69,17 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
           <ConfidenceNote clause={clause} />
 
           {clause.provisions.length > 0 ? (
-            <div>
-              <p className="font-body text-[0.6875rem] tracking-[0.12em] text-ink-3 uppercase">
-                Checked against
+            <div className="bg-[#f8f9fa] p-3.5 rounded-[4px] border border-[#dddddd]">
+              <p className="text-[11px] font-semibold tracking-[0.05em] text-[#0c8c5e] uppercase">
+                Checked against Philippine Statutes
               </p>
               {clause.provisions.map((p) => (
-                <div key={`${p.code}-${p.article}`} className="mt-1.5">
-                  <p className="font-display text-[0.9375rem] italic">
-                    {p.code === "CIVIL" ? "Civil Code" : "Labor Code"}, Art.{" "}
+                <div key={`${p.code}-${p.article}`} className="mt-2">
+                  <p className="font-sans text-xs font-semibold text-[#08090a]">
+                    {p.code === "CIVIL" ? "Civil Code of the Philippines" : "Labor Code of the Philippines"}, Art.{" "}
                     {p.article}
                   </p>
-                  <p className="mt-0.5 text-[0.8125rem] leading-relaxed text-ink-2">
+                  <p className="mt-1 text-xs leading-relaxed text-[#525866]">
                     {p.text}
                   </p>
                 </div>
@@ -88,11 +88,11 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
           ) : null}
 
           {clause.deviation ? (
-            <div>
-              <p className="font-body text-[0.6875rem] tracking-[0.12em] text-ink-3 uppercase">
-                A fair version
+            <div className="bg-[#eefaf4] p-3.5 rounded-[4px] border border-[#bbf0d6]">
+              <p className="text-[11px] font-semibold tracking-[0.05em] text-[#0c8c5e] uppercase">
+                Actionable Redline / Fair Version
               </p>
-              <p className="mt-1.5 text-[0.8125rem] leading-relaxed text-ink-2">
+              <p className="mt-1.5 text-xs leading-relaxed text-[#08090a]">
                 {clause.deviation}
               </p>
             </div>
