@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ReviewView } from "@/components/review/review-view";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/brand/logo";
 import type {
   BoundingBox,
   DocumentStatus,
@@ -128,9 +129,7 @@ export default async function Review({
     <div className="min-h-screen">
       <header className="border-b border-rule">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
-          <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-            Clause<span className="text-brand">Guard</span>
-          </Link>
+          <Logo size="md" href="/" />
           <Button asChild variant="ghost" size="lg">
             <Link href="/dashboard">All contracts</Link>
           </Button>

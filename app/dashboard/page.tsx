@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import { UploadForm } from "@/components/upload/upload-form";
+import { Logo } from "@/components/brand/logo";
 import type { DocumentStatus } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Your contracts" };
@@ -77,12 +78,7 @@ export default async function Dashboard() {
     <div className="min-h-screen">
       <header className="border-b border-rule">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-5">
-          <Link
-            href="/"
-            className="font-display text-xl font-semibold tracking-tight"
-          >
-            Clause<span className="text-brand">Guard</span>
-          </Link>
+          <Logo size="md" href="/" />
           <div className="flex items-center gap-3">
             <span className="hidden text-[0.875rem] text-ink-2 sm:block">
               {email}
