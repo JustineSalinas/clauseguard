@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -15,6 +17,7 @@ import {
   Check,
   Play,
 } from "lucide-react";
+import { DragCompare } from "@/components/brand/drag-compare";
 
 interface ClauseItem {
   id: string;
@@ -119,22 +122,58 @@ export function InteractiveContractInspector() {
   const [activeTab, setActiveTab] = useState<"sample" | "upload">("sample");
   const [activeId, setActiveId] = useState<string>("termination");
   const [inspectorMode, setInspectorMode] = useState<"before" | "after">("after");
+  const [dragRevealKey, setDragRevealKey] = useState(0);
+  const [dragRevealPercent, setDragRevealPercent] = useState(50);
   const [isHeroScanning, setIsHeroScanning] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [uploadingState, setUploadingState] = useState<
     "idle" | "uploading" | "segmenting" | "grounding" | "done"
   >("idle");
   const [droppedFileName, setDroppedFileName] = useState<string | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const root = rootRef.current;
+    if (!root) return;
+
+    // The one scroll-tied moment: a quiet rise into place as the inspector
+    // enters view, the same weight as a page turning rather than a UI
+    // element sliding in. Runs once -- re-triggering on every scroll up/down
+    // past the hero would read as a glitch, not polish. Site-wide Lenis
+    // (components/smooth-scroll.tsx) already makes the scroll itself feel
+    // continuous; this is the one element-level payoff for that.
+    const tween = gsap.fromTo(
+      root,
+      { opacity: 0, y: 28 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: { trigger: root, start: "top 85%", once: true },
+      },
+    );
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, []);
 
   const activeClause =
     SAMPLE_CLAUSES.find((c) => c.id === activeId) ?? SAMPLE_CLAUSES[0];
 
   const triggerHeroScan = () => {
     setInspectorMode("before");
+    setDragRevealPercent(6); // almost entirely raw draft
+    setDragRevealKey((k) => k + 1);
     setIsHeroScanning(true);
     setTimeout(() => {
       setIsHeroScanning(false);
       setInspectorMode("after");
+      setDragRevealPercent(94); // scan "reveals" the audited read
+      setDragRevealKey((k) => k + 1);
     }, 1200);
   };
 
@@ -161,7 +200,7 @@ export function InteractiveContractInspector() {
   };
 
   return (
-    <div className="relative w-full max-w-[1200px] mx-auto">
+    <div ref={rootRef} className="relative w-full max-w-[1200px] mx-auto opacity-0">
       {/* Container with Mintlify 16px radius, pure white surface, and forensic shadow */}
       <div className="rounded-[16px] border border-[#dddddd] bg-white shadow-[0_8px_32px_rgba(0,0,0,0.06)] overflow-hidden transition-all">
         {/* Top Header Bar with Dual-Tab Switcher (Sample Inspector vs Drag-and-Drop Dropzone) */}
@@ -193,15 +232,15 @@ export function InteractiveContractInspector() {
                     : "text-[#525866] hover:text-[#08090a]"
                 }`}
               >
-                <UploadCloud className="size-3 text-[#0c8c5e]" />
+                <UploadCloud className="size-3 text-[#b04000]" />
                 Drag &amp; Drop Your Contract
               </button>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 text-xs text-[#0c8c5e] font-medium bg-[#eefaf4] px-2.5 py-1 rounded-[4px] border border-[#bbf0d6]">
-              <span className="size-1.5 rounded-full bg-[#0c8c5e] animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 text-xs text-[#b04000] font-medium bg-[#fbeee4] px-2.5 py-1 rounded-[4px] border border-[#e8c6a8]">
+              <span className="size-1.5 rounded-full bg-[#b04000] animate-pulse" />
               Civil Code &amp; Labor Code Grounding
             </span>
             <span className="hidden sm:inline text-xs text-[#868c98] font-mono">
@@ -222,13 +261,13 @@ export function InteractiveContractInspector() {
               onDrop={handleDrop}
               className={`border-2 border-dashed rounded-[12px] p-8 sm:p-12 text-center transition-all ${
                 dragActive
-                  ? "border-[#0c8c5e] bg-[#eefaf4]/50"
-                  : "border-[#dddddd] bg-[#fcfdfd] hover:border-[#0c8c5e]/60"
+                  ? "border-[#b04000] bg-[#fbeee4]/50"
+                  : "border-[#dddddd] bg-[#fcfdfd] hover:border-[#b04000]/60"
               }`}
             >
               {uploadingState === "idle" && (
                 <div className="max-w-md mx-auto space-y-4">
-                  <div className="size-12 rounded-[4px] bg-[#eefaf4] text-[#0c8c5e] flex items-center justify-center mx-auto">
+                  <div className="size-12 rounded-[4px] bg-[#fbeee4] text-[#b04000] flex items-center justify-center mx-auto">
                     <FileUp className="size-6" />
                   </div>
                   <div>
@@ -242,7 +281,7 @@ export function InteractiveContractInspector() {
 
                   <div className="flex items-center justify-center gap-3 pt-2">
                     <label className="cursor-pointer inline-flex items-center gap-2 rounded-[4px] bg-[#08090a] text-white px-4 py-2 text-xs font-medium hover:bg-[#1a1c1e] transition-colors shadow-sm">
-                      <UploadCloud className="size-3.5 text-[#0c8c5e]" />
+                      <UploadCloud className="size-3.5 text-[#b04000]" />
                       <span>Browse Files</span>
                       <input
                         type="file"
@@ -257,7 +296,7 @@ export function InteractiveContractInspector() {
                     </label>
                     <button
                       onClick={() => handleSimulatedUpload("Freelance_Services_Agreement_2026.pdf")}
-                      className="text-xs text-[#0c8c5e] hover:underline font-medium cursor-pointer"
+                      className="text-xs text-[#b04000] hover:underline font-medium cursor-pointer"
                     >
                       Try with sample file
                     </button>
@@ -271,11 +310,11 @@ export function InteractiveContractInspector() {
 
               {uploadingState !== "idle" && (
                 <div className="max-w-md mx-auto space-y-5 py-4">
-                  <div className="size-12 rounded-[4px] bg-[#eefaf4] text-[#0c8c5e] flex items-center justify-center mx-auto">
+                  <div className="size-12 rounded-[4px] bg-[#fbeee4] text-[#b04000] flex items-center justify-center mx-auto">
                     {uploadingState === "done" ? (
-                      <Check className="size-6 text-[#0c8c5e]" />
+                      <Check className="size-6 text-[#b04000]" />
                     ) : (
-                      <Loader2 className="size-6 animate-spin text-[#0c8c5e]" />
+                      <Loader2 className="size-6 animate-spin text-[#b04000]" />
                     )}
                   </div>
 
@@ -295,17 +334,17 @@ export function InteractiveContractInspector() {
                   <div className="space-y-2 text-left bg-white p-4 rounded-[6px] border border-[#dddddd] text-xs">
                     <div className="flex items-center justify-between text-[#525866]">
                       <span>Stage 1: Extract &amp; Layout Tokens</span>
-                      <span className="font-semibold text-[#0c8c5e]">Done</span>
+                      <span className="font-semibold text-[#b04000]">Done</span>
                     </div>
                     <div className="flex items-center justify-between text-[#525866]">
                       <span>Stage 2: Deterministic Clause Segmentation</span>
-                      <span className="font-semibold text-[#0c8c5e]">
+                      <span className="font-semibold text-[#b04000]">
                         {uploadingState === "uploading" ? "Pending" : "Done"}
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-[#525866]">
                       <span>Stage 3: Statutory Grounding (pgvector)</span>
-                      <span className="font-semibold text-[#0c8c5e]">
+                      <span className="font-semibold text-[#b04000]">
                         {uploadingState === "grounding" || uploadingState === "done"
                           ? "Grounding Arts. 1308, 1170..."
                           : "Queued"}
@@ -355,10 +394,14 @@ export function InteractiveContractInspector() {
                   return (
                     <button
                       key={item.id}
-                      onClick={() => setActiveId(item.id)}
+                      onClick={() => {
+                        setActiveId(item.id);
+                        setDragRevealPercent(50);
+                        setDragRevealKey((k) => k + 1);
+                      }}
                       className={`w-full text-left p-2.5 rounded-[4px] transition-colors cursor-pointer flex flex-col gap-1 ${
                         isActive
-                          ? "bg-[#eefaf4] text-[#0c8c5e] font-medium"
+                          ? "bg-[#fbeee4] text-[#b04000] font-medium"
                           : "hover:bg-[#f8f9fa] text-[#000000]"
                       }`}
                     >
@@ -401,7 +444,7 @@ export function InteractiveContractInspector() {
               </div>
               <div className="w-full bg-[#dddddd] h-1 rounded-[2px] mt-1.5 overflow-hidden">
                 <div
-                  className="bg-[#0c8c5e] h-full transition-all duration-300"
+                  className="bg-[#b04000] h-full transition-all duration-300"
                   style={{ width: `${activeClause.confidence}%` }}
                 />
               </div>
@@ -413,7 +456,7 @@ export function InteractiveContractInspector() {
             {/* The Scanning Beam Animation (when hero scan is running) */}
             {isHeroScanning && (
               <div
-                className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#0c8c5e] to-transparent shadow-[0_0_12px_#0c8c5e] z-20 pointer-events-none"
+                className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#b04000] to-transparent shadow-[0_0_12px_#b04000] z-20 pointer-events-none"
                 style={{
                   animation: "scanBeam 1.2s ease-in-out infinite",
                 }}
@@ -425,32 +468,11 @@ export function InteractiveContractInspector() {
               <span className="font-mono">PARAGRAPH 14</span>
             </div>
 
-            {/* Before / After Toggle Bar inside Reading Pane */}
-            <div className="flex items-center justify-between gap-2 mb-4 bg-[#f8f9fa] p-1.5 rounded-[6px] border border-[#dddddd]">
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setInspectorMode("before")}
-                  className={`px-2.5 py-1 text-[11px] font-medium rounded-[3px] transition-colors cursor-pointer ${
-                    inspectorMode === "before" && !isHeroScanning
-                      ? "bg-white text-[#08090a] shadow-xs font-semibold"
-                      : "text-[#525866] hover:text-[#08090a]"
-                  }`}
-                >
-                  Before (Raw Draft)
-                </button>
-                <button
-                  onClick={() => setInspectorMode("after")}
-                  className={`px-2.5 py-1 text-[11px] font-medium rounded-[3px] transition-colors cursor-pointer flex items-center gap-1.5 ${
-                    inspectorMode === "after"
-                      ? "bg-white text-[#08090a] shadow-xs font-semibold"
-                      : "text-[#525866] hover:text-[#08090a]"
-                  }`}
-                >
-                  <span className="size-1.5 rounded-full bg-[#0c8c5e]" />
-                  After (Audited)
-                </button>
-              </div>
-
+            {/* Scan trigger: animates the drag divider from raw draft to audited */}
+            <div className="flex items-center justify-between gap-2 mb-4">
+              <p className="text-[11px] text-[#868c98]">
+                Drag the divider below, or run the scan.
+              </p>
               <button
                 onClick={triggerHeroScan}
                 disabled={isHeroScanning}
@@ -459,39 +481,38 @@ export function InteractiveContractInspector() {
                 {isHeroScanning ? (
                   <span className="size-2.5 border border-white/40 border-t-white rounded-full animate-spin" />
                 ) : (
-                  <Play className="size-2.5 text-[#0c8c5e] fill-current" />
+                  <Play className="size-2.5 text-[#b04000] fill-current" />
                 )}
                 <span>{isHeroScanning ? "Scanning..." : "Scan"}</span>
               </button>
             </div>
 
-            {/* Reading Content */}
-            <div className="font-sans text-[14px] sm:text-[15px] leading-relaxed text-[#000000] space-y-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[#868c98] text-xs uppercase tracking-wider font-semibold">
-                  {inspectorMode === "before" ? "Raw Contract Text (Unaudited)" : "Audited Contract Text"}
-                </p>
-                {inspectorMode === "before" ? (
-                  <span className="text-[10px] font-mono text-[#d97706] bg-[#fffbeb] px-1.5 py-0.5 rounded-[2px] border border-[#fde68a]">
-                    Boilerplate disguise
+            {/* Reading Content: drag to compare raw draft against the audited read */}
+            <DragCompare
+              key={`${activeId}-${dragRevealKey}`}
+              initialPercent={dragRevealPercent}
+              leftLabel="Raw Draft"
+              rightLabel="Audited"
+              onPercentChange={(p) => setInspectorMode(p < 50 ? "before" : "after")}
+              className="rounded-[6px] border border-[#f2f2f2] bg-[#fafbfc] min-h-[220px]"
+              before={
+                <div className="p-4 pt-8 font-sans text-[14px] sm:text-[15px] leading-relaxed text-[#000000]">
+                  <span className="font-mono text-xs font-semibold text-[#525866] block mb-2">
+                    {activeClause.clauseNumber}: {activeClause.title}
                   </span>
-                ) : (
-                  <span className="text-[10px] font-mono text-[#0c8c5e] bg-[#eefaf4] px-1.5 py-0.5 rounded-[2px] border border-[#bbf0d6]">
-                    Heat-map active
-                  </span>
-                )}
-              </div>
-
-              <div className="p-4 rounded-[6px] border border-[#f2f2f2] bg-[#fafbfc] relative">
-                <span className="font-mono text-xs font-semibold text-[#525866] block mb-2">
-                  {activeClause.clauseNumber}: {activeClause.title}
-                </span>
-
-                {inspectorMode === "before" ? (
                   <p className="leading-[1.7] text-[#08090a]">
                     {activeClause.contractSnippet}
                   </p>
-                ) : (
+                  <div className="mt-3 bg-[#fffbeb] p-3 rounded-[4px] border border-[#fde68a] text-xs text-[#92400e] leading-relaxed">
+                    In this raw draft, severe risks look completely harmless.
+                  </div>
+                </div>
+              }
+              after={
+                <div className="p-4 pt-8 font-sans text-[14px] sm:text-[15px] leading-relaxed text-[#000000] bg-[#fafbfc] h-full">
+                  <span className="font-mono text-xs font-semibold text-[#525866] block mb-2">
+                    {activeClause.clauseNumber}: {activeClause.title}
+                  </span>
                   <p className="leading-[1.7] text-[#08090a]">
                     {activeClause.contractSnippet.split(activeClause.flaggedText)[0]}
                     <mark
@@ -507,16 +528,7 @@ export function InteractiveContractInspector() {
                     </mark>
                     {activeClause.contractSnippet.split(activeClause.flaggedText)[1]}
                   </p>
-                )}
-              </div>
-
-              <div className="pt-1">
-                {inspectorMode === "before" ? (
-                  <div className="bg-[#fffbeb] p-3 rounded-[4px] border border-[#fde68a] text-xs text-[#92400e] leading-relaxed">
-                    <strong>Notice:</strong> In this raw draft, severe risks (like full fee forfeiture upon cancellation) look completely harmless. Switch to <strong>After</strong> or click <strong>Scan</strong> to see how ClauseGuard flags it.
-                  </div>
-                ) : (
-                  <div>
+                  <div className="mt-3">
                     <span className="text-xs font-semibold uppercase tracking-[0.05em] text-[#868c98] block mb-1.5">
                       Plain-Language Assessment
                     </span>
@@ -524,9 +536,9 @@ export function InteractiveContractInspector() {
                       {activeClause.plainSummary}
                     </p>
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              }
+            />
           </div>
 
           {/* Column 3: Forensic Legal Grounding & Redline Drawer */}
@@ -558,7 +570,7 @@ export function InteractiveContractInspector() {
                     Routed to Human Review
                   </span>
                 ) : (
-                  <span className="text-[10px] font-mono font-medium text-[#0c8c5e] bg-[#eefaf4] px-2 py-0.5 rounded-[3px] border border-[#bbf0d6]">
+                  <span className="text-[10px] font-mono font-medium text-[#b04000] bg-[#fbeee4] px-2 py-0.5 rounded-[3px] border border-[#e8c6a8]">
                     Verified Grounding
                   </span>
                 )}
@@ -574,7 +586,7 @@ export function InteractiveContractInspector() {
                   </p>
                   <button
                     onClick={triggerHeroScan}
-                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-[4px] bg-[#0c8c5e] text-white text-xs font-medium hover:bg-[#0aa36b] transition-colors cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-[4px] bg-[#b04000] text-white text-xs font-medium hover:bg-[#8a3300] transition-colors cursor-pointer"
                   >
                     <Play className="size-3 fill-current" />
                     <span>Run Statutory Audit Scan</span>
@@ -584,7 +596,7 @@ export function InteractiveContractInspector() {
                 <>
                   {/* Statutory Grounding Card */}
                   <div className="rounded-[4px] border border-[#dddddd] bg-white p-3.5 space-y-2">
-                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0c8c5e]">
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#b04000]">
                       <Scale className="size-3.5" />
                       <span>{activeClause.statuteTitle}</span>
                     </div>
@@ -599,7 +611,7 @@ export function InteractiveContractInspector() {
                   {/* Recommended Redline Action */}
                   <div className="rounded-[4px] border border-[#dddddd] bg-white p-3.5 space-y-2">
                     <div className="flex items-center gap-1.5 text-xs font-semibold text-[#08090a]">
-                      <FileText className="size-3.5 text-[#0c8c5e]" />
+                      <FileText className="size-3.5 text-[#b04000]" />
                       <span>Actionable Redline</span>
                     </div>
                     <p className="text-xs leading-relaxed text-[#525866]">

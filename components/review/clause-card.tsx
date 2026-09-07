@@ -70,7 +70,7 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
 
           {clause.provisions.length > 0 ? (
             <div className="bg-[#f8f9fa] p-3.5 rounded-[4px] border border-[#dddddd]">
-              <p className="text-[11px] font-semibold tracking-[0.05em] text-[#0c8c5e] uppercase">
+              <p className="text-[11px] font-semibold tracking-[0.05em] text-[#b04000] uppercase">
                 Checked against Philippine Statutes
               </p>
               {clause.provisions.map((p) => (
@@ -88,8 +88,8 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
           ) : null}
 
           {clause.deviation ? (
-            <div className="bg-[#eefaf4] p-3.5 rounded-[4px] border border-[#bbf0d6]">
-              <p className="text-[11px] font-semibold tracking-[0.05em] text-[#0c8c5e] uppercase">
+            <div className="bg-[#fbeee4] p-3.5 rounded-[4px] border border-[#e8c6a8]">
+              <p className="text-[11px] font-semibold tracking-[0.05em] text-[#b04000] uppercase">
                 Actionable Redline / Fair Version
               </p>
               <p className="mt-1.5 text-xs leading-relaxed text-[#08090a]">

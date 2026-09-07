@@ -27,8 +27,8 @@ export default function Sample() {
 
       <main className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
         <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-[4px] bg-[#eefaf4] px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.05em] text-[#0c8c5e] border border-[#bbf0d6]">
-            <span className="size-1.5 rounded-full bg-[#0c8c5e]" />
+          <div className="inline-flex items-center gap-2 rounded-[4px] bg-[#fbeee4] px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.05em] text-[#b04000] border border-[#e8c6a8]">
+            <span className="size-1.5 rounded-full bg-[#b04000]" />
             Live Marked-Up Review &middot; No Account Required
           </div>
           <h1 className="mt-4 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a] text-balance">

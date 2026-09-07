@@ -4,16 +4,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Tailwind v4: @theme must be top level. Light-theme values are plain
-   custom-property overrides below, which is what keeps the generated
-   utilities intact.
-
-   Dark is the primary/default theme, not an afterthought: the unconditional
-   block below is what every visitor sees unless their OS says otherwise, and
-   `@media (prefers-color-scheme: light)` is the override. This is a deliberate
-   flip from the site's original light-first palette, made when the accent
-   moved from oxblood red to copper/orange -- copper reads as a glow against
-   near-black and reads muddy on white paper.
+/* Tailwind v4: @theme must be top level. The site is light-primary (white
+   paper, black ink) -- Navarro's landing redesign moved off the earlier
+   dark-primary draft. No dark-mode override exists yet; the tokens below are
+   the only palette in effect.
 
    Two colour systems live here, kept deliberately separate:
    --color-flag / --color-caution / --color-clear are RISK SEVERITY -- the
@@ -22,7 +16,13 @@
    CTA button in the same colour as a "high risk" clause would read as a
    warning, and a risk badge in the brand colour would read as decoration
    instead of danger. Never point a semantic risk class at --color-brand or
-   vice versa. */
+   vice versa.
+
+   --color-brand is copper/rust (#B04000), not green, on purpose: green is
+   already spent on --color-clear (a "this clause is fine" verdict), so a
+   green brand and a green safe-verdict would read as the same signal. Copper
+   is also just rarer in legal-tech, where blue/green defaults are the norm --
+   it reads as a deliberate choice, not a template. */
 @theme {
   --color-paper: #ffffff;
   --color-surface: #ffffff;
@@ -46,8 +46,10 @@
   --color-clear: #0c8c5e;
   --color-clear-wash: #eefaf4;
 
-  --color-brand: #0c8c5e;
-  --color-brand-wash: #eefaf4;
+  --color-brand: #b04000;
+  --color-brand-wash: #fbeee4;
+  --color-brand-hover: #8a3300;
+  --color-brand-border: #e8c6a8;
 
   --font-display: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-body: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -67,12 +69,12 @@ body {
 }
 
 ::selection {
-  background: #0c8c5e;
+  background: #b04000;
   color: #ffffff;
 }
 
 :focus-visible {
-  outline: 2px solid #0c8c5e;
+  outline: 2px solid #b04000;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -190,7 +192,7 @@ body {
   --font-heading: var(--font-inter), system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-ring: #0c8c5e;
+  --color-ring: #b04000;
   --color-input: #dddddd;
   --color-border: #f2f2f2;
   --color-destructive: #dc2626;
@@ -239,7 +241,7 @@ body {
 
   --border: #f2f2f2;
   --input: #dddddd;
-  --ring: #0c8c5e;
+  --ring: #b04000;
 
   --radius: 4px;
 }

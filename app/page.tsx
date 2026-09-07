@@ -17,48 +17,40 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white text-[#000000] selection:bg-[#0c8c5e] selection:text-white">
+    <div className="min-h-screen bg-white text-[#000000] selection:bg-[#b04000] selection:text-white">
       {/* ---------------- Sticky Top Navigation Bar ---------------- */}
       <header className="sticky top-0 z-50 border-b border-[#f2f2f2] bg-white/95 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-8">
-            <Logo size="md" href="/" />
+        <div className="mx-auto grid h-16 max-w-[1200px] grid-cols-[1fr_auto_1fr] items-center px-4 sm:px-6">
+          <Logo size="md" href="/" />
 
-            <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#525866]">
-              <Link
-                href="#features"
-                className="transition-colors hover:text-[#000000]"
-              >
-                Features
-              </Link>
-              <Link
-                href="#statutory-grounding"
-                className="transition-colors hover:text-[#000000]"
-              >
-                Statutory Grounding
-              </Link>
-              <Link
-                href="/sample"
-                className="transition-colors hover:text-[#000000]"
-              >
-                Sample Review
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="transition-colors hover:text-[#000000]"
-              >
-                How it Works
-              </Link>
-              <Link
-                href="#faq"
-                className="transition-colors hover:text-[#000000]"
-              >
-                FAQ
-              </Link>
-            </nav>
-          </div>
+          <nav className="hidden md:flex items-center gap-6 text-[14px] font-medium text-[#525866] justify-self-center">
+            <Link
+              href="#features"
+              className="transition-colors hover:text-[#000000]"
+            >
+              Features
+            </Link>
+            <Link
+              href="/sample"
+              className="transition-colors hover:text-[#000000]"
+            >
+              Sample Review
+            </Link>
+            <Link
+              href="#how-it-works"
+              className="transition-colors hover:text-[#000000]"
+            >
+              How it Works
+            </Link>
+            <Link
+              href="#faq"
+              className="transition-colors hover:text-[#000000]"
+            >
+              FAQ
+            </Link>
+          </nav>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 justify-self-end">
             <Link
               href="/login"
               className="text-[14px] font-medium text-[#08090a] px-3 py-1.5 rounded-[4px] hover:bg-[#f2f2f2] transition-colors"
@@ -76,26 +68,18 @@ export default function Home() {
       </header>
 
       {/* ---------------- Hero Section with Atmospheric Cloud Garden ---------------- */}
-      <section className="relative overflow-hidden pt-16 pb-28 sm:pt-24 sm:pb-36 bg-[#061e16]">
+      <section className="relative overflow-hidden pt-16 pb-28 sm:pt-24 sm:pb-36 bg-[#130a05]">
         {/* The Signature "Cloud Garden over a Glass Desk" Atmospheric Layer */}
         <CloudHeroBackdrop />
 
         <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6">
-          {/* Eyebrow Label with Mint Green dot and small caps */}
-          <div className="flex justify-center">
-            <div className="inline-flex items-center gap-2 rounded-[4px] border border-[#1b634c] bg-[#072d21]/80 px-3 py-1 text-[12px] font-medium uppercase tracking-[0.05em] text-[#6ee7b7] backdrop-blur-sm">
-              <span className="size-1.5 rounded-full bg-[#0c8c5e] animate-pulse" />
-              Philippine Contract Intelligence Engine
-            </div>
-          </div>
-
           {/* Display Headline */}
-          <h1 className="mt-6 text-center text-4xl sm:text-6xl font-semibold tracking-[-0.02em] leading-[1.08] text-white text-balance max-w-4xl mx-auto">
+          <h1 className="mt-2 text-center text-4xl sm:text-6xl font-semibold tracking-[-0.02em] leading-[1.08] text-white text-balance max-w-4xl mx-auto [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
             Know what you&rsquo;re signing before you sign it.
           </h1>
 
           {/* Subheading */}
-          <p className="mt-5 text-center text-base sm:text-lg leading-relaxed text-[#d1fae5]/85 max-w-[68ch] mx-auto text-pretty">
+          <p className="mt-5 text-center text-base sm:text-lg leading-relaxed text-[#f3ddc4]/85 max-w-[68ch] mx-auto text-pretty [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
             Upload any contract. ClauseGuard segments every clause, flags
             one-sided liabilities, and grounds each risk in the Philippine Civil
             Code and Labor Code with calibrated confidence scores.
@@ -108,7 +92,7 @@ export default function Home() {
               className="flex w-full sm:w-auto flex-1 items-center justify-between rounded-[4px] border border-[#dddddd] bg-white px-3.5 py-2.5 shadow-[0_2px_4px_rgba(0,0,0,0.05)] hover:border-[#cccccc] transition-colors group"
             >
               <div className="flex items-center">
-                <UploadCloud className="size-4 text-[#0c8c5e] mr-2.5 shrink-0" />
+                <UploadCloud className="size-4 text-[#b04000] mr-2.5 shrink-0" />
                 <span className="text-xs sm:text-sm text-[#868c98] group-hover:text-[#525866]">
                   Drop a contract PDF or DOCX to analyze...
                 </span>
@@ -126,7 +110,7 @@ export default function Home() {
             </Button>
           </div>
 
-          <p className="mt-3 text-center text-xs text-emerald-200/60 font-mono">
+          <p className="mt-3 text-center text-xs text-amber-100/90 font-mono [text-shadow:0_1px_10px_rgba(0,0,0,0.7)]">
             No credit card required &middot; Private private bucket storage &middot; No model training on user files
           </p>
 
@@ -156,7 +140,7 @@ export default function Home() {
               <div className="text-xs text-[#525866] mt-1">
                 Civil Code of the Philippines
               </div>
-              <div className="text-[11px] text-[#0c8c5e] font-medium mt-1">
+              <div className="text-[11px] text-[#b04000] font-medium mt-1">
                 Arts. 1308, 1318, 1409
               </div>
             </div>
@@ -168,7 +152,7 @@ export default function Home() {
               <div className="text-xs text-[#525866] mt-1">
                 Labor Code of the Philippines
               </div>
-              <div className="text-[11px] text-[#0c8c5e] font-medium mt-1">
+              <div className="text-[11px] text-[#b04000] font-medium mt-1">
                 Arts. 106, 297, Restraint of Trade
               </div>
             </div>
@@ -180,7 +164,7 @@ export default function Home() {
               <div className="text-xs text-[#525866] mt-1">
                 Objective 3 Benchmark
               </div>
-              <div className="text-[11px] text-[#0c8c5e] font-medium mt-1">
+              <div className="text-[11px] text-[#b04000] font-medium mt-1">
                 Gemini Flash &middot; Llama 3.3 70B
               </div>
             </div>
@@ -192,7 +176,7 @@ export default function Home() {
               <div className="text-xs text-[#525866] mt-1">
                 CLASE Capstone Research
               </div>
-              <div className="text-[11px] text-[#0c8c5e] font-medium mt-1">
+              <div className="text-[11px] text-[#b04000] font-medium mt-1">
                 Salinas &middot; Navarro &middot; Zallen
               </div>
             </div>
@@ -204,7 +188,7 @@ export default function Home() {
       <section id="how-it-works" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#0c8c5e] uppercase tracking-[0.05em]">
+            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
               Precision Pipeline
             </span>
             <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
@@ -234,7 +218,7 @@ export default function Home() {
                   Extracts document tokens, page geometry, and strips invisible text. The segmenter partitions provisions into discrete legal clauses without hallucinating content.
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#0c8c5e]">
+              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#b04000]">
                 &rarr; lib/pipeline/segment
               </div>
             </div>
@@ -257,7 +241,7 @@ export default function Home() {
                   Queries indexed statutory provisions of the Philippine Civil Code and Labor Code. Every clause is matched against relevant jurisprudence, not generic AI heuristics.
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#0c8c5e]">
+              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#b04000]">
                 &rarr; lib/pipeline/ground
               </div>
             </div>
@@ -280,7 +264,7 @@ export default function Home() {
                   Generates an explicit confidence score alongside severity. Unclear or low-confidence provisions route to human review rather than gambling on a false verdict.
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#0c8c5e]">
+              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#b04000]">
                 &rarr; lib/pipeline/score
               </div>
             </div>
@@ -292,7 +276,7 @@ export default function Home() {
       <section id="features" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-[13px] font-semibold text-[#0c8c5e] uppercase tracking-[0.05em]">
+            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
               Platform Capabilities
             </span>
             <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
@@ -306,10 +290,10 @@ export default function Home() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Feature 1 */}
             <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#eefaf4] flex items-center justify-center text-[#0c8c5e] mb-5">
+              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
                 <Scale className="size-5" />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#0c8c5e]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
                 Statutory RAG Engine
               </span>
               <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
@@ -319,17 +303,17 @@ export default function Home() {
                 Generic chatbots evaluate agreements using vague common-law assumptions from US jurisdictions. ClauseGuard verifies obligations strictly against the Philippine Civil Code (Arts. 1306, 1308, 1409) and Supreme Court labor rulings.
               </p>
               <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#0c8c5e]" />
+                <CheckCircle className="size-3.5 text-[#b04000]" />
                 Verifiable citations attached to every single flagged risk
               </div>
             </div>
 
             {/* Feature 2 */}
             <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#eefaf4] flex items-center justify-center text-[#0c8c5e] mb-5">
+              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
                 <FileWarning className="size-5" />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#0c8c5e]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
                 Confidence Calibration
               </span>
               <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
@@ -339,17 +323,17 @@ export default function Home() {
                 If a clause scores below calibrated thresholds (Objective 2), ClauseGuard marks it as requiring review instead of presenting a false positive. A tool that flags what it struggles with is a tool you can actually rely on.
               </p>
               <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#0c8c5e]" />
+                <CheckCircle className="size-3.5 text-[#b04000]" />
                 Automatic routing to human review for ambiguous clauses
               </div>
             </div>
 
             {/* Feature 3 */}
             <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#eefaf4] flex items-center justify-center text-[#0c8c5e] mb-5">
+              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
                 <FileSearch className="size-5" />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#0c8c5e]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
                 Visual Document Heat-Map
               </span>
               <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
@@ -359,17 +343,17 @@ export default function Home() {
                 No need to read disconnected notes. See high risk, caution, and clean terms highlighted directly on your contract layout with side-by-side margin translations and redlines.
               </p>
               <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#0c8c5e]" />
+                <CheckCircle className="size-3.5 text-[#b04000]" />
                 Preserves exact PDF typography, margins, and page numbers
               </div>
             </div>
 
             {/* Feature 4 */}
             <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#eefaf4] flex items-center justify-center text-[#0c8c5e] mb-5">
+              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
                 <ShieldCheck className="size-5" />
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#0c8c5e]">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
                 Actionable Counter-Proposals
               </span>
               <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
@@ -379,7 +363,7 @@ export default function Home() {
                 Knowing a clause is predatory is only half the battle. ClauseGuard suggests balanced counter-clauses and negotiation language that protects your earnings while preserving client goodwill.
               </p>
               <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#0c8c5e]" />
+                <CheckCircle className="size-3.5 text-[#b04000]" />
                 Balanced substitute wording ready for your client response
               </div>
             </div>
@@ -391,7 +375,7 @@ export default function Home() {
       <section id="statutory-grounding" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-[#fcfdfd]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#0c8c5e] uppercase tracking-[0.05em]">
+            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
               The Statutory Difference
             </span>
             <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
@@ -438,35 +422,35 @@ export default function Home() {
             </div>
 
             {/* ClauseGuard Grounded Solution */}
-            <div className="rounded-[16px] border border-[#bbf0d6] bg-[#f6fcf8] p-7 flex flex-col justify-between">
+            <div className="rounded-[16px] border border-[#e8c6a8] bg-[#f6fcf8] p-7 flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#d1fae5]">
-                  <span className="text-xs font-semibold text-[#0c8c5e] uppercase tracking-[0.05em]">
+                <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#f3ddc4]">
+                  <span className="text-xs font-semibold text-[#b04000] uppercase tracking-[0.05em]">
                     ClauseGuard Grounded Pipeline
                   </span>
-                  <span className="text-xs font-mono text-[#0c8c5e]">STATUTORY RAG</span>
+                  <span className="text-xs font-mono text-[#b04000]">STATUTORY RAG</span>
                 </div>
                 <div className="space-y-3 text-sm text-[#08090a]">
-                  <p className="font-mono text-xs text-[#0c8c5e] bg-[#eefaf4] p-2.5 rounded-[4px]">
+                  <p className="font-mono text-xs text-[#b04000] bg-[#fbeee4] p-2.5 rounded-[4px]">
                     &ldquo;FLAGGED: Overbroad under Civil Code Art. 1306. A 24-month regional restriction without compensation constitutes an unreasonable restraint of trade.&rdquo;
                   </p>
                   <ul className="space-y-2 text-xs text-[#525866] pt-2">
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="size-3.5 text-[#0c8c5e] shrink-0 mt-0.5" />
+                      <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
                       Cites exact articles from the Civil Code of the Philippines (R.A. 386).
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="size-3.5 text-[#0c8c5e] shrink-0 mt-0.5" />
+                      <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
                       Calibrated confidence calibration score reported on every finding.
                     </li>
                     <li className="flex items-start gap-2">
-                      <CheckCircle className="size-3.5 text-[#0c8c5e] shrink-0 mt-0.5" />
+                      <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
                       Suggests legally tested redlines tailored to freelance contractor equity.
                     </li>
                   </ul>
                 </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#d1fae5] text-xs font-medium text-[#0c8c5e]">
+              <div className="mt-6 pt-4 border-t border-[#f3ddc4] text-xs font-medium text-[#b04000]">
                 Verified statutory grounding
               </div>
             </div>
@@ -478,7 +462,7 @@ export default function Home() {
       <section className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#0c8c5e] uppercase tracking-[0.05em]">
+            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
               Real-World Usability
             </span>
             <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
@@ -516,7 +500,7 @@ export default function Home() {
                   <div className="text-xs font-semibold text-[#08090a]">Marco Tan</div>
                   <div className="text-[11px] text-[#868c98]">Independent Consultant</div>
                 </div>
-                <span className="text-xs font-medium text-[#0c8c5e] group-hover:underline">
+                <span className="text-xs font-medium text-[#b04000] group-hover:underline">
                   Read story &rarr;
                 </span>
               </div>
@@ -548,7 +532,7 @@ export default function Home() {
                   <div className="text-xs font-semibold text-[#08090a]">Bea Santos</div>
                   <div className="text-[11px] text-[#868c98]">Brand Designer</div>
                 </div>
-                <span className="text-xs font-medium text-[#0c8c5e] group-hover:underline">
+                <span className="text-xs font-medium text-[#b04000] group-hover:underline">
                   Read story &rarr;
                 </span>
               </div>
@@ -580,7 +564,7 @@ export default function Home() {
                   <div className="text-xs font-semibold text-[#08090a]">Rafael Cruz</div>
                   <div className="text-[11px] text-[#868c98]">Full-Stack Developer</div>
                 </div>
-                <span className="text-xs font-medium text-[#0c8c5e] group-hover:underline">
+                <span className="text-xs font-medium text-[#b04000] group-hover:underline">
                   Read story &rarr;
                 </span>
               </div>
@@ -593,7 +577,7 @@ export default function Home() {
       <section id="faq" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#0c8c5e] uppercase tracking-[0.05em]">
+            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
               Transparency &amp; FAQ
             </span>
             <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
@@ -648,7 +632,7 @@ export default function Home() {
       <section className="py-20 sm:py-24 bg-[#f8f9fa] border-b border-[#f2f2f2]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <div className="rounded-[24px] border border-[#dddddd] bg-white p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-[0_4px_16px_rgba(8,9,10,0.03)]">
-            <span className="inline-flex items-center gap-2 rounded-[4px] bg-[#eefaf4] px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] text-[#0c8c5e] border border-[#bbf0d6]">
+            <span className="inline-flex items-center gap-2 rounded-[4px] bg-[#fbeee4] px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] text-[#b04000] border border-[#e8c6a8]">
               Start Reviewing Today
             </span>
             <h2 className="mt-4 font-sans text-3xl sm:text-5xl font-semibold tracking-[-0.02em] text-[#08090a]">

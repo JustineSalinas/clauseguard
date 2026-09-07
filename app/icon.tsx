@@ -5,7 +5,7 @@ export const contentType = "image/png";
 
 /**
  * ClauseGuard Favicon Mark:
- * 1:1 match with the website brand logo mark — Mint/Emerald (#0c8c5e) squircle
+ * 1:1 match with the website brand logo mark — copper (#b04000) squircle
  * with a centered white "C" in bold sans-serif.
  */
 export default function Icon() {
@@ -18,7 +18,7 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0c8c5e",
+          background: "#b04000",
           borderRadius: 7,
         }}
       >

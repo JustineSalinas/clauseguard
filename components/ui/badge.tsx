@@ -22,7 +22,7 @@ const badgeVariants = cva(
           "bg-[#eefaf4] text-[#0c8c5e] border border-[#bbf0d6]",
         caution:
           "bg-[#fffbeb] text-[#d97706] border border-[#fde68a]",
-        link: "text-[#0c8c5e] underline-offset-4 hover:underline",
+        link: "text-[#b04000] underline-offset-4 hover:underline",
       },
     },
     defaultVariants: {

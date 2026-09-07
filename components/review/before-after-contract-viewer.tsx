@@ -66,7 +66,7 @@ function DocumentView({ clauses }: { clauses: ScoredClause[] }) {
     <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 sm:p-10 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
       <div className="font-sans mx-auto max-w-[68ch] space-y-6 text-[15px] leading-[1.8] text-[#08090a]">
         <div className="border-b border-[#f2f2f2] pb-4 mb-6">
-          <p className="text-[11px] font-mono text-[#0c8c5e] uppercase tracking-wider font-semibold">
+          <p className="text-[11px] font-mono text-[#b04000] uppercase tracking-wider font-semibold">
             In-Situ Contract Heat-Map &middot; Grounded in Philippine Law
           </p>
           <h3 className="text-lg font-semibold text-[#08090a] mt-1">
@@ -82,7 +82,7 @@ function DocumentView({ clauses }: { clauses: ScoredClause[] }) {
                 {c.label ? (
                   <a
                     href={`#clause-${c.id}`}
-                    className="font-bold text-[#08090a] no-underline hover:text-[#0c8c5e] mr-2"
+                    className="font-bold text-[#08090a] no-underline hover:text-[#b04000] mr-2"
                   >
                     {c.label}
                   </a>
@@ -135,7 +135,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
             <span
               className={`text-xs font-mono font-medium px-2 py-0.5 rounded-[3px] border ${
                 viewMode === "after"
-                  ? "bg-[#eefaf4] text-[#0c8c5e] border-[#bbf0d6]"
+                  ? "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]"
                   : "bg-[#fffbeb] text-[#d97706] border-[#fde68a]"
               }`}
             >
@@ -179,7 +179,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                   : "text-[#525866] hover:text-[#08090a]"
               }`}
             >
-              <span className="size-1.5 rounded-full bg-[#0c8c5e]" />
+              <span className="size-1.5 rounded-full bg-[#b04000]" />
               After (Audited)
             </button>
           </div>
@@ -193,7 +193,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
             {isScanning ? (
               <span className="size-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Play className="size-3 text-[#0c8c5e] fill-current" />
+              <Play className="size-3 text-[#b04000] fill-current" />
             )}
             <span>{isScanning ? "Scanning..." : "Run Audit Scan"}</span>
           </button>
@@ -202,16 +202,16 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
 
       {/* Live Scanning Progress Overlay & Telemetry (visible during scan) */}
       {isScanning && (
-        <div className="p-4 rounded-[12px] border border-[#0c8c5e] bg-[#eefaf4] flex flex-col sm:flex-row items-center justify-between gap-3 animate-fadeIn">
+        <div className="p-4 rounded-[12px] border border-[#b04000] bg-[#fbeee4] flex flex-col sm:flex-row items-center justify-between gap-3 animate-fadeIn">
           <div className="flex items-center gap-3">
-            <span className="size-2 rounded-full bg-[#0c8c5e] animate-ping" />
+            <span className="size-2 rounded-full bg-[#b04000] animate-ping" />
             <div className="text-xs font-mono font-medium text-[#08090a]">
               {scanStage === 1 && "Stage 1/3: Extracting token bounding boxes & hierarchy..."}
               {scanStage === 2 && "Stage 2/3: Querying Philippine Civil Code (R.A. 386) & Labor Code vectors..."}
               {scanStage === 3 && "Stage 3/3: Calibrating confidence thresholds & generating heat-map overlay..."}
             </div>
           </div>
-          <span className="text-xs font-mono text-[#0c8c5e] font-semibold">
+          <span className="text-xs font-mono text-[#b04000] font-semibold">
             {scanStage === 1 && "33%"}
             {scanStage === 2 && "68%"}
             {scanStage === 3 && "95%"}
@@ -238,7 +238,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
             {/* The Scanning Beam Animation */}
             {isScanning && (
               <div
-                className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#0c8c5e] to-transparent shadow-[0_0_12px_#0c8c5e] z-20 pointer-events-none"
+                className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#b04000] to-transparent shadow-[0_0_12px_#b04000] z-20 pointer-events-none"
                 style={{
                   animation: "scanBeam 2.2s ease-in-out infinite",
                 }}

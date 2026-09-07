@@ -19,10 +19,11 @@ const buttonVariants = cva(
           "text-[#000000] hover:bg-[#f2f2f2]",
         destructive:
           "bg-[#dc2626] text-white hover:bg-[#b91c1c]",
-        link: "text-[#0c8c5e] underline-offset-4 hover:underline",
-        // Refero Mintlify: Ink Black (#08090a) for the primary filled action
+        link: "text-[#b04000] underline-offset-4 hover:underline",
+        // Brand copper, for the rare CTA that should read as ClauseGuard's
+        // own colour rather than the neutral ink-black default action.
         brand:
-          "bg-[#08090a] text-white hover:bg-[#1a1c1e] shadow-[0_2px_4px_rgba(8,9,10,0.04)]",
+          "bg-[#b04000] text-white hover:bg-[#8a3300] shadow-[0_2px_4px_rgba(8,9,10,0.04)]",
       },
       size: {
         default:
