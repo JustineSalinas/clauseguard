@@ -5,8 +5,10 @@ export const contentType = "image/png";
 
 /**
  * ClauseGuard Favicon Mark:
- * 1:1 match with the website brand logo mark — copper (#b04000) squircle
- * with a centered white "C" in bold sans-serif.
+ * A silhouette of the header shield mark (see shield-mark.tsx) -- outline
+ * only, no scale or book, since that fine detail turns to mush at 16-32px.
+ * Copper background matches the wordmark's "Guard" accent
+ * (SHIELD_MARK_BRAND_LIGHT in shield-mark.tsx).
  */
 export default function Icon() {
   return new ImageResponse(
@@ -22,20 +24,12 @@ export default function Icon() {
           borderRadius: 7,
         }}
       >
-        <div
-          style={{
-            fontSize: 22,
-            fontWeight: 800,
-            color: "#ffffff",
-            lineHeight: 1,
-            fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          C
-        </div>
+        <svg width="19" height="19" viewBox="0 0 100 100">
+          <path
+            d="M50,6 L82,19 L82,49 C82,71 68,85 50,94 C32,85 18,71 18,49 L18,19 Z"
+            fill="#ffffff"
+          />
+        </svg>
       </div>
     ),
     { ...size },

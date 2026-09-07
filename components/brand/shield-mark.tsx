@@ -2,9 +2,9 @@
  * The full ClauseGuard mark: shield, scale, open book. Flat, hand-drawn SVG
  * -- no gradients, no bevels, no photographed background. Intended for the
  * header lockup, hero, and print, at sizes roughly 40px and up. It is
- * deliberately not the favicon: a shield with a scale and a book reads as
- * texture, not a shape, once it is shrunk to a 16-32px browser tab. That job
- * stays with the plain "C" monogram in app/icon.tsx.
+ * deliberately not used whole in the favicon: a shield with a scale and a
+ * book reads as texture, not a shape, once it is shrunk to a 16-32px browser
+ * tab. app/icon.tsx uses just the shield outline from this mark instead.
  *
  * Colour comes from CSS custom properties, not fixed hex, so the mark follows
  * the page's light/dark theme the same way every other token-driven element

@@ -5,7 +5,7 @@ export const contentType = "image/png";
 
 /**
  * ClauseGuard Apple Touch Icon:
- * Scaled 180x180 version of the brand mark matching the favicon and navbar mark.
+ * Scaled 180x180 version of the same shield silhouette used in app/icon.tsx.
  */
 export default function AppleIcon() {
   return new ImageResponse(
@@ -21,20 +21,12 @@ export default function AppleIcon() {
           borderRadius: 40,
         }}
       >
-        <div
-          style={{
-            fontSize: 124,
-            fontWeight: 800,
-            color: "#ffffff",
-            lineHeight: 1,
-            fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          C
-        </div>
+        <svg width="108" height="108" viewBox="0 0 100 100">
+          <path
+            d="M50,6 L82,19 L82,49 C82,71 68,85 50,94 C32,85 18,71 18,49 L18,19 Z"
+            fill="#ffffff"
+          />
+        </svg>
       </div>
     ),
     { ...size },
