@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { CloudHeroBackdrop } from "@/components/brand/cloud-hero-backdrop";
 import { InteractiveContractInspector } from "@/components/brand/interactive-contract-inspector";
 import { Reveal } from "@/components/brand/reveal";
+import { HeroUploadCta } from "@/components/brand/hero-upload-cta";
 import { Logo } from "@/components/brand/logo";
 import {
   ShieldCheck,
@@ -12,8 +12,10 @@ import {
   FileSearch,
   CheckCircle,
   ArrowRight,
-  UploadCloud,
   FileWarning,
+  Gavel,
+  Users,
+  Gauge,
 } from "lucide-react";
 
 export default function Home() {
@@ -88,20 +90,7 @@ export default function Home() {
 
           {/* Hero Action Lead: Direct Upload or Explore Sample */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-xl mx-auto">
-            <Link
-              href="/signup"
-              className="flex w-full sm:w-auto flex-1 items-center justify-between rounded-[4px] border border-[#dddddd] bg-white px-3.5 py-2.5 shadow-[0_2px_4px_rgba(0,0,0,0.05)] hover:border-[#cccccc] transition-colors group"
-            >
-              <div className="flex items-center">
-                <UploadCloud className="size-4 text-[#b04000] mr-2.5 shrink-0" />
-                <span className="text-xs sm:text-sm text-[#868c98] group-hover:text-[#525866]">
-                  Drop a contract PDF or DOCX to analyze...
-                </span>
-              </div>
-              <span className="shrink-0 ml-2 text-xs font-medium bg-[#08090a] text-white px-3 py-1 rounded-[4px]">
-                Analyze
-              </span>
-            </Link>
+            <HeroUploadCta />
 
             <Button asChild size="default" variant="outline" className="w-full sm:w-auto bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white">
               <Link href="/sample">
@@ -135,7 +124,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             <Reveal delay={0}>
-              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-colors duration-300 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40">
                 <div className="font-mono text-xs font-semibold text-[#08090a]">
                   Republic Act 386
                 </div>
@@ -149,7 +138,7 @@ export default function Home() {
             </Reveal>
 
             <Reveal delay={0.08}>
-              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-colors duration-300 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40">
                 <div className="font-mono text-xs font-semibold text-[#08090a]">
                   Presidential Decree 442
                 </div>
@@ -163,21 +152,21 @@ export default function Home() {
             </Reveal>
 
             <Reveal delay={0.16}>
-              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-colors duration-300 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40">
                 <div className="font-mono text-xs font-semibold text-[#08090a]">
-                  Tested Across Multiple AI Models
+                  Part of Our Research
                 </div>
                 <div className="text-xs text-[#525866] mt-1">
-                  Accuracy &amp; cost compared
+                  Model accuracy &amp; cost ablation
                 </div>
                 <div className="text-[11px] text-[#b04000] font-medium mt-1">
-                  Gemini Flash &middot; Llama 3.3 70B
+                  Gemini Flash &middot; Flash-Lite &middot; Llama 3.3 70B
                 </div>
               </div>
             </Reveal>
 
             <Reveal delay={0.24}>
-              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-colors duration-300 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40">
                 <div className="font-mono text-xs font-semibold text-[#08090a]">
                   Univ. of San Agustin
                 </div>
@@ -514,122 +503,81 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- Customer Stories / Freelancer Testimonials ---------------- */}
+      {/* ---------------- Who It's Built For ---------------- */}
+      {/* Deliberately not testimonials: no invented names, photos, or savings
+          figures standing in for a usability study that hasn't run yet
+          (Objective 5). These are scenarios the pipeline is designed around,
+          told honestly as scenarios. */}
       <section className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <Reveal>
             <div className="max-w-2xl">
               <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-                Real Stories
+                Who It&rsquo;s For
               </span>
               <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
                 Built for Philippine freelancers and agency owners.
               </h2>
               <p className="mt-3 text-base text-[#525866] leading-relaxed">
-                Tested with real independent contractors and small business owners &mdash; the people who actually have to sign these contracts.
+                Designed around the situations independent contractors and small business owners actually run into &mdash; the people who have to sign these contracts without a lawyer on retainer.
               </p>
             </div>
           </Reveal>
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Story 1 */}
             <Reveal delay={0}>
-              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 flex flex-col justify-between transition-colors duration-300 hover:border-[#e8c6a8]">
                 <div>
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
-                    <Image
-                      src="/images/customer-ux.jpg"
-                      alt="Marco Tan, UX Consultant"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
-                      UX Consultancy &middot; Makati
-                    </span>
+                  <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                    <Gavel className="size-5" />
                   </div>
-                  <div className="p-6">
-                    <p className="text-sm leading-relaxed text-[#08090a]">
-                      &ldquo;A client inserted a unilateral termination clause that forfeited my milestone payments if they ended the project early. ClauseGuard flagged Art. 1308 and gave me the exact redline to fix it. Saved me ₱85,000.&rdquo;
-                    </p>
-                  </div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">
+                    The unilateral termination clause
+                  </h3>
+                  <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
+                    A client contract lets them end the project early and keep your milestone payments. Clauses like this cite specific Civil Code articles on unconscionable stipulations &mdash; ClauseGuard is built to catch it before you sign, not after.
+                  </p>
                 </div>
-                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
-                  <div>
-                    <div className="text-xs font-semibold text-[#08090a]">Marco Tan</div>
-                    <div className="text-[11px] text-[#868c98]">Independent Consultant</div>
-                  </div>
-                  <span className="text-xs font-medium text-[#b04000] group-hover:underline">
-                    Read story &rarr;
-                  </span>
+                <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-medium text-[#b04000]">
+                  Grounded in Art. 1308, 1409
                 </div>
               </div>
             </Reveal>
 
-            {/* Story 2 */}
             <Reveal delay={0.1}>
-              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 flex flex-col justify-between transition-colors duration-300 hover:border-[#e8c6a8]">
                 <div>
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
-                    <Image
-                      src="/images/customer-designer.jpg"
-                      alt="Bea Santos, Brand Identity Designer"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
-                      Brand Studio &middot; Cebu City
-                    </span>
+                  <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                    <Users className="size-5" />
                   </div>
-                  <div className="p-6">
-                    <p className="text-sm leading-relaxed text-[#08090a]">
-                      &ldquo;Before ClauseGuard, I just skimmed contracts and signed because lawyer consults cost more than the project deposit. Having instant statutory citations gives me the confidence to push back on predatory terms.&rdquo;
-                    </p>
-                  </div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">
+                    No lawyer on retainer
+                  </h3>
+                  <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
+                    A legal consult often costs more than a small project&rsquo;s deposit, so most independent contractors just skim and sign. ClauseGuard is meant to give a first-pass, statute-backed read before it&rsquo;s worth paying for a real one.
+                  </p>
                 </div>
-                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
-                  <div>
-                    <div className="text-xs font-semibold text-[#08090a]">Bea Santos</div>
-                    <div className="text-[11px] text-[#868c98]">Brand Designer</div>
-                  </div>
-                  <span className="text-xs font-medium text-[#b04000] group-hover:underline">
-                    Read story &rarr;
-                  </span>
+                <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-medium text-[#b04000]">
+                  A first pass, not a legal opinion
                 </div>
               </div>
             </Reveal>
 
-            {/* Story 3 */}
             <Reveal delay={0.2}>
-              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 flex flex-col justify-between transition-colors duration-300 hover:border-[#e8c6a8]">
                 <div>
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
-                    <Image
-                      src="/images/customer-developer.jpg"
-                      alt="Rafael Cruz, Software Engineer"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                    <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
-                      Software Agency &middot; Iloilo City
-                    </span>
+                  <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                    <Gauge className="size-5" />
                   </div>
-                  <div className="p-6">
-                    <p className="text-sm leading-relaxed text-[#08090a]">
-                      &ldquo;The calibrated confidence score is what makes this trustworthy. When it says 95% confidence with the Civil Code citation, I know it is solid. When it flags review, it does not pretend to know everything.&rdquo;
-                    </p>
-                  </div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">
+                    Confidence you can act on
+                  </h3>
+                  <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
+                    A flag with a high confidence score and a Civil Code citation is worth acting on. A clause the model genuinely isn&rsquo;t sure about gets routed to you for review instead of a guess dressed up as certainty.
+                  </p>
                 </div>
-                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
-                  <div>
-                    <div className="text-xs font-semibold text-[#08090a]">Rafael Cruz</div>
-                    <div className="text-[11px] text-[#868c98]">Full-Stack Developer</div>
-                  </div>
-                  <span className="text-xs font-medium text-[#b04000] group-hover:underline">
-                    Read story &rarr;
-                  </span>
+                <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-medium text-[#b04000]">
+                  Calibrated, not just confident-sounding
                 </div>
               </div>
             </Reveal>
@@ -712,10 +660,10 @@ export default function Home() {
         <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6">
           <Reveal y={16}>
             <h2 className="text-center font-sans text-3xl sm:text-5xl font-semibold tracking-[-0.02em] text-white text-balance max-w-3xl mx-auto [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
-              Protect your work and your earnings.
+              Every clause. Every citation.
             </h2>
             <p className="mt-4 text-center text-base sm:text-lg leading-relaxed text-[#f3ddc4]/85 max-w-[60ch] mx-auto text-pretty [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
-              Never sign an unbalanced contract in the dark. Upload your agreement now and see what risks are hiding in the fine print.
+              No flag without a statute behind it, and no confidence score without a reason to trust it. See it on your own contract.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -793,7 +741,7 @@ export default function Home() {
                   <span className="text-[#868c98]">Labor Code of the Philippines</span>
                 </li>
                 <li>
-                  <span className="text-[#868c98]">Tested with real freelancers</span>
+                  <span className="text-[#868c98]">Built with freelancers in mind</span>
                 </li>
                 <li>
                   <span className="text-[#868c98]">University of San Agustin research</span>
