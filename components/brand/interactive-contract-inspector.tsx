@@ -452,7 +452,10 @@ export function InteractiveContractInspector() {
           </div>
 
           {/* Column 2: Contract Parchment Reading Pane with Before & After Transition */}
-          <div className="relative lg:col-span-5 p-6 lg:p-7 border-b lg:border-b-0 lg:border-r border-[#f2f2f2] bg-[#ffffff] overflow-y-auto">
+          <div
+            data-lenis-prevent
+            className="relative lg:col-span-5 p-6 lg:p-7 border-b lg:border-b-0 lg:border-r border-[#f2f2f2] bg-[#ffffff] overflow-y-auto"
+          >
             {/* The Scanning Beam Animation (when hero scan is running) */}
             {isHeroScanning && (
               <div

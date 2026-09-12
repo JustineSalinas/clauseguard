@@ -103,9 +103,12 @@ export function DragCompare({
       if (!rafId) rafId = requestAnimationFrame(applyPending);
     };
 
-    const onPointerUp = () => {
+    const onPointerUp = (e?: PointerEvent) => {
       if (!dragging) return;
       dragging = false;
+      if (e && handle.hasPointerCapture?.(e.pointerId)) {
+        handle.releasePointerCapture(e.pointerId);
+      }
       if (rafId) {
         cancelAnimationFrame(rafId);
         rafId = 0;
@@ -127,6 +130,12 @@ export function DragCompare({
 
     const onPointerDown = (e: PointerEvent) => {
       dragging = true;
+      // Pin the drag to this pointer regardless of what it moves over --
+      // Lenis's wheel/touch handling, an iframe, or simply moving faster
+      // than the handle's hit area -- so a fast drag never silently drops
+      // mid-gesture. Without this, losing capture mid-drag is what reads as
+      // the slider "sticking" and then jumping.
+      handle.setPointerCapture?.(e.pointerId);
       idlePulse.kill();
       gsap.set(handle, { scale: 1 });
       gsap.to(cursor, { opacity: 0, duration: 0.15 });
@@ -160,6 +169,7 @@ export function DragCompare({
     handle.addEventListener("pointerdown", onPointerDown);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
     const onRailDown = (e: PointerEvent) => {
       // Skip if the press landed anywhere inside the handle (the grip
       // circle, its icon) -- handle.contains, not e.target === handle,
@@ -170,7 +180,7 @@ export function DragCompare({
       // starting a drag.
       if (handle.contains(e.target as Node)) return;
       onPointerDown(e);
-      onPointerUp();
+      onPointerUp(e);
     };
     rail.addEventListener("pointerdown", onRailDown);
     rail.addEventListener("pointermove", onRailPointerMove);
@@ -183,6 +193,7 @@ export function DragCompare({
       handle.removeEventListener("pointerdown", onPointerDown);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
       rail.removeEventListener("pointerdown", onRailDown);
       rail.removeEventListener("pointermove", onRailPointerMove);
       rail.removeEventListener("pointerenter", onRailEnter);
@@ -195,7 +206,12 @@ export function DragCompare({
     <div
       ref={railRef}
       className={`relative select-none overflow-hidden [@media(pointer:fine)]:cursor-none ${className}`}
-      style={{ touchAction: "none" }}
+      // pan-y, not none: the rail spans the full card, so blocking all touch
+      // here would trap a finger that's just trying to scroll the page past
+      // this component. Vertical panning stays native; only the horizontal
+      // drag gesture is claimed by the pointer handlers below. The handle
+      // itself (the actual drag target) keeps touchAction: none.
+      style={{ touchAction: "pan-y" }}
     >
       <div className="pointer-events-none absolute left-3 top-3 z-10 font-mono text-[0.625rem] font-medium uppercase tracking-[0.1em] text-ink-3">
         {leftLabel}
