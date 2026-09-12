@@ -1,21 +1,24 @@
 import React from "react";
 import Link from "next/link";
-import { ShieldMark } from "@/components/brand/shield-mark";
+import { LogoBadge } from "@/components/brand/logo-badge";
 
 interface LogoMarkProps {
   size?: "sm" | "md" | "lg";
   className?: string;
 }
 
-const PX = { sm: 24, md: 28, lg: 32 };
+const PX = { sm: 26, md: 30, lg: 36 };
 
 /**
- * ClauseGuard brand mark: the hand-drawn shield/scale/book, not a plain
- * monogram. See shield-mark.tsx for why the "C" stays reserved for the
- * favicon instead.
+ * ClauseGuard brand mark for the nav bar and footer -- the only two places
+ * this renders. The detailed shield/scale/book (shield-mark.tsx) needs
+ * ~40px and up before it reads as a shape rather than texture; every real
+ * usage here is smaller than that, so it uses the same solid copper badge
+ * as the browser tab icon instead. One mark, used everywhere it actually
+ * appears, rather than two different unfinished-looking attempts.
  */
 export function LogoMark({ size = "md", className = "" }: LogoMarkProps) {
-  return <ShieldMark size={PX[size]} className={className} />;
+  return <LogoBadge size={PX[size]} className={className} />;
 }
 
 interface LogoProps {
@@ -24,6 +27,12 @@ interface LogoProps {
   showWordmark?: boolean;
   className?: string;
 }
+
+const WORDMARK_TEXT = {
+  sm: "text-base",
+  md: "text-lg",
+  lg: "text-xl",
+};
 
 export function Logo({
   size = "md",
@@ -35,7 +44,7 @@ export function Logo({
     <div className={`inline-flex items-center gap-2.5 group select-none ${className}`}>
       <LogoMark size={size} />
       {showWordmark && (
-        <span className="font-display text-[1.125rem] font-semibold tracking-[-0.01em] text-ink">
+        <span className={`font-display ${WORDMARK_TEXT[size]} font-semibold tracking-[-0.01em] text-ink`}>
           Clause<span className="text-brand">Guard</span>
         </span>
       )}

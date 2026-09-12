@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { CloudHeroBackdrop } from "@/components/brand/cloud-hero-backdrop";
 import { InteractiveContractInspector } from "@/components/brand/interactive-contract-inspector";
+import { Reveal } from "@/components/brand/reveal";
 import { Logo } from "@/components/brand/logo";
 import {
   ShieldCheck,
@@ -129,57 +130,65 @@ export default function Home() {
       <section className="border-b border-[#f2f2f2] bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
           <p className="text-center text-[11px] font-semibold uppercase tracking-[0.08em] text-[#868c98] mb-8">
-            Rigorous Academic Research Grounded in Codified Philippine Law
+            Built on Real Philippine Law, Not Guesswork
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            <div className="rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center">
-              <div className="font-mono text-xs font-semibold text-[#08090a]">
-                Republic Act 386
+            <Reveal delay={0}>
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+                <div className="font-mono text-xs font-semibold text-[#08090a]">
+                  Republic Act 386
+                </div>
+                <div className="text-xs text-[#525866] mt-1">
+                  Civil Code of the Philippines
+                </div>
+                <div className="text-[11px] text-[#b04000] font-medium mt-1">
+                  Arts. 1308, 1318, 1409
+                </div>
               </div>
-              <div className="text-xs text-[#525866] mt-1">
-                Civil Code of the Philippines
-              </div>
-              <div className="text-[11px] text-[#b04000] font-medium mt-1">
-                Arts. 1308, 1318, 1409
-              </div>
-            </div>
+            </Reveal>
 
-            <div className="rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center">
-              <div className="font-mono text-xs font-semibold text-[#08090a]">
-                Presidential Decree 442
+            <Reveal delay={0.08}>
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+                <div className="font-mono text-xs font-semibold text-[#08090a]">
+                  Presidential Decree 442
+                </div>
+                <div className="text-xs text-[#525866] mt-1">
+                  Labor Code of the Philippines
+                </div>
+                <div className="text-[11px] text-[#b04000] font-medium mt-1">
+                  Arts. 106, 297, Restraint of Trade
+                </div>
               </div>
-              <div className="text-xs text-[#525866] mt-1">
-                Labor Code of the Philippines
-              </div>
-              <div className="text-[11px] text-[#b04000] font-medium mt-1">
-                Arts. 106, 297, Restraint of Trade
-              </div>
-            </div>
+            </Reveal>
 
-            <div className="rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center">
-              <div className="font-mono text-xs font-semibold text-[#08090a]">
-                Model Ablation Matrix
+            <Reveal delay={0.16}>
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+                <div className="font-mono text-xs font-semibold text-[#08090a]">
+                  Tested Across Multiple AI Models
+                </div>
+                <div className="text-xs text-[#525866] mt-1">
+                  Accuracy &amp; cost compared
+                </div>
+                <div className="text-[11px] text-[#b04000] font-medium mt-1">
+                  Gemini Flash &middot; Llama 3.3 70B
+                </div>
               </div>
-              <div className="text-xs text-[#525866] mt-1">
-                Objective 3 Benchmark
-              </div>
-              <div className="text-[11px] text-[#b04000] font-medium mt-1">
-                Gemini Flash &middot; Llama 3.3 70B
-              </div>
-            </div>
+            </Reveal>
 
-            <div className="rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center">
-              <div className="font-mono text-xs font-semibold text-[#08090a]">
-                Univ. of San Agustin
+            <Reveal delay={0.24}>
+              <div className="h-full rounded-[4px] border border-[#f2f2f2] bg-[#f8f9fa] p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8c6a8] hover:bg-[#fbeee4]/40 hover:shadow-[0_8px_20px_rgba(176,64,0,0.06)]">
+                <div className="font-mono text-xs font-semibold text-[#08090a]">
+                  Univ. of San Agustin
+                </div>
+                <div className="text-xs text-[#525866] mt-1">
+                  CLASE Capstone Research
+                </div>
+                <div className="text-[11px] text-[#b04000] font-medium mt-1">
+                  Salinas &middot; Navarro &middot; Zallen
+                </div>
               </div>
-              <div className="text-xs text-[#525866] mt-1">
-                CLASE Capstone Research
-              </div>
-              <div className="text-[11px] text-[#b04000] font-medium mt-1">
-                Salinas &middot; Navarro &middot; Zallen
-              </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -187,87 +196,118 @@ export default function Home() {
       {/* ---------------- How It Works (3-Step Precision Pipeline) ---------------- */}
       <section id="how-it-works" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-              Precision Pipeline
-            </span>
-            <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
-              Three stages. Zero uncited assumptions.
-            </h2>
-            <p className="mt-3 text-base text-[#525866] leading-relaxed">
-              ClauseGuard does not summarize documents with generic prompts. It executes a multi-stage transactional pipeline that isolates and validates legal risk.
-            </p>
-          </div>
+          <Reveal>
+            <div className="max-w-2xl">
+              <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                How It Works
+              </span>
+              <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
+                Three simple steps. No guesswork.
+              </h2>
+              <p className="mt-3 text-base text-[#525866] leading-relaxed">
+                ClauseGuard doesn&rsquo;t just summarize your contract. It reads every clause carefully, checks it against real Philippine law, and shows you exactly what to worry about.
+              </p>
+            </div>
+          </Reveal>
 
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="mt-12 flex flex-col md:flex-row md:items-stretch gap-3">
             {/* Step 1 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f2f2f2]">
-                  <span className="font-mono text-xs font-semibold text-[#868c98]">
-                    STAGE 01
-                  </span>
-                  <span className="size-6 rounded-[4px] bg-[#f2f2f2] flex items-center justify-center text-xs font-mono font-medium">
-                    1
-                  </span>
+            <Reveal delay={0} className="flex-1 min-w-0">
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f2f2f2]">
+                    <span className="font-mono text-xs font-semibold text-[#868c98]">
+                      STAGE 01
+                    </span>
+                    <span className="size-6 rounded-[4px] bg-[#f2f2f2] flex items-center justify-center text-xs font-mono font-medium">
+                      1
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">
+                    We Read Your Contract
+                  </h3>
+                  <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
+                    Upload your contract and we break it down clause by clause, so nothing gets missed or mixed up &mdash; even hidden or oddly formatted text.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-[#08090a]">
-                  OCR &amp; Deterministic Clause Segmentation
-                </h3>
-                <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
-                  Extracts document tokens, page geometry, and strips invisible text. The segmenter partitions provisions into discrete legal clauses without hallucinating content.
-                </p>
+                <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-medium text-[#b04000]">
+                  Every clause, accounted for
+                </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#b04000]">
-                &rarr; lib/pipeline/segment
+            </Reveal>
+
+            {/* Connector: this is a pipeline, not three unrelated cards */}
+            <div className="hidden md:flex items-center justify-center shrink-0" aria-hidden="true">
+              <div className="flex size-9 items-center justify-center rounded-full border border-[#e8c6a8] bg-[#fbeee4] text-[#b04000]">
+                <ArrowRight className="size-4" />
+              </div>
+            </div>
+            <div className="flex md:hidden items-center justify-center py-1" aria-hidden="true">
+              <div className="flex size-9 rotate-90 items-center justify-center rounded-full border border-[#e8c6a8] bg-[#fbeee4] text-[#b04000]">
+                <ArrowRight className="size-4" />
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f2f2f2]">
-                  <span className="font-mono text-xs font-semibold text-[#868c98]">
-                    STAGE 02
-                  </span>
-                  <span className="size-6 rounded-[4px] bg-[#f2f2f2] flex items-center justify-center text-xs font-mono font-medium">
-                    2
-                  </span>
+            <Reveal delay={0.12} className="flex-1 min-w-0">
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f2f2f2]">
+                    <span className="font-mono text-xs font-semibold text-[#868c98]">
+                      STAGE 02
+                    </span>
+                    <span className="size-6 rounded-[4px] bg-[#f2f2f2] flex items-center justify-center text-xs font-mono font-medium">
+                      2
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">
+                    We Check It Against Real Law
+                  </h3>
+                  <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
+                    Each clause is compared against the actual Civil Code and Labor Code of the Philippines &mdash; not a generic AI guess based on foreign contracts.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-[#08090a]">
-                  Statutory Grounding via pgvector
-                </h3>
-                <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
-                  Queries indexed statutory provisions of the Philippine Civil Code and Labor Code. Every clause is matched against relevant jurisprudence, not generic AI heuristics.
-                </p>
+                <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-medium text-[#b04000]">
+                  Grounded in real Philippine statutes
+                </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#b04000]">
-                &rarr; lib/pipeline/ground
+            </Reveal>
+
+            <div className="hidden md:flex items-center justify-center shrink-0" aria-hidden="true">
+              <div className="flex size-9 items-center justify-center rounded-full border border-[#e8c6a8] bg-[#fbeee4] text-[#b04000]">
+                <ArrowRight className="size-4" />
+              </div>
+            </div>
+            <div className="flex md:hidden items-center justify-center py-1" aria-hidden="true">
+              <div className="flex size-9 rotate-90 items-center justify-center rounded-full border border-[#e8c6a8] bg-[#fbeee4] text-[#b04000]">
+                <ArrowRight className="size-4" />
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f2f2f2]">
-                  <span className="font-mono text-xs font-semibold text-[#868c98]">
-                    STAGE 03
-                  </span>
-                  <span className="size-6 rounded-[4px] bg-[#f2f2f2] flex items-center justify-center text-xs font-mono font-medium">
-                    3
-                  </span>
+            <Reveal delay={0.24} className="flex-1 min-w-0">
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-6 shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#f2f2f2]">
+                    <span className="font-mono text-xs font-semibold text-[#868c98]">
+                      STAGE 03
+                    </span>
+                    <span className="size-6 rounded-[4px] bg-[#f2f2f2] flex items-center justify-center text-xs font-mono font-medium">
+                      3
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">
+                    We Show You What&rsquo;s Risky
+                  </h3>
+                  <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
+                    Get a clear risk level for every clause, highlighted right on your contract. If we&rsquo;re genuinely not sure, we say so instead of guessing.
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-[#08090a]">
-                  Calibrated Scoring &amp; Heat-Map Overlay
-                </h3>
-                <p className="mt-2.5 text-sm text-[#525866] leading-relaxed">
-                  Generates an explicit confidence score alongside severity. Unclear or low-confidence provisions route to human review rather than gambling on a false verdict.
-                </p>
+                <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-medium text-[#b04000]">
+                  Color-coded, easy to scan
+                </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f2f2f2] text-xs font-mono text-[#b04000]">
-                &rarr; lib/pipeline/score
-              </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -275,98 +315,108 @@ export default function Home() {
       {/* ---------------- Features / Built for Contract Intelligence ---------------- */}
       <section id="features" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-              Platform Capabilities
-            </span>
-            <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
-              Built for contract intelligence.
-            </h2>
-            <p className="mt-3 text-base text-[#525866] leading-relaxed">
-              Designed specifically for independent professionals who need immediate clarity without hiring an attorney for every project agreement.
-            </p>
-          </div>
+          <Reveal>
+            <div className="text-center max-w-2xl mx-auto">
+              <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                What You Get
+              </span>
+              <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
+                Built to protect your work.
+              </h2>
+              <p className="mt-3 text-base text-[#525866] leading-relaxed">
+                Made for freelancers and small business owners who need clarity fast, without hiring a lawyer for every contract that lands in their inbox.
+              </p>
+            </div>
+          </Reveal>
 
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Feature 1 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
-                <Scale className="size-5" />
+            <Reveal delay={0}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                  <Scale className="size-5" />
+                </div>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
+                  Grounded in Real Law
+                </span>
+                <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
+                  Checked Against Actual Philippine Law
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  Most AI chatbots guess based on US or generic contract examples. ClauseGuard checks every clause against the real Civil Code and Labor Code of the Philippines.
+                </p>
+                <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
+                  <CheckCircle className="size-3.5 text-[#b04000]" />
+                  Every risk comes with the exact law behind it
+                </div>
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
-                Statutory RAG Engine
-              </span>
-              <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
-                Grounded in Philippine Law, Not General LLM Training
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                Generic chatbots evaluate agreements using vague common-law assumptions from US jurisdictions. ClauseGuard verifies obligations strictly against the Philippine Civil Code (Arts. 1306, 1308, 1409) and Supreme Court labor rulings.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#b04000]" />
-                Verifiable citations attached to every single flagged risk
-              </div>
-            </div>
+            </Reveal>
 
             {/* Feature 2 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
-                <FileWarning className="size-5" />
+            <Reveal delay={0.1}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                  <FileWarning className="size-5" />
+                </div>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
+                  Honest About Uncertainty
+                </span>
+                <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
+                  Tells You When It&rsquo;s Not Sure
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  If a clause is genuinely tricky to judge, ClauseGuard says so instead of guessing &mdash; so you know exactly when it&rsquo;s worth a second look.
+                </p>
+                <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
+                  <CheckCircle className="size-3.5 text-[#b04000]" />
+                  Flags unclear clauses instead of guessing
+                </div>
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
-                Confidence Calibration
-              </span>
-              <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
-                Admitting Uncertainty Instead of Quietly Guessing
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                If a clause scores below calibrated thresholds (Objective 2), ClauseGuard marks it as requiring review instead of presenting a false positive. A tool that flags what it struggles with is a tool you can actually rely on.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#b04000]" />
-                Automatic routing to human review for ambiguous clauses
-              </div>
-            </div>
+            </Reveal>
 
             {/* Feature 3 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
-                <FileSearch className="size-5" />
+            <Reveal delay={0.05}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                  <FileSearch className="size-5" />
+                </div>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
+                  Easy to Scan
+                </span>
+                <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
+                  See Risks Right on Your Contract
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  No separate report to read. Risky, cautionary, and safe clauses are highlighted right where they appear in your document, with plain-language notes alongside.
+                </p>
+                <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
+                  <CheckCircle className="size-3.5 text-[#b04000]" />
+                  Keeps your document looking exactly as it should
+                </div>
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
-                Visual Document Heat-Map
-              </span>
-              <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
-                Color-Coded Overlay on the Original Contract
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                No need to read disconnected notes. See high risk, caution, and clean terms highlighted directly on your contract layout with side-by-side margin translations and redlines.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#b04000]" />
-                Preserves exact PDF typography, margins, and page numbers
-              </div>
-            </div>
+            </Reveal>
 
             {/* Feature 4 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)]">
-              <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
-                <ShieldCheck className="size-5" />
+            <Reveal delay={0.15}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 shadow-[0_2px_4px_rgba(8,9,10,0.02)] transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div className="size-9 rounded-[4px] bg-[#fbeee4] flex items-center justify-center text-[#b04000] mb-5">
+                  <ShieldCheck className="size-5" />
+                </div>
+                <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
+                  Ready-to-Send Fixes
+                </span>
+                <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
+                  Suggested Wording You Can Send Right Away
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  Spotting a bad clause is only half the fight. ClauseGuard suggests fairer wording you can send back, protecting your earnings without burning the relationship.
+                </p>
+                <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
+                  <CheckCircle className="size-3.5 text-[#b04000]" />
+                  Fair, ready-to-use wording for your reply
+                </div>
               </div>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#b04000]">
-                Actionable Counter-Proposals
-              </span>
-              <h3 className="mt-1 text-xl font-semibold text-[#08090a]">
-                Professional Redlines You Can Paste Directly into an Email
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                Knowing a clause is predatory is only half the battle. ClauseGuard suggests balanced counter-clauses and negotiation language that protects your earnings while preserving client goodwill.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#f2f2f2] flex items-center gap-2 text-xs font-medium text-[#08090a]">
-                <CheckCircle className="size-3.5 text-[#b04000]" />
-                Balanced substitute wording ready for your client response
-              </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -374,86 +424,92 @@ export default function Home() {
       {/* ---------------- Direct Comparison: Generic LLM vs ClauseGuard ---------------- */}
       <section id="statutory-grounding" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-[#fcfdfd]">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-              The Statutory Difference
-            </span>
-            <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
-              Why uncited generic AI fails Philippine contracts.
-            </h2>
-            <p className="mt-3 text-base text-[#525866] leading-relaxed">
-              Commercial AI tools rely on general internet datasets. ClauseGuard implements dual-arm RAG grounding against the codified statutes of the Philippines.
-            </p>
-          </div>
+          <Reveal>
+            <div className="max-w-2xl">
+              <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                Why It&rsquo;s Different
+              </span>
+              <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
+                Why a regular chatbot isn&rsquo;t enough.
+              </h2>
+              <p className="mt-3 text-base text-[#525866] leading-relaxed">
+                Popular AI tools like ChatGPT weren&rsquo;t built for Philippine law. ClauseGuard checks every clause against the actual Civil Code and Labor Code, not general internet knowledge.
+              </p>
+            </div>
+          </Reveal>
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Generic LLM Failure Mode */}
-            <div className="rounded-[16px] border border-[#fecaca] bg-[#fffbfb] p-7 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#fee2e2]">
-                  <span className="text-xs font-semibold text-[#dc2626] uppercase tracking-[0.05em]">
-                    Generic Uncited LLM (ChatGPT / Claude Prompt)
-                  </span>
-                  <span className="text-xs font-mono text-[#dc2626]">UNGROUNDED</span>
+            <Reveal delay={0} y={16}>
+              <div className="h-full rounded-[16px] border border-[#fecaca] bg-[#fffbfb] p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(220,38,38,0.06)]">
+                <div>
+                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#fee2e2]">
+                    <span className="text-xs font-semibold text-[#dc2626] uppercase tracking-[0.05em]">
+                      A Regular AI Chatbot
+                    </span>
+                    <span className="text-xs font-mono text-[#dc2626]">GUESSING</span>
+                  </div>
+                  <div className="space-y-3 text-sm text-[#525866]">
+                    <p className="font-mono text-xs text-[#dc2626] bg-[#fef2f2] p-2.5 rounded-[4px]">
+                      &ldquo;This non-compete looks standard in California tech contracts. 24 months is a normal duration for specialized consulting.&rdquo;
+                    </p>
+                    <ul className="space-y-2 text-xs text-[#525866] pt-2">
+                      <li className="flex items-start gap-2">
+                        <span className="text-[#dc2626] font-bold">&times;</span>
+                        Doesn&rsquo;t know how Philippine courts actually rule on this
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-[#dc2626] font-bold">&times;</span>
+                        Makes up foreign legal examples that don&rsquo;t apply here
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-[#dc2626] font-bold">&times;</span>
+                        Can miss clauses that let a client keep your unpaid earnings
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="space-y-3 text-sm text-[#525866]">
-                  <p className="font-mono text-xs text-[#dc2626] bg-[#fef2f2] p-2.5 rounded-[4px]">
-                    &ldquo;This non-compete looks standard in California tech contracts. 24 months is a normal duration for specialized consulting.&rdquo;
-                  </p>
-                  <ul className="space-y-2 text-xs text-[#525866] pt-2">
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#dc2626] font-bold">&times;</span>
-                      No knowledge of Philippine Supreme Court restraint of trade doctrines.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#dc2626] font-bold">&times;</span>
-                      Hallucinates foreign case precedents that hold zero weight in local courts.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#dc2626] font-bold">&times;</span>
-                      Provides false security on clauses that would forfeit your accrued earnings.
-                    </li>
-                  </ul>
+                <div className="mt-6 pt-4 border-t border-[#fee2e2] text-xs font-medium text-[#dc2626]">
+                  Real risks can slip through unnoticed
                 </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#fee2e2] text-xs font-medium text-[#dc2626]">
-                High risk of undetected liability shift
-              </div>
-            </div>
+            </Reveal>
 
             {/* ClauseGuard Grounded Solution */}
-            <div className="rounded-[16px] border border-[#e8c6a8] bg-[#f6fcf8] p-7 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#f3ddc4]">
-                  <span className="text-xs font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-                    ClauseGuard Grounded Pipeline
-                  </span>
-                  <span className="text-xs font-mono text-[#b04000]">STATUTORY RAG</span>
+            <Reveal delay={0.15} y={16}>
+              <div className="h-full rounded-[16px] border border-[#e8c6a8] bg-[#f6fcf8] p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_rgba(176,64,0,0.1)]">
+                <div>
+                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#f3ddc4]">
+                    <span className="text-xs font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                      ClauseGuard
+                    </span>
+                    <span className="text-xs font-mono text-[#b04000]">CHECKED AGAINST LAW</span>
+                  </div>
+                  <div className="space-y-3 text-sm text-[#08090a]">
+                    <p className="font-mono text-xs text-[#b04000] bg-[#fbeee4] p-2.5 rounded-[4px]">
+                      &ldquo;FLAGGED: This goes against Civil Code Art. 1306. A 24-month restriction with no compensation unfairly limits your ability to work.&rdquo;
+                    </p>
+                    <ul className="space-y-2 text-xs text-[#525866] pt-2">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
+                        Points to the exact law behind every flag
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
+                        Tells you how confident it is in each finding
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
+                        Suggests fairer wording made for freelancers
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="space-y-3 text-sm text-[#08090a]">
-                  <p className="font-mono text-xs text-[#b04000] bg-[#fbeee4] p-2.5 rounded-[4px]">
-                    &ldquo;FLAGGED: Overbroad under Civil Code Art. 1306. A 24-month regional restriction without compensation constitutes an unreasonable restraint of trade.&rdquo;
-                  </p>
-                  <ul className="space-y-2 text-xs text-[#525866] pt-2">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
-                      Cites exact articles from the Civil Code of the Philippines (R.A. 386).
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
-                      Calibrated confidence calibration score reported on every finding.
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />
-                      Suggests legally tested redlines tailored to freelance contractor equity.
-                    </li>
-                  </ul>
+                <div className="mt-6 pt-4 border-t border-[#f3ddc4] text-xs font-medium text-[#b04000]">
+                  Backed by real Philippine law
                 </div>
               </div>
-              <div className="mt-6 pt-4 border-t border-[#f3ddc4] text-xs font-medium text-[#b04000]">
-                Verified statutory grounding
-              </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -461,114 +517,122 @@ export default function Home() {
       {/* ---------------- Customer Stories / Freelancer Testimonials ---------------- */}
       <section className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-              Real-World Usability
-            </span>
-            <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
-              Built for Philippine freelancers and agency owners.
-            </h2>
-            <p className="mt-3 text-base text-[#525866] leading-relaxed">
-              Evaluating perceived usefulness and usability with actual independent contractors (Objective 5).
-            </p>
-          </div>
+          <Reveal>
+            <div className="max-w-2xl">
+              <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                Real Stories
+              </span>
+              <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
+                Built for Philippine freelancers and agency owners.
+              </h2>
+              <p className="mt-3 text-base text-[#525866] leading-relaxed">
+                Tested with real independent contractors and small business owners &mdash; the people who actually have to sign these contracts.
+              </p>
+            </div>
+          </Reveal>
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Story 1 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group">
-              <div>
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
-                  <Image
-                    src="/images/customer-ux.jpg"
-                    alt="Marco Tan, UX Consultant"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
-                    UX Consultancy &middot; Makati
+            <Reveal delay={0}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
+                    <Image
+                      src="/images/customer-ux.jpg"
+                      alt="Marco Tan, UX Consultant"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
+                      UX Consultancy &middot; Makati
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-sm leading-relaxed text-[#08090a]">
+                      &ldquo;A client inserted a unilateral termination clause that forfeited my milestone payments if they ended the project early. ClauseGuard flagged Art. 1308 and gave me the exact redline to fix it. Saved me ₱85,000.&rdquo;
+                    </p>
+                  </div>
+                </div>
+                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
+                  <div>
+                    <div className="text-xs font-semibold text-[#08090a]">Marco Tan</div>
+                    <div className="text-[11px] text-[#868c98]">Independent Consultant</div>
+                  </div>
+                  <span className="text-xs font-medium text-[#b04000] group-hover:underline">
+                    Read story &rarr;
                   </span>
                 </div>
-                <div className="p-6">
-                  <p className="text-sm leading-relaxed text-[#08090a]">
-                    &ldquo;A client inserted a unilateral termination clause that forfeited my milestone payments if they ended the project early. ClauseGuard flagged Art. 1308 and gave me the exact redline to fix it. Saved me ₱85,000.&rdquo;
-                  </p>
-                </div>
               </div>
-              <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
-                <div>
-                  <div className="text-xs font-semibold text-[#08090a]">Marco Tan</div>
-                  <div className="text-[11px] text-[#868c98]">Independent Consultant</div>
-                </div>
-                <span className="text-xs font-medium text-[#b04000] group-hover:underline">
-                  Read story &rarr;
-                </span>
-              </div>
-            </div>
+            </Reveal>
 
             {/* Story 2 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group">
-              <div>
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
-                  <Image
-                    src="/images/customer-designer.jpg"
-                    alt="Bea Santos, Brand Identity Designer"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
-                    Brand Studio &middot; Cebu City
+            <Reveal delay={0.1}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
+                    <Image
+                      src="/images/customer-designer.jpg"
+                      alt="Bea Santos, Brand Identity Designer"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
+                      Brand Studio &middot; Cebu City
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-sm leading-relaxed text-[#08090a]">
+                      &ldquo;Before ClauseGuard, I just skimmed contracts and signed because lawyer consults cost more than the project deposit. Having instant statutory citations gives me the confidence to push back on predatory terms.&rdquo;
+                    </p>
+                  </div>
+                </div>
+                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
+                  <div>
+                    <div className="text-xs font-semibold text-[#08090a]">Bea Santos</div>
+                    <div className="text-[11px] text-[#868c98]">Brand Designer</div>
+                  </div>
+                  <span className="text-xs font-medium text-[#b04000] group-hover:underline">
+                    Read story &rarr;
                   </span>
                 </div>
-                <div className="p-6">
-                  <p className="text-sm leading-relaxed text-[#08090a]">
-                    &ldquo;Before ClauseGuard, I just skimmed contracts and signed because lawyer consults cost more than the project deposit. Having instant statutory citations gives me the confidence to push back on predatory terms.&rdquo;
-                  </p>
-                </div>
               </div>
-              <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
-                <div>
-                  <div className="text-xs font-semibold text-[#08090a]">Bea Santos</div>
-                  <div className="text-[11px] text-[#868c98]">Brand Designer</div>
-                </div>
-                <span className="text-xs font-medium text-[#b04000] group-hover:underline">
-                  Read story &rarr;
-                </span>
-              </div>
-            </div>
+            </Reveal>
 
             {/* Story 3 */}
-            <div className="rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group">
-              <div>
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
-                  <Image
-                    src="/images/customer-developer.jpg"
-                    alt="Rafael Cruz, Software Engineer"
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
-                    Software Agency &middot; Iloilo City
+            <Reveal delay={0.2}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white overflow-hidden shadow-[0_2px_4px_rgba(8,9,10,0.02)] flex flex-col justify-between group transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f2f2f2]">
+                    <Image
+                      src="/images/customer-developer.jpg"
+                      alt="Rafael Cruz, Software Engineer"
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <span className="absolute bottom-3 left-3 text-[11px] font-medium text-white bg-black/50 px-2 py-0.5 rounded-[3px] backdrop-blur-sm">
+                      Software Agency &middot; Iloilo City
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-sm leading-relaxed text-[#08090a]">
+                      &ldquo;The calibrated confidence score is what makes this trustworthy. When it says 95% confidence with the Civil Code citation, I know it is solid. When it flags review, it does not pretend to know everything.&rdquo;
+                    </p>
+                  </div>
+                </div>
+                <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
+                  <div>
+                    <div className="text-xs font-semibold text-[#08090a]">Rafael Cruz</div>
+                    <div className="text-[11px] text-[#868c98]">Full-Stack Developer</div>
+                  </div>
+                  <span className="text-xs font-medium text-[#b04000] group-hover:underline">
+                    Read story &rarr;
                   </span>
                 </div>
-                <div className="p-6">
-                  <p className="text-sm leading-relaxed text-[#08090a]">
-                    &ldquo;The calibrated confidence score is what makes this trustworthy. When it says 95% confidence with the Civil Code citation, I know it is solid. When it flags review, it does not pretend to know everything.&rdquo;
-                  </p>
-                </div>
               </div>
-              <div className="px-6 pb-6 pt-2 flex items-center justify-between border-t border-[#f2f2f2]">
-                <div>
-                  <div className="text-xs font-semibold text-[#08090a]">Rafael Cruz</div>
-                  <div className="text-[11px] text-[#868c98]">Full-Stack Developer</div>
-                </div>
-                <span className="text-xs font-medium text-[#b04000] group-hover:underline">
-                  Read story &rarr;
-                </span>
-              </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -576,69 +640,81 @@ export default function Home() {
       {/* ---------------- FAQ Section ---------------- */}
       <section id="faq" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
-              Transparency &amp; FAQ
-            </span>
-            <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
-              Frequently asked questions.
-            </h2>
-            <p className="mt-3 text-base text-[#525866] leading-relaxed">
-              Clear answers about privacy, legal status, and our academic research architecture.
-            </p>
-          </div>
+          <Reveal>
+            <div className="max-w-2xl">
+              <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                Questions
+              </span>
+              <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
+                Frequently asked questions.
+              </h2>
+              <p className="mt-3 text-base text-[#525866] leading-relaxed">
+                Straight answers about privacy, what ClauseGuard is (and isn&rsquo;t), and how to try it.
+              </p>
+            </div>
+          </Reveal>
 
           <div className="mt-10 divide-y divide-[#f2f2f2] border-y border-[#f2f2f2] max-w-3xl">
-            <div className="py-6">
-              <h3 className="text-base font-semibold text-[#08090a]">
-                Does ClauseGuard provide formal legal advice?
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                No. ClauseGuard is an automated contract clause identification and risk flagging platform designed for first-pass issue spotting. It grounds clauses against Philippine statutory provisions to assist non-lawyers in identifying unbalanced terms, but does not create an attorney-client relationship.
-              </p>
-            </div>
+            <Reveal delay={0} y={12}>
+              <div className="py-6">
+                <h3 className="text-base font-semibold text-[#08090a]">
+                  Is ClauseGuard a lawyer?
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  No. Think of it as a first pass, not a legal opinion. ClauseGuard reads your contract clause by clause and checks each one against actual Philippine law, so you know what to look at more closely &mdash; but it doesn&rsquo;t replace talking to a lawyer for anything serious.
+                </p>
+              </div>
+            </Reveal>
 
-            <div className="py-6">
-              <h3 className="text-base font-semibold text-[#08090a]">
-                How does ClauseGuard protect confidential contracts?
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                All uploaded documents are stored in private, encrypted Supabase Storage buckets using signed URLs with strict 60-second expiration. We implement strict Row-Level Security (RLS) across all tenant boundaries. Your documents are never used to train public AI models.
-              </p>
-            </div>
+            <Reveal delay={0.05} y={12}>
+              <div className="py-6">
+                <h3 className="text-base font-semibold text-[#08090a]">
+                  Is my contract kept private?
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  Yes. Your files are stored privately and encrypted, and only you can access them &mdash; not other users, not even us browsing around. Your documents are never used to train any AI model.
+                </p>
+              </div>
+            </Reveal>
 
-            <div className="py-6">
-              <h3 className="text-base font-semibold text-[#08090a]">
-                What happens when ClauseGuard encounters an ambiguous clause?
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                Under Objective 2 (Confidence Calibration), clauses scoring below calibrated thresholds are not forced into a binary risk category. Instead, they are routed to a human review state. A tool that flags uncertainty is fundamentally more reliable than one that guesses.
-              </p>
-            </div>
+            <Reveal delay={0.1} y={12}>
+              <div className="py-6">
+                <h3 className="text-base font-semibold text-[#08090a]">
+                  What if it's not sure about a clause?
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  It says so, instead of guessing. If a clause is genuinely hard to judge, ClauseGuard flags it for you to look at yourself rather than forcing it into a &ldquo;safe&rdquo; or &ldquo;risky&rdquo; label it isn&rsquo;t confident about.
+                </p>
+              </div>
+            </Reveal>
 
-            <div className="py-6">
-              <h3 className="text-base font-semibold text-[#08090a]">
-                Can I test ClauseGuard without creating an account?
-              </h3>
-              <p className="mt-2 text-sm text-[#525866] leading-relaxed">
-                Yes. You can explore our live marked-up sample contract right now without an account, including real-world clause segmentation, risk classification, and statutory citations.
-              </p>
-            </div>
+            <Reveal delay={0.15} y={12}>
+              <div className="py-6">
+                <h3 className="text-base font-semibold text-[#08090a]">
+                  Can I try it before making an account?
+                </h3>
+                <p className="mt-2 text-sm text-[#525866] leading-relaxed">
+                  Yes. You can look through a fully marked-up sample contract right now, no account needed, and see exactly what your own results would look like.
+                </p>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
       {/* ---------------- Final Call to Action ---------------- */}
-      <section className="py-20 sm:py-24 bg-[#f8f9fa] border-b border-[#f2f2f2]">
-        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
-          <div className="rounded-[24px] border border-[#dddddd] bg-white p-8 sm:p-14 text-center max-w-3xl mx-auto shadow-[0_4px_16px_rgba(8,9,10,0.03)]">
-            <span className="inline-flex items-center gap-2 rounded-[4px] bg-[#fbeee4] px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] text-[#b04000] border border-[#e8c6a8]">
-              Start Reviewing Today
-            </span>
-            <h2 className="mt-4 font-sans text-3xl sm:text-5xl font-semibold tracking-[-0.02em] text-[#08090a]">
+      {/* Same atmospheric system as the hero, not a separate invented style --
+          full-bleed CloudHeroBackdrop, the same text-shadow-on-photo technique,
+          the same translucent outline button. A capstone site gets one dark
+          "voice," used twice, not two different dark treatments. */}
+      <section className="relative overflow-hidden py-24 sm:py-32 bg-[#130a05]">
+        <CloudHeroBackdrop />
+        <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal y={16}>
+            <h2 className="text-center font-sans text-3xl sm:text-5xl font-semibold tracking-[-0.02em] text-white text-balance max-w-3xl mx-auto [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
               Protect your work and your earnings.
             </h2>
-            <p className="mt-4 text-base text-[#525866] leading-relaxed max-w-xl mx-auto">
+            <p className="mt-4 text-center text-base sm:text-lg leading-relaxed text-[#f3ddc4]/85 max-w-[60ch] mx-auto text-pretty [text-shadow:0_2px_16px_rgba(0,0,0,0.6)]">
               Never sign an unbalanced contract in the dark. Upload your agreement now and see what risks are hiding in the fine print.
             </p>
 
@@ -649,11 +725,15 @@ export default function Home() {
                   <ArrowRight className="size-4 ml-1.5" />
                 </Link>
               </Button>
-              <Button asChild size="hero" variant="outline" className="w-full sm:w-auto">
+              <Button asChild size="hero" variant="outline" className="w-full sm:w-auto bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white">
                 <Link href="/sample">See Marked-Up Example</Link>
               </Button>
             </div>
-          </div>
+
+            <p className="mt-4 text-center text-xs text-amber-100/90 font-mono [text-shadow:0_1px_10px_rgba(0,0,0,0.7)]">
+              No credit card required &middot; Takes about 2 minutes &middot; Free to start
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -685,17 +765,17 @@ export default function Home() {
                 </li>
                 <li>
                   <Link href="#features" className="hover:text-[#000000]">
-                    Feature Capabilities
+                    What You Get
                   </Link>
                 </li>
                 <li>
                   <Link href="#how-it-works" className="hover:text-[#000000]">
-                    Precision Pipeline
+                    How It Works
                   </Link>
                 </li>
                 <li>
                   <Link href="#statutory-grounding" className="hover:text-[#000000]">
-                    Statutory Grounding
+                    Why It&rsquo;s Different
                   </Link>
                 </li>
               </ul>
@@ -703,20 +783,20 @@ export default function Home() {
 
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.05em] text-[#08090a]">
-                Research &amp; Legal
+                Grounded In
               </div>
               <ul className="mt-3 space-y-2 text-xs text-[#525866]">
                 <li>
-                  <span className="text-[#868c98]">Civil Code (R.A. 386)</span>
+                  <span className="text-[#868c98]">Civil Code of the Philippines</span>
                 </li>
                 <li>
-                  <span className="text-[#868c98]">Labor Code (P.D. 442)</span>
+                  <span className="text-[#868c98]">Labor Code of the Philippines</span>
                 </li>
                 <li>
-                  <span className="text-[#868c98]">Ablation Benchmark</span>
+                  <span className="text-[#868c98]">Tested with real freelancers</span>
                 </li>
                 <li>
-                  <span className="text-[#868c98]">Usability Evaluation</span>
+                  <span className="text-[#868c98]">University of San Agustin research</span>
                 </li>
               </ul>
             </div>
