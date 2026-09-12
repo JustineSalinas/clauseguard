@@ -29,7 +29,7 @@ function Submit({ label, pending }: { label: string; pending: string }) {
   );
 }
 
-function GoogleButton({ next }: { next: string }) {
+function GoogleButton() {
   const status = useFormStatus();
   return (
     <Button
@@ -39,8 +39,6 @@ function GoogleButton({ next }: { next: string }) {
       className="w-full"
       disabled={status.pending}
       formAction={signInWithGoogle}
-      name="next"
-      value={next}
     >
       <svg viewBox="0 0 18 18" className="size-4" aria-hidden="true">
         <path
@@ -143,7 +141,7 @@ export function AuthForm({
         <Separator className="flex-1" />
       </div>
 
-      <GoogleButton next={next} />
+      <GoogleButton />
     </form>
   );
 }
