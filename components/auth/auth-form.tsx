@@ -39,6 +39,7 @@ function GoogleButton() {
       className="w-full"
       disabled={status.pending}
       formAction={signInWithGoogle}
+      formNoValidate
     >
       <svg viewBox="0 0 18 18" className="size-4" aria-hidden="true">
         <path
@@ -88,8 +89,10 @@ export function AuthForm({
       ) : null}
 
       {state?.notice ? (
-        <Alert>
-          <AlertDescription>{state.notice}</AlertDescription>
+        <Alert className="border-[#e8c6a8] bg-[#fbeee4] px-4 py-3">
+          <AlertDescription className="text-[#8a3300]">
+            {state.notice}
+          </AlertDescription>
         </Alert>
       ) : null}
 

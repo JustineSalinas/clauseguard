@@ -76,3 +76,4 @@ venv/
 # playwright mcp scratch
 .playwright-mcp/
 .gstack/
+.env*

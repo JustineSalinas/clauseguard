@@ -40,8 +40,10 @@ export function RequestResetForm() {
         </Alert>
       ) : null}
       {state?.notice ? (
-        <Alert>
-          <AlertDescription>{state.notice}</AlertDescription>
+        <Alert className="border-[#e8c6a8] bg-[#fbeee4] px-4 py-3">
+          <AlertDescription className="text-[#8a3300]">
+            {state.notice}
+          </AlertDescription>
         </Alert>
       ) : null}
 
