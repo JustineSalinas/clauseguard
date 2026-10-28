@@ -1,0 +1,74 @@
+{
+  "term.duration": [
+    { "code": "CIVIL", "article": "1193", "rank": 1 }
+  ],
+  "termination.unilateral": [
+    { "code": "CIVIL", "article": "1308", "rank": 1 },
+    { "code": "CIVIL", "article": "1159", "rank": 2 }
+  ],
+  "termination.mutual": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 },
+    { "code": "CIVIL", "article": "1159", "rank": 2 }
+  ],
+  "payment.terms": [
+    { "code": "CIVIL", "article": "1159", "rank": 1 },
+    { "code": "CIVIL", "article": "1169", "rank": 2 }
+  ],
+  "payment.penalty": [
+    { "code": "CIVIL", "article": "1226", "rank": 1 }
+  ],
+  "ip.assignment.broad": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 },
+    { "code": "CIVIL", "article": "19", "rank": 2 }
+  ],
+  "ip.assignment.limited": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 }
+  ],
+  "indemnity.uncapped": [
+    { "code": "CIVIL", "article": "1170", "rank": 1 },
+    { "code": "CIVIL", "article": "2201", "rank": 2 }
+  ],
+  "indemnity.capped": [
+    { "code": "CIVIL", "article": "2201", "rank": 1 },
+    { "code": "CIVIL", "article": "1306", "rank": 2 }
+  ],
+  "liability.limitation": [
+    { "code": "CIVIL", "article": "1171", "rank": 1 },
+    { "code": "CIVIL", "article": "2201", "rank": 2 }
+  ],
+  "non.compete": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 }
+  ],
+  "non.solicitation": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 }
+  ],
+  "confidentiality": [
+    { "code": "CIVIL", "article": "1159", "rank": 1 }
+  ],
+  "force.majeure": [
+    { "code": "CIVIL", "article": "1174", "rank": 1 }
+  ],
+  "dispute.arbitration": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 }
+  ],
+  "dispute.venue": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 }
+  ],
+  "warranty": [
+    { "code": "CIVIL", "article": "1159", "rank": 1 },
+    { "code": "CIVIL", "article": "1170", "rank": 2 }
+  ],
+  "assignment.rights": [
+    { "code": "CIVIL", "article": "1178", "rank": 1 }
+  ],
+  "amendment": [
+    { "code": "CIVIL", "article": "1306", "rank": 1 },
+    { "code": "CIVIL", "article": "1159", "rank": 2 }
+  ],
+  "severability": [
+    { "code": "CIVIL", "article": "1420", "rank": 1 }
+  ],
+  "entire.agreement": [
+    { "code": "CIVIL", "article": "1370", "rank": 1 }
+  ]
+}

@@ -1,0 +1,1862 @@
+[
+  {
+    "code": "CIVIL",
+    "article": "19",
+    "heading": null,
+    "text": "Every person must, in the exercise of his rights and in the performance of his duties, act with justice, give everyone his due, and observe honesty and good faith."
+  },
+  {
+    "code": "CIVIL",
+    "article": "20",
+    "heading": null,
+    "text": "Every person who, contrary to law, wilfully or negligently causes damage to another, shall indemnify the latter for the same."
+  },
+  {
+    "code": "CIVIL",
+    "article": "21",
+    "heading": null,
+    "text": "Any person who wilfully causes loss or injury to another in manner that is contrary to morals, good customs or public policy shall compensate the latter for the damage."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1156",
+    "heading": null,
+    "text": "An obligation is a juridical necessity to give, to do or not to do. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1157",
+    "heading": null,
+    "text": "Obligations arise from: (1) Law; (2) Contracts; (3) Quasi-contracts; (4) Acts or omissions punished by law; and (5) Quasi-delicts. (1089a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1158",
+    "heading": null,
+    "text": "Obligations derived from law are not presumed. Only those expressly determined in this Code or in special laws are demandable, and shall be regulated by the precepts of the law which establishes them; and as to what has not been foreseen, by the provisions of this Book. (1090)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1159",
+    "heading": null,
+    "text": "Obligations arising from contracts have the force of law between the contracting parties and should be complied with in good faith. (1091a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1160",
+    "heading": null,
+    "text": "Obligations derived from quasi-contracts shall be subject to the provisions of"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1161",
+    "heading": null,
+    "text": "Civil obligations arising from criminal offenses shall be governed by the penal laws, subject to the provisions of article 2177, and of the pertinent provisions of"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1162",
+    "heading": null,
+    "text": "Obligations derived from quasi-delicts shall be governed by the provisions of"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1163",
+    "heading": null,
+    "text": "Every person obliged to give something is also obliged to take care of it with the proper diligence of a good father of a family, unless the law or the stipulation of the parties requires another standard of care. (1094a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1164",
+    "heading": null,
+    "text": "The creditor has a right to the fruits of the thing from the time the obligation to deliver it arises. However, he shall acquire no real right over it until the same has been delivered to him. (1095)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1165",
+    "heading": null,
+    "text": "When what is to be delivered is a determinate thing, the creditor, in addition to the right granted him by article 1170, may compel the debtor to make the delivery. If the thing is indeterminate or generic, he may ask that the obligation be complied with at the expense of the debtor. If the obligor delays, or has promised to deliver the same thing to two or more persons who do not have the same interest, he shall be responsible for any fortuitous event until he has effected the delivery. (1096)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1166",
+    "heading": null,
+    "text": "The obligation to give a determinate thing includes that of delivering all its accessions and accessories, even though they may not have been mentioned. (1097a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1167",
+    "heading": null,
+    "text": "If a person obliged to do something fails to do it, the same shall be executed at his cost. This same rule shall be observed if he does it in contravention of the tenor of the obligation. Furthermore, it may be decreed that what has been poorly done be undone. (1098)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1168",
+    "heading": null,
+    "text": "When the obligation consists in not doing, and the obligor does what has been forbidden him, it shall also be undone at his expense. (1099a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1169",
+    "heading": null,
+    "text": "Those obliged to deliver or to do something incur in delay from the time the obligee judicially or extrajudicially demands from them the fulfillment of their obligation. However, the demand by the creditor shall not be necessary in order that delay may exist: (1) When the obligation or the law expressly so declare; or (2) When from the nature and the circumstances of the obligation it appears that the designation of the time when the thing is to be delivered or the service is to be rendered was a controlling motive for the establishment of the contract; or (3) When demand would be useless, as when the obligor has rendered it beyond his power to perform. In reciprocal obligations, neither party incurs in delay if the other does not comply or is not ready to comply in a proper manner with what is incumbent upon him. From the moment one of the parties fulfills his obligation, delay by the other begins. (1100a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1170",
+    "heading": null,
+    "text": "Those who in the performance of their obligations are guilty of fraud, negligence, or delay, and those who in any manner contravene the tenor thereof, are liable for damages. (1101)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1171",
+    "heading": null,
+    "text": "Responsibility arising from fraud is demandable in all obligations. Any waiver of an action for future fraud is void. (1102a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1172",
+    "heading": null,
+    "text": "Responsibility arising from negligence in the performance of every kind of obligation is also demandable, but such liability may be regulated by the courts, according to the circumstances. (1103)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1173",
+    "heading": null,
+    "text": "The fault or negligence of the obligor consists in the omission of that diligence which is required by the nature of the obligation and corresponds with the circumstances of the persons, of the time and of the place. When negligence shows bad faith, the provisions of articles 1171 and 2201, paragraph 2, shall apply. If the law or contract does not state the diligence which is to be observed in the performance, that which is expected of a good father of a family shall be required. (1104a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1174",
+    "heading": null,
+    "text": "Except in cases expressly specified by the law, or when it is otherwise declared by stipulation, or when the nature of the obligation requires the assumption of risk, no person shall be responsible for those events which could not be foreseen, or which, though foreseen, were inevitable. (1105a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1175",
+    "heading": null,
+    "text": "Usurious transactions shall be governed by special laws. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1176",
+    "heading": null,
+    "text": "The receipt of the principal by the creditor without reservation with respect to the interest, shall give rise to the presumption that said interest has been paid. The receipt of a later installment of a debt without reservation as to prior installments, shall likewise raise the presumption that such installments have been paid. (1110a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1177",
+    "heading": null,
+    "text": "The creditors, after having pursued the property in possession of the debtor to satisfy their claims, may exercise all the rights and bring all the actions of the latter for the same purpose, save those which are inherent in his person; they may also impugn the acts which the debtor may have done to defraud them. (1111)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1178",
+    "heading": null,
+    "text": "Subject to the laws, all rights acquired in virtue of an obligation are transmissible, if there has been no stipulation to the contrary. (1112)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1179",
+    "heading": null,
+    "text": "Every obligation whose performance does not depend upon a future or uncertain event, or upon a past event unknown to the parties, is demandable at once. Every obligation which contains a resolutory condition shall also be demandable, without prejudice to the effects of the happening of the event. (1113)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1180",
+    "heading": null,
+    "text": "When the debtor binds himself to pay when his means permit him to do so, the obligation shall be deemed to be one with a period, subject to the provisions of article 1197. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1181",
+    "heading": null,
+    "text": "In conditional obligations, the acquisition of rights, as well as the extinguishment or loss of those already acquired, shall depend upon the happening of the event which constitutes the condition. (1114)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1182",
+    "heading": null,
+    "text": "When the fulfillment of the condition depends upon the sole will of the debtor, the conditional obligation shall be void. If it depends upon chance or upon the will of a third person, the obligation shall take effect in conformity with the provisions of this Code. (1115)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1183",
+    "heading": null,
+    "text": "Impossible conditions, those contrary to good customs or public policy and those prohibited by law shall annul the obligation which depends upon them. If the obligation is divisible, that part thereof which is not affected by the impossible or unlawful condition shall be valid. The condition not to do an impossible thing shall be considered as not having been agreed upon. (1116a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1184",
+    "heading": null,
+    "text": "The condition that some event happen at a determinate time shall extinguish the obligation as soon as the time expires or if it has become indubitable that the event will not take place. (1117)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1185",
+    "heading": null,
+    "text": "The condition that some event will not happen at a determinate time shall render the obligation effective from the moment the time indicated has elapsed, or if it has become evident that the event cannot occur. If no time has been fixed, the condition shall be deemed fulfilled at such time as may have probably been contemplated, bearing in mind the nature of the obligation. (1118)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1186",
+    "heading": null,
+    "text": "The condition shall be deemed fulfilled when the obligor voluntarily prevents its fulfillment. (1119)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1187",
+    "heading": null,
+    "text": "The effects of a conditional obligation to give, once the condition has been fulfilled, shall retroact to the day of the constitution of the obligation. Nevertheless, when the obligation imposes reciprocal prestations upon the parties, the fruits and interests during the pendency of the condition shall be deemed to have been mutually compensated. If the obligation is unilateral, the debtor shall appropriate the fruits and interests received, unless from the nature and circumstances of the obligation it should be inferred that the intention of the person constituting the same was different. In obligations to do and not to do, the courts shall determine, in each case, the retroactive effect of the condition that has been complied with. (1120)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1188",
+    "heading": null,
+    "text": "The creditor may, before the fulfillment of the condition, bring the appropriate actions for the preservation of his right. The debtor may recover what during the same time he has paid by mistake in case of a suspensive condition. (1121a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1189",
+    "heading": null,
+    "text": "When the conditions have been imposed with the intention of suspending the efficacy of an obligation to give, the following rules shall be observed in case of the improvement, loss or deterioration of the thing during the pendency of the condition: (1) If the thing is lost without the fault of the debtor, the obligation shall be extinguished; (2) If the thing is lost through the fault of the debtor, he shall be obliged to pay damages; it is understood that the thing is lost when it perishes, or goes out of commerce, or disappears in such a way that its existence is unknown or it cannot be recovered; (3) When the thing deteriorates without the fault of the debtor, the impairment is to be borne by the creditor; (4) If it deteriorates through the fault of the debtor, the creditor may choose between the rescission of the obligation and its fulfillment, with indemnity for damages in either case; (5) If the thing is improved by its nature, or by time, the improvement shall inure to the benefit of the creditor; (6) If it is improved at the expense of the debtor, he shall have no other right than that granted to the usufructuary. (1122)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1190",
+    "heading": null,
+    "text": "When the conditions have for their purpose the extinguishment of an obligation to give, the parties, upon the fulfillment of said conditions, shall return to each other what they have received. In case of the loss, deterioration or improvement of the thing, the provisions which, with respect to the debtor, are laid down in the preceding article shall be applied to the party who is bound to return. As for the obligations to do and not to do, the provisions of the second paragraph of article 1187 shall be observed as regards the effect of the extinguishment of the obligation. (1123)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1191",
+    "heading": null,
+    "text": "The power to rescind obligations is implied in reciprocal ones, in case one of the obligors should not comply with what is incumbent upon him. The injured party may choose between the fulfillment and the rescission of the obligation, with the payment of damages in either case. He may also seek rescission, even after he has chosen fulfillment, if the latter should become impossible. The court shall decree the rescission claimed, unless there be just cause authorizing the fixing of a period. This is understood to be without prejudice to the rights of third persons who have acquired the thing, in accordance with articles 1385 and 1388 and the Mortgage Law. (1124)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1192",
+    "heading": null,
+    "text": "In case both parties have committed a breach of the obligation, the liability of the first infractor shall be equitably tempered by the courts. If it cannot be determined which of the parties first violated the contract, the same shall be deemed extinguished, and each shall bear his own damages. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1193",
+    "heading": null,
+    "text": "Obligations for whose fulfillment a day certain has been fixed, shall be demandable only when that day comes. Obligations with a resolutory period take effect at once, but terminate upon arrival of the day certain. A day certain is understood to be that which must necessarily come, although it may not be known when. If the uncertainty consists in whether the day will come or not, the obligation is conditional, and it shall be regulated by the rules of the preceding Section. (1125a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1194",
+    "heading": null,
+    "text": "In case of loss, deterioration or improvement of the thing before the arrival of the day certain, the rules in article 1189 shall be observed. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1195",
+    "heading": null,
+    "text": "Anything paid or delivered before the arrival of the period, the obligor being unaware of the period or believing that the obligation has become due and demandable, may be recovered, with the fruits and interests. (1126a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1196",
+    "heading": null,
+    "text": "Whenever in an obligation a period is designated, it is presumed to have been established for the benefit of both the creditor and the debtor, unless from the tenor of the same or other circumstances it should appear that the period has been established in favor of one or of the other. (1127)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1197",
+    "heading": null,
+    "text": "If the obligation does not fix a period, but from its nature and the circumstances it can be inferred that a period was intended, the courts may fix the duration thereof. The courts shall also fix the duration of the period when it depends upon the will of the debtor. In every case, the courts shall determine such period as may under the circumstances have been probably contemplated by the parties. Once fixed by the courts, the period cannot be changed by them. (1128a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1198",
+    "heading": null,
+    "text": "The debtor shall lose every right to make use of the period: (1) When after the obligation has been contracted, he becomes insolvent, unless he gives a guaranty or security for the debt; (2) When he does not furnish to the creditor the guaranties or securities which he has promised; (3) When by his own acts he has impaired said guaranties or securities after their establishment, and when through a fortuitous event they disappear, unless he immediately gives new ones equally satisfactory; (4) When the debtor violates any undertaking, in consideration of which the creditor agreed to the period; (5) When the debtor attempts to abscond. (1129a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1200",
+    "heading": null,
+    "text": "The right of choice belongs to the debtor, unless it has been expressly granted to the creditor. The debtor shall have no right to choose those prestations which are impossible, unlawful or which could not have been the object of the obligation. (1132)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1201",
+    "heading": null,
+    "text": "The choice shall produce no effect except from the time it has been communicated. (1133)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1202",
+    "heading": null,
+    "text": "The debtor shall lose the right of choice when among the prestations whereby he is alternatively bound, only one is practicable. (1134)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1203",
+    "heading": null,
+    "text": "If through the creditor's acts the debtor cannot make a choice according to the terms of the obligation, the latter may rescind the contract with damages. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1204",
+    "heading": null,
+    "text": "The creditor shall have a right to indemnity for damages when, through the fault of the debtor, all the things which are alternatively the object of the obligation have been lost, or the compliance of the obligation has become impossible. The indemnity shall be fixed taking as a basis the value of the last thing which disappeared, or that of the service which last became impossible. Damages other than the value of the last thing or service may also be awarded. (1135a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1205",
+    "heading": null,
+    "text": "When the choice has been expressly given to the creditor, the obligation shall cease to be alternative from the day when the selection has been communicated to the debtor. Until then the responsibility of the debtor shall be governed by the following rules: (1) If one of the things is lost through a fortuitous event, he shall perform the obligation by delivering that which the creditor should choose from among the remainder, or that which remains if only one subsists; (2) If the loss of one of the things occurs through the fault of the debtor, the creditor may claim any of those subsisting, or the price of that which, through the fault of the former, has disappeared, with a right to damages; (3) If all the things are lost through the fault of the debtor, the choice by the creditor shall fall upon the price of any one of them, also with indemnity for damages. The same rules shall be applied to obligations to do or not to do in case one, some or all of the prestations should become impossible. (1136a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1206",
+    "heading": null,
+    "text": "When only one prestation has been agreed upon, but the obligor may render another in substitution, the obligation is called facultative. The loss or deterioration of the thing intended as a substitute, through the negligence of the obligor, does not render him liable. But once the substitution has been made, the obligor is liable for the loss of the substitute on account of his delay, negligence or fraud. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1207",
+    "heading": null,
+    "text": "&#9;The concurrence of two or more creditors or of two or more debtors in one and the same obligation does not imply that each one of the former has a right to demand, or that each one of the latter is bound to render, entire compliance with the prestation. There is a solidary liability only when the obligation expressly so states, or when the law or the nature of the obligation requires solidarity. (1137a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1208",
+    "heading": null,
+    "text": "If from the law, or the nature or the wording of the obligations to which the preceding article refers the contrary does not appear, the credit or debt shall be presumed to be divided into as many shares as there are creditors or debtors, the credits or debts being considered distinct from one another, subject to the Rules of Court governing the multiplicity of suits. (1138a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1209",
+    "heading": null,
+    "text": "If the division is impossible, the right of the creditors may be prejudiced only by their collective acts, and the debt can be enforced only by proceeding against all the debtors. If one of the latter should be insolvent, the others shall not be liable for his share. (1139)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1210",
+    "heading": null,
+    "text": "The indivisibility of an obligation does not necessarily give rise to solidarity. Nor does solidarity of itself imply indivisibility. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1211",
+    "heading": null,
+    "text": "Solidarity may exist although the creditors and the debtors may not be bound in the same manner and by the same periods and conditions. (1140)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1212",
+    "heading": null,
+    "text": "Each one of the solidary creditors may do whatever may be useful to the others, but not anything which may be prejudicial to the latter. (1141a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1213",
+    "heading": null,
+    "text": "A solidary creditor cannot assign his rights without the consent of the others. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1214",
+    "heading": null,
+    "text": "The debtor may pay any one of the solidary creditors; but if any demand, judicial or extrajudicial, has been made by one of them, payment should be made to him. (1142a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1215",
+    "heading": null,
+    "text": "Novation, compensation, confusion or remission of the debt, made by any of the solidary creditors or with any of the solidary debtors, shall extinguish the obligation, without prejudice to the provisions of article 1219. The creditor who may have executed any of these acts, as well as he who collects the debt, shall be liable to the others for the share in the obligation corresponding to them. (1143)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1216",
+    "heading": null,
+    "text": "The creditor may proceed against any one of the solidary debtors or some or all of them simultaneously. The demand made against one of them shall not be an obstacle to those which may subsequently be directed against the others, so long as the debt has not been fully collected. (1144a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1217",
+    "heading": null,
+    "text": "Payment made by one of the solidary debtors extinguishes the obligation. If two or more solidary debtors offer to pay, the creditor may choose which offer to accept. He who made the payment may claim from his co-debtors only the share which corresponds to each, with the interest for the payment already made. If the payment is made before the debt is due, no interest for the intervening period may be demanded. When one of the solidary debtors cannot, because of his insolvency, reimburse his share to the debtor paying the obligation, such share shall be borne by all his co-debtors, in proportion to the debt of each. (1145a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1218",
+    "heading": null,
+    "text": "Payment by a solidary debtor shall not entitle him to reimbursement from his co-debtors if such payment is made after the obligation has prescribed or become illegal. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1219",
+    "heading": null,
+    "text": "The remission made by the creditor of the share which affects one of the solidary debtors does not release the latter from his responsibility towards the co-debtors, in case the debt had been totally paid by anyone of them before the remission was effected. (1146a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1220",
+    "heading": null,
+    "text": "The remission of the whole obligation, obtained by one of the solidary debtors, does not entitle him to reimbursement from his co-debtors. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1221",
+    "heading": null,
+    "text": "If the thing has been lost or if the prestation has become impossible without the fault of the solidary debtors, the obligation shall be extinguished. If there was fault on the part of any one of them, all shall be responsible to the creditor, for the price and the payment of damages and interest, without prejudice to their action against the guilty or negligent debtor. If through a fortuitous event, the thing is lost or the performance has become impossible after one of the solidary debtors has incurred in delay through the judicial or extrajudicial demand upon him by the creditor, the provisions of the preceding paragraph shall apply. (1147a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1222",
+    "heading": null,
+    "text": "A solidary debtor may, in actions filed by the creditor, avail himself of all defenses which are derived from the nature of the obligation and of those which are personal to him, or pertain to his own share. With respect to those which personally belong to the others, he may avail himself thereof only as regards that part of the debt for which the latter are responsible. (1148a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1223",
+    "heading": null,
+    "text": "The divisibility or indivisibility of the things that are the object of obligations in which there is only one debtor and only one creditor does not alter or modify the provisions of"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1224",
+    "heading": null,
+    "text": "A joint indivisible obligation gives rise to indemnity for damages from the time anyone of the debtors does not comply with his undertaking. The debtors who may have been ready to fulfill their promises shall not contribute to the indemnity beyond the corresponding portion of the price of the thing or of the value of the service in which the obligation consists. (1150)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1225",
+    "heading": null,
+    "text": "For the purposes of the preceding articles, obligations to give definite things and those which are not susceptible of partial performance shall be deemed to be indivisible. When the obligation has for its object the execution of a certain number of days of work, the accomplishment of work by metrical units, or analogous things which by their nature are susceptible of partial performance, it shall be divisible. However, even though the object or service may be physically divisible, an obligation is indivisible if so provided by law or intended by the parties. In obligations not to do, divisibility or indivisibility shall be determined by the character of the prestation in each particular case. (1151a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1226",
+    "heading": null,
+    "text": "In obligations with a penal clause, the penalty shall substitute the indemnity for damages and the payment of interests in case of noncompliance, if there is no stipulation to the contrary. Nevertheless, damages shall be paid if the obligor refuses to pay the penalty or is guilty of fraud in the fulfillment of the obligation. The penalty may be enforced only when it is demandable in accordance with the provisions of this Code. (1152a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1227",
+    "heading": null,
+    "text": "The debtor cannot exempt himself from the performance of the obligation by paying the penalty, save in the case where this right has been expressly reserved for him. Neither can the creditor demand the fulfillment of the obligation and the satisfaction of the penalty at the same time, unless this right has been clearly granted him. However, if after the creditor has decided to require the fulfillment of the obligation, the performance thereof should become impossible without his fault, the penalty may be enforced. (1153a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1228",
+    "heading": null,
+    "text": "Proof of actual damages suffered by the creditor is not necessary in order that the penalty may be demanded. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1229",
+    "heading": null,
+    "text": "The judge shall equitably reduce the penalty when the principal obligation has been partly or irregularly complied with by the debtor. Even if there has been no performance, the penalty may also be reduced by the courts if it is iniquitous or unconscionable. (1154a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1230",
+    "heading": null,
+    "text": "The nullity of the penal clause does not carry with it that of the principal obligation. The nullity of the principal obligation carries with it that of the penal clause. (1155)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1231",
+    "heading": null,
+    "text": "Obligations are extinguished: (1) By payment or performance; (2) By the loss of the thing due; (3) By the condonation or remission of the debt; (4) By the confusion or merger of the rights of creditor and debtor; (5) By compensation; (6) By novation. Other causes of extinguishment of obligations, such as annulment, rescission, fulfillment of a resolutory condition, and prescription, are governed elsewhere in this Code. (1156a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1232",
+    "heading": null,
+    "text": "Payment means not only the delivery of money but also the performance, in any other manner, of an obligation. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1233",
+    "heading": null,
+    "text": "A debt shall not be understood to have been paid unless the thing or service in which the obligation consists has been completely delivered or rendered, as the case may be. (1157)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1234",
+    "heading": null,
+    "text": "If the obligation has been substantially performed in good faith, the obligor may recover as though there had been a strict and complete fulfillment, less damages suffered by the obligee. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1235",
+    "heading": null,
+    "text": "When the obligee accepts the performance, knowing its incompleteness or irregularity, and without expressing any protest or objection, the obligation is deemed fully complied with. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1236",
+    "heading": null,
+    "text": "The creditor is not bound to accept payment or performance by a third person who has no interest in the fulfillment of the obligation, unless there is a stipulation to the contrary. Whoever pays for another may demand from the debtor what he has paid, except that if he paid without the knowledge or against the will of the debtor, he can recover only insofar as the payment has been beneficial to the debtor. (1158a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1237",
+    "heading": null,
+    "text": "Whoever pays on behalf of the debtor without the knowledge or against the will of the latter, cannot compel the creditor to subrogate him in his rights, such as those arising from a mortgage, guaranty, or penalty. (1159a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1238",
+    "heading": null,
+    "text": "Payment made by a third person who does not intend to be reimbursed by the debtor is deemed to be a donation, which requires the debtor's consent. But the payment is in any case valid as to the creditor who has accepted it. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1239",
+    "heading": null,
+    "text": "In obligations to give, payment made by one who does not have the free disposal of the thing due and capacity to alienate it shall not be valid, without prejudice to the provisions of article 1427 under the Title on \"Natural Obligations.\" (1160a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1240",
+    "heading": null,
+    "text": "Payment shall be made to the person in whose favor the obligation has been constituted, or his successor in interest, or any person authorized to receive it. (1162a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1241",
+    "heading": null,
+    "text": "Payment to a person who is incapacitated to administer his property shall be valid if he has kept the thing delivered, or insofar as the payment has been beneficial to him. Payment made to a third person shall also be valid insofar as it has redounded to the benefit of the creditor. Such benefit to the creditor need not be proved in the following cases: (1) If after the payment, the third person acquires the creditor's rights; (2) If the creditor ratifies the payment to the third person; (3) If by the creditor's conduct, the debtor has been led to believe that the third person had authority to receive the payment. (1163a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1242",
+    "heading": null,
+    "text": "Payment made in good faith to any person in possession of the credit shall release the debtor. (1164)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1243",
+    "heading": null,
+    "text": "Payment made to the creditor by the debtor after the latter has been judicially ordered to retain the debt shall not be valid. (1165)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1244",
+    "heading": null,
+    "text": "The debtor of a thing cannot compel the creditor to receive a different one, although the latter may be of the same value as, or more valuable than that which is due. In obligations to do or not to do, an act or forbearance cannot be substituted by another act or forbearance against the obligee's will. (1166a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1245",
+    "heading": null,
+    "text": "Dation in payment, whereby property is alienated to the creditor in satisfaction of a debt in money, shall be governed by the law of sales. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1246",
+    "heading": null,
+    "text": "When the obligation consists in the delivery of an indeterminate or generic thing, whose quality and circumstances have not been stated, the creditor cannot demand a thing of superior quality. Neither can the debtor deliver a thing of inferior quality. The purpose of the obligation and other circumstances shall be taken into consideration. (1167a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1247",
+    "heading": null,
+    "text": "Unless it is otherwise stipulated, the extrajudicial expenses required by the payment shall be for the account of the debtor. With regard to judicial costs, the Rules of Court shall govern. (1168a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1248",
+    "heading": null,
+    "text": "Unless there is an express stipulation to that effect, the creditor cannot be compelled partially to receive the prestations in which the obligation consists. Neither may the debtor be required to make partial payments. However, when the debt is in part liquidated and in part unliquidated, the creditor may demand and the debtor may effect the payment of the former without waiting for the liquidation of the latter. (1169a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1249",
+    "heading": null,
+    "text": "The payment of debts in money shall be made in the currency stipulated, and if it is not possible to deliver such currency, then in the currency which is legal tender in the Philippines. The delivery of promissory notes payable to order, or bills of exchange or other mercantile documents shall produce the effect of payment only when they have been cashed, or when through the fault of the creditor they have been impaired. In the meantime, the action derived from the original obligation shall be held in the abeyance. (1170)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1250",
+    "heading": null,
+    "text": "In case an extraordinary inflation or deflation of the currency stipulated should supervene, the value of the currency at the time of the establishment of the obligation shall be the basis of payment, unless there is an agreement to the contrary. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1251",
+    "heading": null,
+    "text": "Payment shall be made in the place designated in the obligation. There being no express stipulation and if the undertaking is to deliver a determinate thing, the payment shall be made wherever the thing might be at the moment the obligation was constituted. In any other case the place of payment shall be the domicile of the debtor. If the debtor changes his domicile in bad faith or after he has incurred in delay, the additional expenses shall be borne by him. These provisions are without prejudice to venue under the Rules of Court. (1171a) SUBSECTION 1. Application of Payments"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1252",
+    "heading": null,
+    "text": "He who has various debts of the same kind in favor of one and the same creditor, may declare at the time of making the payment, to which of them the same must be applied. Unless the parties so stipulate, or when the application of payment is made by the party for whose benefit the term has been constituted, application shall not be made as to debts which are not yet due. If the debtor accepts from the creditor a receipt in which an application of the payment is made, the former cannot complain of the same, unless there is a cause for invalidating the contract. (1172a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1253",
+    "heading": null,
+    "text": "If the debt produces interest, payment of the principal shall not be deemed to have been made until the interests have been covered. (1173)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1254",
+    "heading": null,
+    "text": "When the payment cannot be applied in accordance with the preceding rules, or if application can not be inferred from other circumstances, the debt which is most onerous to the debtor, among those due, shall be deemed to have been satisfied. If the debts due are of the same nature and burden, the payment shall be applied to all of them proportionately. (1174a) SUBSECTION 2. Payment by Cession"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1255",
+    "heading": null,
+    "text": "The debtor may cede or assign his property to his creditors in payment of his debts. This cession, unless there is stipulation to the contrary, shall only release the debtor from responsibility for the net proceeds of the thing assigned. The agreements which, on the effect of the cession, are made between the debtor and his creditors shall be governed by special laws. (1175a) SUBSECTION 3. Tender of Payment and Consignation"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1256",
+    "heading": null,
+    "text": "If the creditor to whom tender of payment has been made refuses without just cause to accept it, the debtor shall be released from responsibility by the consignation of the thing or sum due. Consignation alone shall produce the same effect in the following cases: (1) When the creditor is absent or unknown, or does not appear at the place of payment; (2) When he is incapacitated to receive the payment at the time it is due; (3) When, without just cause, he refuses to give a receipt; (4) When two or more persons claim the same right to collect; (5) When the title of the obligation has been lost. (1176a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1257",
+    "heading": null,
+    "text": "In order that the consignation of the thing due may release the obligor, it must first be announced to the persons interested in the fulfillment of the obligation. The consignation shall be ineffectual if it is not made strictly in consonance with the provisions which regulate payment. (1177)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1258",
+    "heading": null,
+    "text": "Consignation shall be made by depositing the things due at the disposal of judicial authority, before whom the tender of payment shall be proved, in a proper case, and the announcement of the consignation in other cases. The consignation having been made, the interested parties shall also be notified thereof. (1178)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1259",
+    "heading": null,
+    "text": "The expenses of consignation, when properly made, shall be charged against the creditor. (1179)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1260",
+    "heading": null,
+    "text": "Once the consignation has been duly made, the debtor may ask the judge to order the cancellation of the obligation. Before the creditor has accepted the consignation, or before a judicial declaration that the consignation has been properly made, the debtor may withdraw the thing or the sum deposited, allowing the obligation to remain in force. (1180)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1261",
+    "heading": null,
+    "text": "If, the consignation having been made, the creditor should authorize the debtor to withdraw the same, he shall lose every preference which he may have over the thing. The co-debtors, guarantors and sureties shall be released. (1181a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1262",
+    "heading": null,
+    "text": "An obligation which consists in the delivery of a determinate thing shall be extinguished if it should be lost or destroyed without the fault of the debtor, and before he has incurred in delay. When by law or stipulation, the obligor is liable even for fortuitous events, the loss of the thing does not extinguish the obligation, and he shall be responsible for damages. The same rule applies when the nature of the obligation requires the assumption of risk. (1182a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1263",
+    "heading": null,
+    "text": "In an obligation to deliver a generic thing, the loss or destruction of anything of the same kind does not extinguish the obligation. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1264",
+    "heading": null,
+    "text": "The courts shall determine whether, under the circumstances, the partial loss of the object of the obligation is so important as to extinguish the obligation. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1265",
+    "heading": null,
+    "text": "Whenever the thing is lost in the possession of the debtor, it shall be presumed that the loss was due to his fault, unless there is proof to the contrary, and without prejudice to the provisions of article 1165. This presumption does not apply in case of earthquake, flood, storm, or other natural calamity. (1183a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1266",
+    "heading": null,
+    "text": "The debtor in obligations to do shall also be released when the prestation becomes legally or physically impossible without the fault of the obligor. (1184a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1267",
+    "heading": null,
+    "text": "When the service has become so difficult as to be manifestly beyond the contemplation of the parties, the obligor may also be released therefrom, in whole or in part. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1268",
+    "heading": null,
+    "text": "When the debt of a thing certain and determinate proceeds from a criminal offense, the debtor shall not be exempted from the payment of its price, whatever may be the cause for the loss, unless the thing having been offered by him to the person who should receive it, the latter refused without justification to accept it. (1185)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1269",
+    "heading": null,
+    "text": "The obligation having been extinguished by the loss of the thing, the creditor shall have all the rights of action which the debtor may have against third persons by reason of the loss. (1186)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1270",
+    "heading": null,
+    "text": "Condonation or remission is essentially gratuitous, and requires the acceptance by the obligor. It may be made expressly or impliedly. One and the other kind shall be subject to the rules which govern inofficious donations. Express condonation shall, furthermore, comply with the forms of donation. (1187)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1271",
+    "heading": null,
+    "text": "The delivery of a private document evidencing a credit, made voluntarily by the creditor to the debtor, implies the renunciation of the action which the former had against the latter. If in order to nullify this waiver it should be claimed to be inofficious, the debtor and his heirs may uphold it by proving that the delivery of the document was made in virtue of payment of the debt. (1188)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1272",
+    "heading": null,
+    "text": "Whenever the private document in which the debt appears is found in the possession of the debtor, it shall be presumed that the creditor delivered it voluntarily, unless the contrary is proved. (1189)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1273",
+    "heading": null,
+    "text": "The renunciation of the principal debt shall extinguish the accessory obligations; but the waiver of the latter shall leave the former in force. (1190)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1274",
+    "heading": null,
+    "text": "It is presumed that the accessory obligation of pledge has been remitted when the thing pledged, after its delivery to the creditor, is found in the possession of the debtor, or of a third person who owns the thing. (1191a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1275",
+    "heading": null,
+    "text": "The obligation is extinguished from the time the characters of creditor and debtor are merged in the same person. (1192a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1276",
+    "heading": null,
+    "text": "Merger which takes place in the person of the principal debtor or creditor benefits the guarantors. Confusion which takes place in the person of any of the latter does not extinguish the obligation. (1193)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1277",
+    "heading": null,
+    "text": "Confusion does not extinguish a joint obligation except as regards the share corresponding to the creditor or debtor in whom the two characters concur. (1194)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1278",
+    "heading": null,
+    "text": "Compensation shall take place when two persons, in their own right, are creditors and debtors of each other. (1195)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1279",
+    "heading": null,
+    "text": "In order that compensation may be proper, it is necessary: (1) That each one of the obligors be bound principally, and that he be at the same time a principal creditor of the other; (2) That both debts consist in a sum of money, or if the things due are consumable, they be of the same kind, and also of the same quality if the latter has been stated; (3) That the two debts be due; (4) That they be liquidated and demandable; (5) That over neither of them there be any retention or controversy, commenced by third persons and communicated in due time to the debtor. (1196)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1280",
+    "heading": null,
+    "text": "Notwithstanding the provisions of the preceding article, the guarantor may set up compensation as regards what the creditor may owe the principal debtor. (1197)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1281",
+    "heading": null,
+    "text": "Compensation may be total or partial. When the two debts are of the same amount, there is a total compensation. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1282",
+    "heading": null,
+    "text": "The parties may agree upon the compensation of debts which are not yet due. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1283",
+    "heading": null,
+    "text": "If one of the parties to a suit over an obligation has a claim for damages against the other, the former may set it off by proving his right to said damages and the amount thereof. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1284",
+    "heading": null,
+    "text": "When one or both debts are rescissible or voidable, they may be compensated against each other before they are judicially rescinded or avoided. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1285",
+    "heading": null,
+    "text": "The debtor who has consented to the assignment of rights made by a creditor in favor of a third person, cannot set up against the assignee the compensation which would pertain to him against the assignor, unless the assignor was notified by the debtor at the time he gave his consent, that he reserved his right to the compensation. If the creditor communicated the cession to him but the debtor did not consent thereto, the latter may set up the compensation of debts previous to the cession, but not of subsequent ones. If the assignment is made without the knowledge of the debtor, he may set up the compensation of all credits prior to the same and also later ones until he had knowledge of the assignment. (1198a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1286",
+    "heading": null,
+    "text": "Compensation takes place by operation of law, even though the debts may be payable at different places, but there shall be an indemnity for expenses of exchange or transportation to the place of payment. (1199a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1287",
+    "heading": null,
+    "text": "Compensation shall not be proper when one of the debts arises from a depositum or from the obligations of a depositary or of a bailee in commodatum. Neither can compensation be set up against a creditor who has a claim for support due by gratuitous title, without prejudice to the provisions of paragraph 2 of article 301. (1200a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1288",
+    "heading": null,
+    "text": "Neither shall there be compensation if one of the debts consists in civil liability arising from a penal offense. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1289",
+    "heading": null,
+    "text": "If a person should have against him several debts which are susceptible of compensation, the rules on the application of payments shall apply to the order of the compensation. (1201)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1290",
+    "heading": null,
+    "text": "When all the requisites mentioned in article 1279 are present, compensation takes effect by operation of law, and extinguishes both debts to the concurrent amount, even though the creditors and debtors are not aware of the compensation. (1202a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1291",
+    "heading": null,
+    "text": "Obligations may be modified by: (1) Changing their object or principal conditions; (2) Substituting the person of the debtor; (3) Subrogating a third person in the rights of the creditor. (1203)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1292",
+    "heading": null,
+    "text": "In order that an obligation may be extinguished by another which substitute the same, it is imperative that it be so declared in unequivocal terms, or that the old and the new obligations be on every point incompatible with each other. (1204)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1293",
+    "heading": null,
+    "text": "Novation which consists in substituting a new debtor in the place of the original one, may be made even without the knowledge or against the will of the latter, but not without the consent of the creditor. Payment by the new debtor gives him the rights mentioned in articles 1236 and 1237. (1205a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1294",
+    "heading": null,
+    "text": "If the substitution is without the knowledge or against the will of the debtor, the new debtor's insolvency or non-fulfillment of the obligations shall not give rise to any liability on the part of the original debtor. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1295",
+    "heading": null,
+    "text": "The insolvency of the new debtor, who has been proposed by the original debtor and accepted by the creditor, shall not revive the action of the latter against the original obligor, except when said insolvency was already existing and of public knowledge, or known to the debtor, when the delegated his debt. (1206a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1296",
+    "heading": null,
+    "text": "When the principal obligation is extinguished in consequence of a novation, accessory obligations may subsist only insofar as they may benefit third persons who did not give their consent. (1207)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1297",
+    "heading": null,
+    "text": "If the new obligation is void, the original one shall subsist, unless the parties intended that the former relation should be extinguished in any event. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1298",
+    "heading": null,
+    "text": "The novation is void if the original obligation was void, except when annulment may be claimed only by the debtor or when ratification validates acts which are voidable. (1208a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1299",
+    "heading": null,
+    "text": "If the original obligation was subject to a suspensive or resolutory condition, the new obligation shall be under the same condition, unless it is otherwise stipulated. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1300",
+    "heading": null,
+    "text": "Subrogation of a third person in the rights of the creditor is either legal or conventional. The former is not presumed, except in cases expressly mentioned in this Code; the latter must be clearly established in order that it may take effect. (1209a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1301",
+    "heading": null,
+    "text": "Conventional subrogation of a third person requires the consent of the original parties and of the third person. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1302",
+    "heading": null,
+    "text": "It is presumed that there is legal subrogation: (1) When a creditor pays another creditor who is preferred, even without the debtor's knowledge; (2) When a third person, not interested in the obligation, pays with the express or tacit approval of the debtor; (3) When, even without the knowledge of the debtor, a person interested in the fulfillment of the obligation pays, without prejudice to the effects of confusion as to the latter's share. (1210a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1303",
+    "heading": null,
+    "text": "Subrogation transfers to the persons subrogated the credit with all the rights thereto appertaining, either against the debtor or against third person, be they guarantors or possessors of mortgages, subject to stipulation in a conventional subrogation. (1212a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1304",
+    "heading": null,
+    "text": "A creditor, to whom partial payment has been made, may exercise his right for the remainder, and he shall be preferred to the person who has been subrogated in his place in virtue of the partial payment of the same credit. (1213)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1305",
+    "heading": null,
+    "text": "A contract is a meeting of minds between two persons whereby one binds himself, with respect to the other, to give something or to render some service. (1254a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1306",
+    "heading": null,
+    "text": "The contracting parties may establish such stipulations, clauses, terms and conditions as they may deem convenient, provided they are not contrary to law, morals, good customs, public order, or public policy. (1255a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1307",
+    "heading": null,
+    "text": "Innominate contracts shall be regulated by the stipulations of the parties, by the provisions of Titles I and II of this Book, by the rules governing the most analogous nominate contracts, and by the customs of the place. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1308",
+    "heading": null,
+    "text": "The contract must bind both contracting parties; its validity or compliance cannot be left to the will of one of them. (1256a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1309",
+    "heading": null,
+    "text": "The determination of the performance may be left to a third person, whose decision shall not be binding until it has been made known to both contracting parties. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1310",
+    "heading": null,
+    "text": "The determination shall not be obligatory if it is evidently inequitable. In such case, the courts shall decide what is equitable under the circumstances. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1311",
+    "heading": null,
+    "text": "Contracts take effect only between the parties, their assigns and heirs, except in case where the rights and obligations arising from the contract are not transmissible by their nature, or by stipulation or by provision of law. The heir is not liable beyond the value of the property he received from the decedent. If a contract should contain some stipulation in favor of a third person, he may demand its fulfillment provided he communicated his acceptance to the obligor before its revocation. A mere incidental benefit or interest of a person is not sufficient. The contracting parties must have clearly and deliberately conferred a favor upon a third person. (1257a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1312",
+    "heading": null,
+    "text": "In contracts creating real rights, third persons who come into possession of the object of the contract are bound thereby, subject to the provisions of the Mortgage Law and the Land Registration Laws. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1313",
+    "heading": null,
+    "text": "Creditors are protected in cases of contracts intended to defraud them. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1314",
+    "heading": null,
+    "text": "Any third person who induces another to violate his contract shall be liable for damages to the other contracting party. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1315",
+    "heading": null,
+    "text": "Contracts are perfected by mere consent, and from that moment the parties are bound not only to the fulfillment of what has been expressly stipulated but also to all the consequences which, according to their nature, may be in keeping with good faith, usage and law. (1258)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1316",
+    "heading": null,
+    "text": "Real contracts, such as deposit, pledge and commodatum, are not perfected until the delivery of the object of the obligation. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1317",
+    "heading": null,
+    "text": "No one may contract in the name of another without being authorized by the latter, or unless he has by law a right to represent him. A contract entered into in the name of another by one who has no authority or legal representation, or who has acted beyond his powers, shall be unenforceable, unless it is ratified, expressly or impliedly, by the person on whose behalf it has been executed, before it is revoked by the other contracting party. (1259a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1318",
+    "heading": null,
+    "text": "There is no contract unless the following requisites concur: (1) Consent of the contracting parties; (2) Object certain which is the subject matter of the contract; (3) Cause of the obligation which is established. (1261)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1319",
+    "heading": null,
+    "text": "Consent is manifested by the meeting of the offer and the acceptance upon the thing and the cause which are to constitute the contract. The offer must be certain and the acceptance absolute. A qualified acceptance constitutes a counter-offer. Acceptance made by letter or telegram does not bind the offerer except from the time it came to his knowledge. The contract, in such a case, is presumed to have been entered into in the place where the offer was made. (1262a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1320",
+    "heading": null,
+    "text": "An acceptance may be express or implied. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1321",
+    "heading": null,
+    "text": "The person making the offer may fix the time, place, and manner of acceptance, all of which must be complied with. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1322",
+    "heading": null,
+    "text": "An offer made through an agent is accepted from the time acceptance is communicated to him. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1323",
+    "heading": null,
+    "text": "An offer becomes ineffective upon the death, civil interdiction, insanity, or insolvency of either party before acceptance is conveyed. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1324",
+    "heading": null,
+    "text": "When the offerer has allowed the offeree a certain period to accept, the offer may be withdrawn at any time before acceptance by communicating such withdrawal, except when the option is founded upon a consideration, as something paid or promised. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1325",
+    "heading": null,
+    "text": "Unless it appears otherwise, business advertisements of things for sale are not definite offers, but mere invitations to make an offer. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1326",
+    "heading": null,
+    "text": "Advertisements for bidders are simply invitations to make proposals, and the advertiser is not bound to accept the highest or lowest bidder, unless the contrary appears. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1327",
+    "heading": null,
+    "text": "The following cannot give consent to a contract: (1) Unemancipated minors; (2) Insane or demented persons, and deaf-mutes who do not know how to write. (1263a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1328",
+    "heading": null,
+    "text": "Contracts entered into during a lucid interval are valid. Contracts agreed to in a state of drunkenness or during a hypnotic spell are voidable. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1329",
+    "heading": null,
+    "text": "The incapacity declared in article 1327 is subject to the modifications determined by law, and is understood to be without prejudice to special disqualifications established in the laws. (1264)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1330",
+    "heading": null,
+    "text": "A contract where consent is given through mistake, violence, intimidation, undue influence, or fraud is voidable. (1265a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1331",
+    "heading": null,
+    "text": "In order that mistake may invalidate consent, it should refer to the substance of the thing which is the object of the contract, or to those conditions which have principally moved one or both parties to enter into the contract. Mistake as to the identity or qualifications of one of the parties will vitiate consent only when such identity or qualifications have been the principal cause of the contract. A simple mistake of account shall give rise to its correction. (1266a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1332",
+    "heading": null,
+    "text": "When one of the parties is unable to read, or if the contract is in a language not understood by him, and mistake or fraud is alleged, the person enforcing the contract must show that the terms thereof have been fully explained to the former. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1333",
+    "heading": null,
+    "text": "There is no mistake if the party alleging it knew the doubt, contingency or risk affecting the object of the contract. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1334",
+    "heading": null,
+    "text": "Mutual error as to the legal effect of an agreement when the real purpose of the parties is frustrated, may vitiate consent. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1335",
+    "heading": null,
+    "text": "There is violence when in order to wrest consent, serious or irresistible force is employed. There is intimidation when one of the contracting parties is compelled by a reasonable and well-grounded fear of an imminent and grave evil upon his person or property, or upon the person or property of his spouse, descendants or ascendants, to give his consent. To determine the degree of intimidation, the age, sex and condition of the person shall be borne in mind. A threat to enforce one's claim through competent authority, if the claim is just or legal, does not vitiate consent. (1267a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1336",
+    "heading": null,
+    "text": "Violence or intimidation shall annul the obligation, although it may have been employed by a third person who did not take part in the contract. (1268)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1337",
+    "heading": null,
+    "text": "There is undue influence when a person takes improper advantage of his power over the will of another, depriving the latter of a reasonable freedom of choice. The following circumstances shall be considered: the confidential, family, spiritual and other relations between the parties, or the fact that the person alleged to have been unduly influenced was suffering from mental weakness, or was ignorant or in financial distress. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1338",
+    "heading": null,
+    "text": "There is fraud when, through insidious words or machinations of one of the contracting parties, the other is induced to enter into a contract which, without them, he would not have agreed to. (1269)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1339",
+    "heading": null,
+    "text": "Failure to disclose facts, when there is a duty to reveal them, as when the parties are bound by confidential relations, constitutes fraud. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1340",
+    "heading": null,
+    "text": "The usual exaggerations in trade, when the other party had an opportunity to know the facts, are not in themselves fraudulent. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1341",
+    "heading": null,
+    "text": "A mere expression of an opinion does not signify fraud, unless made by an expert and the other party has relied on the former's special knowledge. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1342",
+    "heading": null,
+    "text": "Misrepresentation by a third person does not vitiate consent, unless such misrepresentation has created substantial mistake and the same is mutual. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1343",
+    "heading": null,
+    "text": "Misrepresentation made in good faith is not fraudulent but may constitute error. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1344",
+    "heading": null,
+    "text": "In order that fraud may make a contract voidable, it should be serious and should not have been employed by both contracting parties. Incidental fraud only obliges the person employing it to pay damages. (1270)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1345",
+    "heading": null,
+    "text": "Simulation of a contract may be absolute or relative. The former takes place when the parties do not intend to be bound at all; the latter, when the parties conceal their true agreement. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1346",
+    "heading": null,
+    "text": "An absolutely simulated or fictitious contract is void. A relative simulation, when it does not prejudice a third person and is not intended for any purpose contrary to law, morals, good customs, public order or public policy binds the parties to their real agreement. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1347",
+    "heading": null,
+    "text": "All things which are not outside the commerce of men, including future things, may be the object of a contract. All rights which are not intransmissible may also be the object of contracts. No contract may be entered into upon future inheritance except in cases expressly authorized by law. All services which are not contrary to law, morals, good customs, public order or public policy may likewise be the object of a contract. (1271a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1348",
+    "heading": null,
+    "text": "Impossible things or services cannot be the object of contracts. (1272)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1349",
+    "heading": null,
+    "text": "The object of every contract must be determinate as to its kind. The fact that the quantity is not determinate shall not be an obstacle to the existence of the contract, provided it is possible to determine the same, without the need of a new contract between the parties. (1273)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1350",
+    "heading": null,
+    "text": "In onerous contracts the cause is understood to be, for each contracting party, the prestation or promise of a thing or service by the other; in remuneratory ones, the service or benefit which is remunerated; and in contracts of pure beneficence, the mere liberality of the benefactor. (1274)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1351",
+    "heading": null,
+    "text": "The particular motives of the parties in entering into a contract are different from the cause thereof. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1352",
+    "heading": null,
+    "text": "Contracts without cause, or with unlawful cause, produce no effect whatever. The cause is unlawful if it is contrary to law, morals, good customs, public order or public policy. (1275a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1353",
+    "heading": null,
+    "text": "The statement of a false cause in contracts shall render them void, if it should not be proved that they were founded upon another cause which is true and lawful. (1276)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1354",
+    "heading": null,
+    "text": "Although the cause is not stated in the contract, it is presumed that it exists and is lawful, unless the debtor proves the contrary. (1277)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1355",
+    "heading": null,
+    "text": "Except in cases specified by law, lesion or inadequacy of cause shall not invalidate a contract, unless there has been fraud, mistake or undue influence. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1356",
+    "heading": null,
+    "text": "Contracts shall be obligatory, in whatever form they may have been entered into, provided all the essential requisites for their validity are present. However, when the law requires that a contract be in some form in order that it may be valid or enforceable, or that a contract be proved in a certain way, that requirement is absolute and indispensable. In such cases, the right of the parties stated in the following article cannot be exercised. (1278a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1357",
+    "heading": null,
+    "text": "If the law requires a document or other special form, as in the acts and contracts enumerated in the following article, the contracting parties may compel each other to observe that form, once the contract has been perfected. This right may be exercised simultaneously with the action upon the contract. (1279a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1358",
+    "heading": null,
+    "text": "The following must appear in a public document: (1) Acts and contracts which have for their object the creation, transmission, modification or extinguishment of real rights over immovable property; sales of real property or of an interest therein are governed by articles 1403, No. 2, and 1405; (2) The cession, repudiation or renunciation of hereditary rights or of those of the conjugal partnership of gains; (3) The power to administer property, or any other power which has for its object an act appearing or which should appear in a public document, or should prejudice a third person; (4) The cession of actions or rights proceeding from an act appearing in a public document. All other contracts where the amount involved exceeds five hundred pesos must appear in writing, even a private one. But sales of goods, chattels or things in action are governed by articles, 1403, No. 2 and 1405. (1280a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1359",
+    "heading": null,
+    "text": "When, there having been a meeting of the minds of the parties to a contract, their true intention is not expressed in the instrument purporting to embody the agreement, by reason of mistake, fraud, inequitable conduct or accident, one of the parties may ask for the reformation of the instrument to the end that such true intention may be expressed. If mistake, fraud, inequitable conduct, or accident has prevented a meeting of the minds of the parties, the proper remedy is not reformation of the instrument but annulment of the contract."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1360",
+    "heading": null,
+    "text": "The principles of the general law on the reformation of instruments are hereby adopted insofar as they are not in conflict with the provisions of this Code."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1361",
+    "heading": null,
+    "text": "When a mutual mistake of the parties causes the failure of the instrument to disclose their real agreement, said instrument may be reformed."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1362",
+    "heading": null,
+    "text": "If one party was mistaken and the other acted fraudulently or inequitably in such a way that the instrument does not show their true intention, the former may ask for the reformation of the instrument."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1363",
+    "heading": null,
+    "text": "When one party was mistaken and the other knew or believed that the instrument did not state their real agreement, but concealed that fact from the former, the instrument may be reformed."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1364",
+    "heading": null,
+    "text": "When through the ignorance, lack of skill, negligence or bad faith on the part of the person drafting the instrument or of the clerk or typist, the instrument does not express the true intention of the parties, the courts may order that the instrument be reformed."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1365",
+    "heading": null,
+    "text": "If two parties agree upon the mortgage or pledge of real or personal property, but the instrument states that the property is sold absolutely or with a right of repurchase, reformation of the instrument is proper."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1366",
+    "heading": null,
+    "text": "There shall be no reformation in the following cases: (1) Simple donations inter vivos wherein no condition is imposed; (2) Wills; (3) When the real agreement is void."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1367",
+    "heading": null,
+    "text": "When one of the parties has brought an action to enforce the instrument, he cannot subsequently ask for its reformation."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1368",
+    "heading": null,
+    "text": "Reformation may be ordered at the instance of either party or his successors in interest, if the mistake was mutual; otherwise, upon petition of the injured party, or his heirs and assigns."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1369",
+    "heading": null,
+    "text": "The procedure for the reformation of instrument shall be governed by rules of court to be promulgated by the Supreme Court."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1370",
+    "heading": null,
+    "text": "If the terms of a contract are clear and leave no doubt upon the intention of the contracting parties, the literal meaning of its stipulations shall control. If the words appear to be contrary to the evident intention of the parties, the latter shall prevail over the former. (1281)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1371",
+    "heading": null,
+    "text": "In order to judge the intention of the contracting parties, their contemporaneous and subsequent acts shall be principally considered. (1282)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1372",
+    "heading": null,
+    "text": "However general the terms of a contract may be, they shall not be understood to comprehend things that are distinct and cases that are different from those upon which the parties intended to agree. (1283)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1373",
+    "heading": null,
+    "text": "If some stipulation of any contract should admit of several meanings, it shall be understood as bearing that import which is most adequate to render it effectual. (1284)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1374",
+    "heading": null,
+    "text": "The various stipulations of a contract shall be interpreted together, attributing to the doubtful ones that sense which may result from all of them taken jointly. (1285)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1375",
+    "heading": null,
+    "text": "Words which may have different significations shall be understood in that which is most in keeping with the nature and object of the contract. (1286)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1376",
+    "heading": null,
+    "text": "The usage or custom of the place shall be borne in mind in the interpretation of the ambiguities of a contract, and shall fill the omission of stipulations which are ordinarily established. (1287)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1377",
+    "heading": null,
+    "text": "The interpretation of obscure words or stipulations in a contract shall not favor the party who caused the obscurity. (1288)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1378",
+    "heading": null,
+    "text": "When it is absolutely impossible to settle doubts by the rules established in the preceding articles, and the doubts refer to incidental circumstances of a gratuitous contract, the least transmission of rights and interests shall prevail. If the contract is onerous, the doubt shall be settled in favor of the greatest reciprocity of interests. If the doubts are cast upon the principal object of the contract in such a way that it cannot be known what may have been the intention or will of the parties, the contract shall be null and void. (1289)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1379",
+    "heading": null,
+    "text": "The principles of interpretation stated in Rule 123 of the Rules of Court shall likewise be observed in the construction of contracts. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1380",
+    "heading": null,
+    "text": "Contracts validly agreed upon may be rescinded in the cases established by law. (1290)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1381",
+    "heading": null,
+    "text": "The following contracts are rescissible: (1) Those which are entered into by guardians whenever the wards whom they represent suffer lesion by more than one-fourth of the value of the things which are the object thereof; (2) Those agreed upon in representation of absentees, if the latter suffer the lesion stated in the preceding number; (3) Those undertaken in fraud of creditors when the latter cannot in any other manner collect the claims due them; (4) Those which refer to things under litigation if they have been entered into by the defendant without the knowledge and approval of the litigants or of competent judicial authority; (5) All other contracts specially declared by law to be subject to rescission. (1291a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1382",
+    "heading": null,
+    "text": "Payments made in a state of insolvency for obligations to whose fulfillment the debtor could not be compelled at the time they were effected, are also rescissible. (1292)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1383",
+    "heading": null,
+    "text": "The action for rescission is subsidiary; it cannot be instituted except when the party suffering damage has no other legal means to obtain reparation for the same. (1294)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1384",
+    "heading": null,
+    "text": "Rescission shall be only to the extent necessary to cover the damages caused. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1385",
+    "heading": null,
+    "text": "Rescission creates the obligation to return the things which were the object of the contract, together with their fruits, and the price with its interest; consequently, it can be carried out only when he who demands rescission can return whatever he may be obliged to restore. Neither shall rescission take place when the things which are the object of the contract are legally in the possession of third persons who did not act in bad faith. In this case, indemnity for damages may be demanded from the person causing the loss. (1295)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1386",
+    "heading": null,
+    "text": "Rescission referred to in Nos. 1 and 2 of article 1381 shall not take place with respect to contracts approved by the courts. (1296a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1387",
+    "heading": null,
+    "text": "All contracts by virtue of which the debtor alienates property by gratuitous title are presumed to have been entered into in fraud of creditors, when the donor did not reserve sufficient property to pay all debts contracted before the donation. Alienations by onerous title are also presumed fraudulent when made by persons against whom some judgment has been rendered in any instance or some writ of attachment has been issued. The decision or attachment need not refer to the property alienated, and need not have been obtained by the party seeking the rescission. In addition to these presumptions, the design to defraud creditors may be proved in any other manner recognized by the law of evidence. (1297a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1388",
+    "heading": null,
+    "text": "Whoever acquires in bad faith the things alienated in fraud of creditors, shall indemnify the latter for damages suffered by them on account of the alienation, whenever, due to any cause, it should be impossible for him to return them. If there are two or more alienations, the first acquirer shall be liable first, and so on successively. (1298a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1389",
+    "heading": null,
+    "text": "The action to claim rescission must be commenced within four years. For persons under guardianship and for absentees, the period of four years shall not begin until the termination of the former's incapacity, or until the domicile of the latter is known. (1299)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1390",
+    "heading": null,
+    "text": "The following contracts are voidable or annullable, even though there may have been no damage to the contracting parties: (1) Those where one of the parties is incapable of giving consent to a contract; (2) Those where the consent is vitiated by mistake, violence, intimidation, undue influence or fraud. These contracts are binding, unless they are annulled by a proper action in court. They are susceptible of ratification. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1391",
+    "heading": null,
+    "text": "The action for annulment shall be brought within four years. This period shall begin: In cases of intimidation, violence or undue influence, from the time the defect of the consent ceases. In case of mistake or fraud, from the time of the discovery of the same. And when the action refers to contracts entered into by minors or other incapacitated persons, from the time the guardianship ceases. (1301a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1392",
+    "heading": null,
+    "text": "Ratification extinguishes the action to annul a voidable contract. (1309a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1393",
+    "heading": null,
+    "text": "Ratification may be effected expressly or tacitly. It is understood that there is a tacit ratification if, with knowledge of the reason which renders the contract voidable and such reason having ceased, the person who has a right to invoke it should execute an act which necessarily implies an intention to waive his right. (1311a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1394",
+    "heading": null,
+    "text": "Ratification may be effected by the guardian of the incapacitated person. (n)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1395",
+    "heading": null,
+    "text": "Ratification does not require the conformity of the contracting party who has no right to bring the action for annulment. (1312)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1396",
+    "heading": null,
+    "text": "Ratification cleanses the contract from all its defects from the moment it was constituted. (1313)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1397",
+    "heading": null,
+    "text": "The action for the annulment of contracts may be instituted by all who are thereby obliged principally or subsidiarily. However, persons who are capable cannot allege the incapacity of those with whom they contracted; nor can those who exerted intimidation, violence, or undue influence, or employed fraud, or caused mistake base their action upon these flaws of the contract. (1302a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1398",
+    "heading": null,
+    "text": "An obligation having been annulled, the contracting parties shall restore to each other the things which have been the subject matter of the contract, with their fruits, and the price with its interest, except in cases provided by law. In obligations to render service, the value thereof shall be the basis for damages. (1303a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1399",
+    "heading": null,
+    "text": "When the defect of the contract consists in the incapacity of one of the parties, the incapacitated person is not obliged to make any restitution except insofar as he has been benefited by the thing or price received by him. (1304)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1400",
+    "heading": null,
+    "text": "Whenever the person obliged by the decree of annulment to return the thing can not do so because it has been lost through his fault, he shall return the fruits received and the value of the thing at the time of the loss, with interest from the same date. (1307a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1401",
+    "heading": null,
+    "text": "The action for annulment of contracts shall be extinguished when the thing which is the object thereof is lost through the fraud or fault of the person who has a right to institute the proceedings. If the right of action is based upon the incapacity of any one of the contracting parties, the loss of the thing shall not be an obstacle to the success of the action, unless said loss took place through the fraud or fault of the plaintiff. (1314a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1402",
+    "heading": null,
+    "text": "As long as one of the contracting parties does not restore what in virtue of the decree of annulment he is bound to return, the other cannot be compelled to comply with what is incumbent upon him. (1308)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1403",
+    "heading": null,
+    "text": "The following contracts are unenforceable, unless they are ratified: (1) Those entered into in the name of another person by one who has been given no authority or legal representation, or who has acted beyond his powers; (2) Those that do not comply with the Statute of Frauds as set forth in this number. In the following cases an agreement hereafter made shall be unenforceable by action, unless the same, or some note or memorandum, thereof, be in writing, and subscribed by the party charged, or by his agent; evidence, therefore, of the agreement cannot be received without the writing, or a secondary evidence of its contents: (a) An agreement that by its terms is not to be performed within a year from the making thereof; (b) A special promise to answer for the debt, default, or miscarriage of another; (c) An agreement made in consideration of marriage, other than a mutual promise to marry; (d) An agreement for the sale of goods, chattels or things in action, at a price not less than five hundred pesos, unless the buyer accept and receive part of such goods and chattels, or the evidences, or some of them, of such things in action or pay at the time some part of the purchase money; but when a sale is made by auction and entry is made by the auctioneer in his sales book, at the time of the sale, of the amount and kind of property sold, terms of sale, price, names of the purchasers and person on whose account the sale is made, it is a sufficient memorandum; (e) An agreement for the leasing for a longer period than one year, or for the sale of real property or of an interest therein; ( f ) A representation as to the credit of a third person. (3) Those where both parties are incapable of giving consent to a contract."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1404",
+    "heading": null,
+    "text": "Unauthorized contracts are governed by article 1317 and the principles of agency in"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1405",
+    "heading": null,
+    "text": "Contracts infringing the Statute of Frauds, referred to in No. 2 of article 1403, are ratified by the failure to object to the presentation of oral evidence to prove the same, or by the acceptance of benefit under them."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1406",
+    "heading": null,
+    "text": "When a contract is enforceable under the Statute of Frauds, and a public document is necessary for its registration in the Registry of Deeds, the parties may avail themselves of the right under Article 1357."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1407",
+    "heading": null,
+    "text": "In a contract where both parties are incapable of giving consent, express or implied ratification by the parent, or guardian, as the case may be, of one of the contracting parties shall give the contract the same effect as if only one of them were incapacitated. If ratification is made by the parents or guardians, as the case may be, of both contracting parties, the contract shall be validated from the inception."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1408",
+    "heading": null,
+    "text": "Unenforceable contracts cannot be assailed by third persons."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1409",
+    "heading": null,
+    "text": "The following contracts are inexistent and void from the beginning: (1) Those whose cause, object or purpose is contrary to law, morals, good customs, public order or public policy; (2) Those which are absolutely simulated or fictitious; (3) Those whose cause or object did not exist at the time of the transaction; (4) Those whose object is outside the commerce of men; (5) Those which contemplate an impossible service; (6) Those where the intention of the parties relative to the principal object of the contract cannot be ascertained; (7) Those expressly prohibited or declared void by law. These contracts cannot be ratified. Neither can the right to set up the defense of illegality be waived."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1410",
+    "heading": null,
+    "text": "The action or defense for the declaration of the inexistence of a contract does not prescribe."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1411",
+    "heading": null,
+    "text": "When the nullity proceeds from the illegality of the cause or object of the contract, and the act constitutes a criminal offense, both parties being in pari delicto, they shall have no action against each other, and both shall be prosecuted. Moreover, the provisions of the Penal Code relative to the disposal of effects or instruments of a crime shall be applicable to the things or the price of the contract. This rule shall be applicable when only one of the parties is guilty; but the innocent one may claim what he has given, and shall not be bound to comply with his promise. (1305)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1412",
+    "heading": null,
+    "text": "If the act in which the unlawful or forbidden cause consists does not constitute a criminal offense, the following rules shall be observed: (1) When the fault is on the part of both contracting parties, neither may recover what he has given by virtue of the contract, or demand the performance of the other's undertaking; (2) When only one of the contracting parties is at fault, he cannot recover what he has given by reason of the contract, or ask for the fulfillment of what has been promised him. The other, who is not at fault, may demand the return of what he has given without any obligation to comply his promise. (1306)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "1413",
+    "heading": null,
+    "text": "Interest paid in excess of the interest allowed by the usury laws may be recovered by the debtor, with interest thereon from the date of the payment."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1414",
+    "heading": null,
+    "text": "When money is paid or property delivered for an illegal purpose, the contract may be repudiated by one of the parties before the purpose has been accomplished, or before any damage has been caused to a third person. In such case, the courts may, if the public interest will thus be subserved, allow the party repudiating the contract to recover the money or property."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1415",
+    "heading": null,
+    "text": "Where one of the parties to an illegal contract is incapable of giving consent, the courts may, if the interest of justice so demands allow recovery of money or property delivered by the incapacitated person."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1416",
+    "heading": null,
+    "text": "When the agreement is not illegal per se but is merely prohibited, and the prohibition by the law is designed for the protection of the plaintiff, he may, if public policy is thereby enhanced, recover what he has paid or delivered."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1417",
+    "heading": null,
+    "text": "When the price of any article or commodity is determined by statute, or by authority of law, any person paying any amount in excess of the maximum price allowed may recover such excess."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1418",
+    "heading": null,
+    "text": "When the law fixes, or authorizes the fixing of the maximum number of hours of labor, and a contract is entered into whereby a laborer undertakes to work longer than the maximum thus fixed, he may demand additional compensation for service rendered beyond the time limit."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1419",
+    "heading": null,
+    "text": "When the law sets, or authorizes the setting of a minimum wage for laborers, and a contract is agreed upon by which a laborer accepts a lower wage, he shall be entitled to recover the deficiency."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1420",
+    "heading": null,
+    "text": "In case of a divisible contract, if the illegal terms can be separated from the legal ones, the latter may be enforced."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1421",
+    "heading": null,
+    "text": "The defense of illegality of contract is not available to third persons whose interests are not directly affected."
+  },
+  {
+    "code": "CIVIL",
+    "article": "1422",
+    "heading": null,
+    "text": "A contract which is the direct result of a previous illegal contract, is also void and inexistent."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2195",
+    "heading": null,
+    "text": "The provisions of this Title shall be respectively applicable to all obligations mentioned in article 1157."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2196",
+    "heading": null,
+    "text": "The rules under this Title are without prejudice to special provisions on damages formulated elsewhere in this Code. Compensation for workmen and other employees in case of death, injury or illness is regulated by special laws. Rules governing damages laid down in other laws shall be observed insofar as they are not in conflict with this Code."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2197",
+    "heading": null,
+    "text": "Damages may be: (1) Actual or compensatory; (2) Moral; (3) Nominal; (4) Temperate or moderate; (5) Liquidated; or (6) Exemplary or corrective."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2198",
+    "heading": null,
+    "text": "The principles of the general law on damages are hereby adopted insofar as they are not inconsistent with this Code."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2199",
+    "heading": null,
+    "text": "Except as provided by law or by stipulation, one is entitled to an adequate compensation only for such pecuniary loss suffered by him as he has duly proved. Such compensation is referred to as actual or compensatory damages."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2200",
+    "heading": null,
+    "text": "Indemnification for damages shall comprehend not only the value of the loss suffered, but also that of the profits which the obligee failed to obtain. (1106)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "2201",
+    "heading": null,
+    "text": "In contracts and quasi-contracts, the damages for which the obligor who acted in good faith is liable shall be those that are the natural and probable consequences of the breach of the obligation, and which the parties have foreseen or could have reasonably foreseen at the time the obligation was constituted. In case of fraud, bad faith, malice or wanton attitude, the obligor shall be responsible for all damages which may be reasonably attributed to the non-performance of the obligation. (1107a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "2202",
+    "heading": null,
+    "text": "In crimes and quasi-delicts, the defendant shall be liable for all damages which are the natural and probable consequences of the act or omission complained of. It is not necessary that such damages have been foreseen or could have reasonably been foreseen by the defendant."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2203",
+    "heading": null,
+    "text": "The party suffering loss or injury must exercise the diligence of a good father of a family to minimize the damages resulting from the act or omission in question."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2204",
+    "heading": null,
+    "text": "In crimes, the damages to be adjudicated may be respectively increased or lessened according to the aggravating or mitigating circumstances."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2205",
+    "heading": null,
+    "text": "Damages may be recovered: (1) For loss or impairment of earning capacity in cases of temporary or permanent personal injury; (2) For injury to the plaintiff's business standing or commercial credit."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2206",
+    "heading": null,
+    "text": "The amount of damages for death caused by a crime or quasi-delict shall be at least three thousand pesos, even though there may have been mitigating circumstances. In addition: (1) The defendant shall be liable for the loss of the earning capacity of the deceased, and the indemnity shall be paid to the heirs of the latter; such indemnity shall in every case be assessed and awarded by the court, unless the deceased on account of permanent physical disability not caused by the defendant, had no earning capacity at the time of his death; (2) If the deceased was obliged to give support according to the provisions of article 291, the recipient who is not an heir called to the decedent's inheritance by the law of testate or intestate succession, may demand support from the person causing the death, for a period not exceeding five years, the exact duration to be fixed by the court; (3) The spouse, legitimate and illegitimate descendants and ascendants of the deceased may demand moral damages for mental anguish by reason of the death of the deceased."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2207",
+    "heading": null,
+    "text": "If the plaintiff's property has been insured, and he has received indemnity from the insurance company for the injury or loss arising out of the wrong or breach of contract complained of, the insurance company shall be subrogated to the rights of the insured against the wrongdoer or the person who has violated the contract. If the amount paid by the insurance company does not fully cover the injury or loss, the aggrieved party shall be entitled to recover the deficiency from the person causing the loss or injury."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2208",
+    "heading": null,
+    "text": "In the absence of stipulation, attorney's fees and expenses of litigation, other than judicial costs, cannot be recovered, except: (1) When exemplary damages are awarded; (2) When the defendant's act or omission has compelled the plaintiff to litigate with third persons or to incur expenses to protect his interest; (3) In criminal cases of malicious prosecution against the plaintiff; (4) In case of a clearly unfounded civil action or proceeding against the plaintiff; (5) Where the defendant acted in gross and evident bad faith in refusing to satisfy the plaintiff's plainly valid, just and demandable claim; (6) In actions for legal support; (7) In actions for the recovery of wages of household helpers, laborers and skilled workers; (8) In actions for indemnity under workmen's compensation and employer's liability laws; (9) In a separate civil action to recover civil liability arising from a crime; (10) When at least double judicial costs are awarded; (11) In any other case where the court deems it just and equitable that attorney's fees and expenses of litigation should be recovered. In all cases, the attorney's fees and expenses of litigation must be reasonable."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2209",
+    "heading": null,
+    "text": "If the obligation consists in the payment of a sum of money, and the debtor incurs in delay, the indemnity for damages, there being no stipulation to the contrary, shall be the payment of the interest agreed upon, and in the absence of stipulation, the legal interest, which is six per cent per annum. (1108)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "2210",
+    "heading": null,
+    "text": "Interest may, in the discretion of the court, be allowed upon damages awarded for breach of contract."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2211",
+    "heading": null,
+    "text": "In crimes and quasi-delicts, interest as a part of the damages may, in a proper case, be adjudicated in the discretion of the court."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2212",
+    "heading": null,
+    "text": "Interest due shall earn legal interest from the time it is judicially demanded, although the obligation may be silent upon this point. (1109a)"
+  },
+  {
+    "code": "CIVIL",
+    "article": "2213",
+    "heading": null,
+    "text": "Interest cannot be recovered upon unliquidated claims or damages, except when the demand can be established with reasonable certainty."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2214",
+    "heading": null,
+    "text": "In quasi-delicts, the contributory negligence of the plaintiff shall reduce the damages that he may recover."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2215",
+    "heading": null,
+    "text": "In contracts, quasi-contracts, and quasi-delicts, the court may equitably mitigate the damages under circumstances other than the case referred to in the preceding article, as in the following instances: (1) That the plaintiff himself has contravened the terms of the contract; (2) That the plaintiff has derived some benefit as a result of the contract; (3) In cases where exemplary damages are to be awarded, that the defendant acted upon the advice of counsel; (4) That the loss would have resulted in any event; (5) That since the filing of the action, the defendant has done his best to lessen the plaintiff's loss or injury."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2216",
+    "heading": null,
+    "text": "No proof of pecuniary loss is necessary in order that moral, nominal, temperate, liquidated or exemplary damages, may be adjudicated. The assessment of such damages, except liquidated ones, is left to the discretion of the court, according to the circumstances of each case."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2217",
+    "heading": null,
+    "text": "Moral damages include physical suffering, mental anguish, fright, serious anxiety, besmirched reputation, wounded feelings, moral shock, social humiliation, and similar injury. Though incapable of pecuniary computation, moral damages may be recovered if they are the proximate result of the defendant's wrongful act for omission."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2218",
+    "heading": null,
+    "text": "In the adjudication of moral damages, the sentimental value of property, real or personal, may be considered."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2219",
+    "heading": null,
+    "text": "Moral damages may be recovered in the following and analogous cases: (1) A criminal offense resulting in physical injuries; (2) Quasi-delicts causing physical injuries; (3) Seduction, abduction, rape, or other lascivious acts; (4) Adultery or concubinage; (5) Illegal or arbitrary detention or arrest; (6) Illegal search; (7) Libel, slander or any other form of defamation; (8) Malicious prosecution; (9) Acts mentioned in article 309; (10) Acts and actions referred to in articles 21, 26, 27, 28, 29, 30, 32, 34, and 35. The parents of the female seduced, abducted, raped, or abused, referred to in No. 3 of this article, may also recover moral damages. The spouse, descendants, ascendants, and brothers and sisters may bring the action mentioned in No. 9 of this article, in the order named."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2220",
+    "heading": null,
+    "text": "Willful injury to property may be a legal ground for awarding moral damages if the court should find that, under the circumstances, such damages are justly due. The same rule applies to breaches of contract where the defendant acted fraudulently or in bad faith."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2221",
+    "heading": null,
+    "text": "Nominal damages are adjudicated in order that a right of the plaintiff, which has been violated or invaded by the defendant, may be vindicated or recognized, and not for the purpose of indemnifying the plaintiff for any loss suffered by him."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2222",
+    "heading": null,
+    "text": "The court may award nominal damages in every obligation arising from any source enumerated in article 1157, or in every case where any property right has been invaded."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2223",
+    "heading": null,
+    "text": "The adjudication of nominal damages shall preclude further contest upon the right involved and all accessory questions, as between the parties to the suit, or their respective heirs and assigns."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2224",
+    "heading": null,
+    "text": "Temperate or moderate damages, which are more than nominal but less than compensatory damages, may be recovered when the court finds that some pecuniary loss has been suffered but its amount can not, from the nature of the case, be provided with certainty."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2225",
+    "heading": null,
+    "text": "Temperate damages must be reasonable under the circumstances."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2226",
+    "heading": null,
+    "text": "Liquidated damages are those agreed upon by the parties to a contract, to be paid in case of breach thereof."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2227",
+    "heading": null,
+    "text": "Liquidated damages, whether intended as an indemnity or a penalty, shall be equitably reduced if they are iniquitous or unconscionable."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2228",
+    "heading": null,
+    "text": "When the breach of the contract committed by the defendant is not the one contemplated by the parties in agreeing upon the liquidated damages, the law shall determine the measure of damages, and not the stipulation."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2229",
+    "heading": null,
+    "text": "Exemplary or corrective damages are imposed, by way of example or correction for the public good, in addition to the moral, temperate, liquidated or compensatory damages."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2230",
+    "heading": null,
+    "text": "In criminal offenses, exemplary damages as a part of the civil liability may be imposed when the crime was committed with one or more aggravating circumstances. Such damages are separate and distinct from fines and shall be paid to the offended party."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2231",
+    "heading": null,
+    "text": "In quasi-delicts, exemplary damages may be granted if the defendant acted with gross negligence."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2232",
+    "heading": null,
+    "text": "In contracts and quasi-contracts, the court may award exemplary damages if the defendant acted in a wanton, fraudulent, reckless, oppressive, or malevolent manner."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2233",
+    "heading": null,
+    "text": "Exemplary damages cannot be recovered as a matter of right; the court will decide whether or not they should be adjudicated."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2234",
+    "heading": null,
+    "text": "While the amount of the exemplary damages need not be proved, the plaintiff must show that he is entitled to moral, temperate or compensatory damages before the court may consider the question of whether or not exemplary damages should be awarded. In case liquidated damages have been agreed upon, although no proof of loss is necessary in order that such liquidated damages may be recovered, nevertheless, before the court may consider the question of granting exemplary in addition to the liquidated damages, the plaintiff must show that he would be entitled to moral, temperate or compensatory damages were it not for the stipulation for liquidated damages."
+  },
+  {
+    "code": "CIVIL",
+    "article": "2235",
+    "heading": null,
+    "text": "A stipulation whereby exemplary damages are renounced in advance shall be null and void."
+  }
+]
