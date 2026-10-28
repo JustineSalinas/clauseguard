@@ -61,6 +61,18 @@ export const SCORE_STAGE_DEFAULT_MODEL: ModelId = "google/gemini-2.0-flash-lite"
 /** The stronger model used for the cascade's second pass. */
 export const SCORE_STAGE_CASCADE_MODEL: ModelId = "google/gemini-2.0-flash";
 
+/**
+ * Vision OCR fallback for a photographed or otherwise image-only upload --
+ * never for a normal PDF, which always goes through the text-layer path in
+ * lib/pipeline/extract instead (see that module's header comment for why:
+ * the prompt-injection research needs to see the real text layer, which a
+ * rasterizing OCR cannot). Flash, not Flash-Lite: legibility of a phone
+ * photo under bad lighting is exactly where the cheaper model's accuracy
+ * gap shows up, and this call happens once per document, not once per
+ * clause, so the cost difference is negligible.
+ */
+export const OCR_MODEL: ModelId = "google/gemini-2.0-flash";
+
 export function requireApiKeyFor(modelId: ModelId): string {
   const { envVar, label } = MODELS[modelId];
   const key = process.env[envVar];

@@ -15,7 +15,7 @@ export default function ResetPassword() {
           Reset your password
         </h1>
         <p className="mt-2 text-ink-2">
-          We&rsquo;ll email you a link to set a new one.
+          We&rsquo;ll email you a code to set a new one.
         </p>
       </div>
 

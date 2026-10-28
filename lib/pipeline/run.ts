@@ -30,15 +30,21 @@ import {
 import { segmentClauses } from "@/lib/pipeline/segment";
 import { locateClauses } from "@/lib/pipeline/boxes";
 import { scoreClause } from "@/lib/pipeline/score";
+import { groundClause, type GroundingDb } from "@/lib/pipeline/ground";
 import { SCORE_STAGE_DEFAULT_MODEL } from "@/lib/models";
 import { PROMPT_VERSION } from "@/lib/prompts/score.v1";
 import type { GroundingArm } from "@/lib/types";
 
-/** The first pass is ungrounded and single-clause on purpose. Batching (T9)
- *  and the grounding arms (T8/Objective 4) are separate increments; wiring
- *  them in alongside first-light orchestration would make a failure here
- *  ambiguous between three causes. */
-const FIRST_PASS_ARM: GroundingArm = "none";
+/** The static arm (Objective 4, T8): clause_type looked up against the
+ *  hand-curated corpus/mapping/. Requires scripts/seed-corpus.mjs and
+ *  scripts/seed-provision-mappings.mjs to have been run against this
+ *  Supabase project -- an unseeded database makes every groundClause call
+ *  resolve to zero provisions (NoRelevantProvision for everything), not an
+ *  error, so an empty-looking run is the signal to check the seed scripts
+ *  ran, not a pipeline bug. Switch to "rag" only once
+ *  lib/pipeline/ground/README.md's embedding step is done -- "none" stays
+ *  available for the ungrounded-baseline arm of the Objective 4 comparison. */
+const FIRST_PASS_ARM: GroundingArm = "static";
 
 export type RunResult = {
   documentId: string;
@@ -223,12 +229,24 @@ export async function runPipeline(documentId: string): Promise<RunResult> {
   // stage explicitly is what keeps the state machine honest.
   try {
     for (const clause of clauseRows) {
+      const { provisions } = await groundClause({
+        // The real client structurally satisfies GroundingDb (the minimal
+        // from/select/eq/order slice this stage actually calls), but
+        // postgrest-js's generics are deep enough that TS's structural
+        // check against SupabaseClient's full generic type hits its
+        // recursion limit comparing them directly -- a known class of
+        // issue with Supabase's generated types, not a real type mismatch.
+        db: db as unknown as GroundingDb,
+        clauseType: clause.clause_type,
+        arm: FIRST_PASS_ARM,
+      });
+
       const result = await scoreClause({
         modelId: SCORE_STAGE_DEFAULT_MODEL,
         clauseText: clause.text,
         clauseLabel: clause.label,
         suggestedType: clause.clause_type,
-        provisions: [],
+        provisions,
         groundingArm: FIRST_PASS_ARM,
       });
 

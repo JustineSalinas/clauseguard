@@ -1,50 +1,26 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { fetchQuery } from "convex/nextjs";
+import { convexAuthNextjsToken, isAuthenticatedNextjs } from "@convex-dev/auth/nextjs/server";
+import { api } from "@/convex/_generated/api";
+import type { Id } from "@/convex/_generated/dataModel";
 import { ReviewView } from "@/components/review/review-view";
+import { PipelineFlow } from "@/components/review/pipeline-flow";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/logo";
-import type {
-  BoundingBox,
-  DocumentStatus,
-  ReviewedDocument,
-  RiskLevel,
-  ScoreOutcome,
-  ScoredClause,
-} from "@/lib/types";
+import type { DocumentStatus, ReviewedDocument, ScoredClause } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Contract review" };
 
 /**
  * One document's review.
  *
- * Read through the *user's* client, never the service role. RLS is what scopes
- * this to its owner, and no owner_id filter is written below on purpose: if a
- * hand-written filter were the only thing separating tenants, one forgotten
- * .eq() would leak every contract in the table. A document belonging to
- * someone else returns no rows and renders as a 404 -- never a 403, which
- * would confirm the id exists.
+ * documents:get returns null for "doesn't exist" and "exists but isn't
+ * yours" alike -- same reasoning the old RLS-based version called out: a
+ * document belonging to someone else should 404, never 403, since a 403
+ * would confirm the id exists at all.
  */
-
-type ClauseRow = {
-  id: string;
-  ordinal: number;
-  label: string | null;
-  clause_type: string | null;
-  text: string;
-  page: number;
-  bboxes: BoundingBox[] | null;
-  clause_scores: {
-    risk_level: RiskLevel | null;
-    confidence: number | null;
-    rationale: string | null;
-    deviation: string | null;
-    outcome: ScoreOutcome;
-    injection_suspected: boolean;
-    created_at: string;
-  }[];
-};
 
 const PROCESSING: DocumentStatus[] = [
   "uploaded",
@@ -55,71 +31,52 @@ const PROCESSING: DocumentStatus[] = [
   "scoring",
 ];
 
-export default async function Review({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function Review({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const supabase = await createClient();
 
-  const { data: claimsData } = await supabase.auth.getClaims();
-  if (!claimsData?.claims) redirect(`/login?next=/dashboard/${id}`);
+  if (!(await isAuthenticatedNextjs())) {
+    redirect(`/login?next=/dashboard/${id}`);
+  }
 
-  const { data: doc } = await supabase
-    .from("documents")
-    .select("id, filename, contract_type, page_count, status, failed_reason, created_at")
-    .eq("id", id)
-    .maybeSingle();
+  const token = await convexAuthNextjsToken();
+  const documentId = id as Id<"documents">;
 
+  const doc = await fetchQuery(api.documents.get, { id: documentId }, { token });
   if (!doc) notFound();
 
-  const { data: clauseRows } = await supabase
-    .from("clauses")
-    .select(
-      "id, ordinal, label, clause_type, text, page, bboxes, " +
-        "clause_scores(risk_level, confidence, rationale, deviation, outcome, injection_suspected, created_at)",
-    )
-    .eq("document_id", id)
-    .order("ordinal", { ascending: true })
-    .returns<ClauseRow[]>();
+  const rows = await fetchQuery(
+    api.clauses.listScoresForDocument,
+    { documentId },
+    { token },
+  );
 
-  const clauses: ScoredClause[] = (clauseRows ?? []).map((row) => {
-    // A clause can carry scores from several runs once Objectives 3 and 4
-    // start replaying the corpus. The reader gets the most recent; the older
-    // rows stay in the table for the ablation to query.
-    const score = [...row.clause_scores].sort((a, b) =>
-      b.created_at.localeCompare(a.created_at),
-    )[0];
-
-    return {
-      id: row.id,
-      ordinal: row.ordinal,
-      label: row.label,
-      clauseType: row.clause_type,
-      text: row.text,
-      page: row.page,
-      bboxes: row.bboxes ?? [],
-      riskLevel: score?.risk_level ?? null,
-      confidence: score?.confidence ?? null,
-      rationale: score?.rationale ?? null,
-      deviation: score?.deviation ?? null,
-      // No score row at all means the scoring stage has not reached this
-      // clause yet. "empty" routes it through the same unreadable verdict as
-      // a failed score, which is the honest presentation: we have no answer.
-      outcome: score?.outcome ?? "empty",
-      injectionSuspected: score?.injection_suspected ?? false,
-      provisions: [],
-    };
-  });
+  const clauses: ScoredClause[] = rows.map(({ clause, score }) => ({
+    id: clause._id,
+    ordinal: clause.ordinal,
+    label: clause.label ?? null,
+    clauseType: clause.clauseType ?? null,
+    text: clause.text,
+    page: clause.page,
+    bboxes: clause.bboxes ?? [],
+    riskLevel: score?.riskLevel ?? null,
+    confidence: score?.confidence ?? null,
+    rationale: score?.rationale ?? null,
+    deviation: score?.deviation ?? null,
+    // No score row yet means the scoring stage hasn't reached this clause.
+    // "empty" routes it through the same unreadable verdict as a failed
+    // score -- the honest presentation when there's no answer yet.
+    outcome: score?.outcome ?? "empty",
+    injectionSuspected: score?.injectionSuspected ?? false,
+    provisions: [],
+  }));
 
   const reviewed: ReviewedDocument = {
-    id: doc.id,
+    id: doc._id,
     filename: doc.filename,
-    contractType: doc.contract_type,
-    pageCount: doc.page_count,
+    contractType: doc.contractType ?? null,
+    pageCount: doc.pageCount ?? null,
     status: doc.status,
-    createdAt: doc.created_at,
+    createdAt: new Date(doc.createdAt).toISOString(),
     clauses,
   };
 
@@ -145,13 +102,13 @@ export default async function Review({
           <div className="mt-8 rounded-sm border border-rule border-l-2 border-l-flag bg-surface p-6">
             <p className="font-semibold">This contract couldn&rsquo;t be read.</p>
             <p className="mt-2 leading-relaxed text-ink-2">
-              {doc.failed_reason ?? "Something went wrong while reading it."}
+              {doc.failedReason ?? "Something went wrong while reading it."}
             </p>
           </div>
         ) : isProcessing ? (
-          <div className="mt-8 rounded-sm border border-dashed border-rule-2 bg-surface p-12 text-center">
-            <p className="font-display text-xl font-semibold">Still reading.</p>
-            <p className="mx-auto mt-2 max-w-md leading-relaxed text-ink-2">
+          <div className="mt-8">
+            <PipelineFlow status={doc.status} />
+            <p className="mt-4 text-center text-[0.8125rem] text-ink-3">
               Clauses appear here as they&rsquo;re found. Reload in a moment.
             </p>
           </div>
@@ -176,8 +133,7 @@ export default async function Review({
         )}
 
         <p className="mt-10 text-[0.8125rem] leading-relaxed text-ink-3">
-          ClauseGuard is a first-pass review tool and does not give legal
-          advice.
+          ClauseGuard is a first-pass review tool and does not give legal advice.
         </p>
       </main>
     </div>

@@ -1,70 +1,104 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
-import { useFormStatus } from "react-dom";
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation, useAction } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { uploadContract, type UploadState } from "@/app/dashboard/upload/actions";
+
+const MAX_BYTES = 10 * 1024 * 1024;
+const ACCEPT = "application/pdf,.pdf,image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif";
 
 /**
- * The submit button doubles as the progress indicator.
- *
- * Extraction, segmentation and scoring all happen inside this one request, so
- * the wait is real -- tens of seconds for a long contract. Saying "Reading
- * your contract" rather than showing a spinner is the difference between a
- * pause that looks deliberate and one that looks broken.
+ * Supabase's version of this form posted a server action that ran the
+ * whole extract -> segment -> score pipeline inline, inside the same
+ * request, which is why its button doubled as the only progress
+ * indicator. Convex's version uploads the file, creates the document row,
+ * and kicks off pipeline.start as a *scheduled* action -- the request
+ * returns immediately and the dashboard's status pill is what shows
+ * progress from here (see app/dashboard/page.tsx), not this button.
  */
-function Submit({ hasFile }: { hasFile: boolean }) {
-  const status = useFormStatus();
-  return (
-    <Button type="submit" size="hero" variant="brand" disabled={status.pending || !hasFile}>
-      {status.pending ? "Reading your contract…" : "Upload and review"}
-    </Button>
-  );
-}
-
 export function UploadForm() {
-  const [state, action] = useActionState<UploadState, FormData>(uploadContract, undefined);
+  const generateUploadUrl = useMutation(api.upload.generateUploadUrl);
+  const createDocument = useMutation(api.documents.create);
+  const startPipeline = useAction(api.pipeline.start);
+  const router = useRouter();
+
   const [fileName, setFileName] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  async function handleUpload() {
+    const file = inputRef.current?.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_BYTES) {
+      setError("That file is over 10 MB. Try a smaller file.");
+      return;
+    }
+
+    setPending(true);
+    setError(null);
+    try {
+      const uploadUrl = await generateUploadUrl();
+      const result = await fetch(uploadUrl, {
+        method: "POST",
+        headers: { "Content-Type": file.type || "application/pdf" },
+        body: file,
+      });
+      if (!result.ok) throw new Error("Upload failed.");
+      const { storageId } = await result.json();
+
+      const documentId = await createDocument({ filename: file.name, storageId });
+      await startPipeline({ documentId });
+
+      router.push(`/dashboard/${documentId}`);
+    } catch {
+      setError("That upload didn't go through. Try again.");
+    } finally {
+      setPending(false);
+    }
+  }
+
   return (
-    <form action={action} className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center gap-3">
         <input
           ref={inputRef}
           type="file"
-          name="file"
-          accept="application/pdf,.pdf"
+          accept={ACCEPT}
           className="sr-only"
-          onChange={(e) => setFileName(e.target.files?.[0]?.name ?? null)}
+          onChange={(e) => {
+            setFileName(e.target.files?.[0]?.name ?? null);
+            setError(null);
+          }}
         />
         <Button type="button" variant="outline" size="hero" onClick={() => inputRef.current?.click()}>
-          {fileName ? "Choose a different file" : "Choose a PDF"}
+          {fileName ? "Choose a different file" : "Choose a file or photo"}
         </Button>
-        <Submit hasFile={fileName !== null} />
+        <Button type="button" size="hero" variant="brand" disabled={pending || !fileName} onClick={handleUpload}>
+          {pending ? "Uploading…" : "Upload and review"}
+        </Button>
       </div>
 
       {fileName ? (
         <p className="truncate text-[0.875rem] text-ink-2">{fileName}</p>
       ) : (
         <p className="text-[0.8125rem] text-ink-3">
-          PDF, up to 10 MB. A scanned contract has no text layer to read, so it
-          needs to be a PDF exported from a document rather than photographed.
+          PDF, or a photo (JPG, PNG, HEIC) of a printed page — up to 10 MB. A
+          PDF exported from a document gets exact clause highlighting on the
+          page; a photo is read with OCR instead, so the review still shows
+          every clause and risk, just without that on-page overlay.
         </p>
       )}
 
-      {state?.error ? (
+      {error ? (
         <Alert variant="destructive">
-          <AlertDescription>{state.error}</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
-
-      {state?.notice ? (
-        <Alert>
-          <AlertDescription>{state.notice}</AlertDescription>
-        </Alert>
-      ) : null}
-    </form>
+    </div>
   );
 }

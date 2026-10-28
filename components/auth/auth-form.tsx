@@ -1,45 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import {
-  signIn,
-  signUp,
-  signInWithGoogle,
-  type AuthState,
-} from "@/app/auth/actions";
 
-function Submit({ label, pending }: { label: string; pending: string }) {
-  const status = useFormStatus();
+function GoogleButton({ pending, onClick }: { pending: boolean; onClick: () => void }) {
   return (
     <Button
-      type="submit"
-      size="hero"
-      className="w-full"
-      disabled={status.pending}
-    >
-      {status.pending ? pending : label}
-    </Button>
-  );
-}
-
-function GoogleButton() {
-  const status = useFormStatus();
-  return (
-    <Button
-      type="submit"
+      type="button"
       variant="outline"
       size="hero"
       className="w-full"
-      disabled={status.pending}
-      formAction={signInWithGoogle}
-      formNoValidate
+      disabled={pending}
+      onClick={onClick}
     >
       <svg viewBox="0 0 18 18" className="size-4" aria-hidden="true">
         <path
@@ -64,6 +43,16 @@ function GoogleButton() {
   );
 }
 
+/**
+ * Supabase Auth let this form submit via a server action (useActionState +
+ * formAction) -- the whole formNoValidate fix lived there. Convex Auth's
+ * client owns its own session/token storage, so sign-in has to happen
+ * client-side through useAuthActions() instead; there's no formAction to
+ * attach a second provider to, so the Google button is a plain onClick
+ * rather than a second submit button sharing the form's required fields --
+ * which incidentally means the earlier formNoValidate bug class can't
+ * recur here, there's no shared native form validation to collide with.
+ */
 export function AuthForm({
   mode,
   next = "/dashboard",
@@ -72,27 +61,56 @@ export function AuthForm({
   next?: string;
 }) {
   const isSignUp = mode === "signup";
-  const action = isSignUp ? signUp : signIn;
-  const [state, formAction] = useActionState<AuthState, FormData>(
-    action,
-    undefined,
-  );
+  const { signIn } = useAuthActions();
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setPending(true);
+    try {
+      await signIn("password", {
+        email,
+        password,
+        flow: isSignUp ? "signUp" : "signIn",
+      });
+      router.push(next);
+    } catch {
+      // Convex Auth throws on bad credentials / duplicate account without a
+      // stable machine-readable code yet, same ambiguity Supabase's error
+      // had -- stay vague for the same reason the old comment gave: don't
+      // let the form be used to discover which addresses are registered.
+      setError(
+        isSignUp
+          ? "That account could not be created. The email may already be in use."
+          : "That email and password combination didn't work.",
+      );
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function handleGoogle() {
+    setError(null);
+    setPending(true);
+    try {
+      await signIn("google", { redirectTo: next });
+    } catch {
+      setError("Google sign-in didn't complete. Try again, or use your email and password.");
+      setPending(false);
+    }
+  }
 
   return (
-    <form action={formAction} className="flex flex-col gap-5">
-      <input type="hidden" name="next" value={next} />
-
-      {state?.error ? (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {error ? (
         <Alert variant="destructive">
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
-
-      {state?.notice ? (
-        <Alert className="border-[#e8c6a8] bg-[#fbeee4] px-4 py-3">
-          <AlertDescription className="text-[#8a3300]">
-            {state.notice}
-          </AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       ) : null}
 
@@ -100,11 +118,12 @@ export function AuthForm({
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
-          name="email"
           type="email"
           autoComplete="email"
           required
           placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
@@ -122,29 +141,33 @@ export function AuthForm({
         </div>
         <Input
           id="password"
-          name="password"
           type="password"
           autoComplete={isSignUp ? "new-password" : "current-password"}
           required
           minLength={isSignUp ? 8 : undefined}
           placeholder={isSignUp ? "At least 8 characters" : ""}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
 
-      <Submit
-        label={isSignUp ? "Create account" : "Sign in"}
-        pending={isSignUp ? "Creating account…" : "Signing in…"}
-      />
+      <Button type="submit" size="hero" className="w-full" disabled={pending}>
+        {pending
+          ? isSignUp
+            ? "Creating account…"
+            : "Signing in…"
+          : isSignUp
+            ? "Create account"
+            : "Sign in"}
+      </Button>
 
       <div className="flex items-center gap-3">
         <Separator className="flex-1" />
-        <span className="text-[0.75rem] tracking-wide text-ink-3 uppercase">
-          or
-        </span>
+        <span className="text-[0.75rem] tracking-wide text-ink-3 uppercase">or</span>
         <Separator className="flex-1" />
       </div>
 
-      <GoogleButton />
+      <GoogleButton pending={pending} onClick={handleGoogle} />
     </form>
   );
 }

@@ -29,7 +29,19 @@ import {
   OPS,
   type PDFPageProxy,
 } from "pdfjs-dist/legacy/build/pdf.mjs";
+import * as pdfjsWorker from "pdfjs-dist/legacy/build/pdf.worker.mjs";
 import type { BoundingBox } from "@/lib/types";
+
+// pdfjs's "fake worker" path (used whenever a real Worker thread isn't
+// available, which is every serverless/edge runtime) checks
+// globalThis.pdfjsWorker.WorkerMessageHandler FIRST and only falls back to
+// a dynamic import of its worker file if that's unset. The dynamic import
+// never survives a bundler that flattens node_modules into one file with
+// no sibling worker asset on disk at runtime (Convex's action bundler is
+// exactly that) -- it fails with "Cannot find module .../pdf.worker.mjs".
+// Registering the already-imported worker module here, once, at import
+// time, means pdfjs finds it synchronously and never attempts that import.
+(globalThis as unknown as { pdfjsWorker?: unknown }).pdfjsWorker = pdfjsWorker;
 
 /** Why a token was withheld from the text handed to the model. */
 export type SuppressionReason = "tiny" | "invisible" | "offpage";

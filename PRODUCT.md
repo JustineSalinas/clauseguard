@@ -49,7 +49,12 @@ say *I am not sure about this clause* is the product's core differentiator
 Emotional goal: a freelancer arrives anxious and outmatched, and leaves with
 specific, quotable leverage.
 
-## Anti-references
+## Anti-references (Persuade surfaces: landing, marketing)
+
+These apply to the pages a visitor judges the claim by before they are a
+signed-in user — the landing page above all. They do **not** apply to the
+signed-in app shell (dashboard, contract review); see "Operate surfaces"
+below for why that split exists.
 
 - **Generic AI-SaaS landing.** Gradient heroes, glowing orbs, an uppercase
   tracked eyebrow above every section, identical three-up icon-card grids,
@@ -63,12 +68,40 @@ specific, quotable leverage.
   statutory claim), and the academic-poster failure mode where objective
   numbers and methodology tables crowd out what the user actually gets.
 
+## Operate surfaces (dashboard, contract review): a deliberate exception
+
+Once a user is signed in and managing contracts rather than being persuaded
+to try the product, the "generic AI-SaaS" anti-reference above is
+explicitly **lifted**. The dashboard (`app/dashboard`) now uses sidebar
+navigation, live stat tiles, and a connected-node pipeline-progress
+visualization (`components/review/pipeline-flow.tsx`) — structurally the
+SaaS-product-chrome pattern the landing page still refuses, adopted on
+owner direction (2026-10-28) because the plain single-column list read as
+too sparse for a signed-in user to orient in, not because the earlier
+judgment about the landing page was wrong.
+
+What still holds even here: the ClauseGuard token system (copper `#b04000`
+as the single accent, ink/surface neutrals, Inter), not the teal/pink
+palette of whatever reference inspired the structure — only the *pattern*
+(nav, tiles, connected stages) transferred, not a different brand. The
+pipeline-flow visualization's stages are real (upload → extract → segment
+→ **ground** → score, matching `lib/pipeline/*`), not decorative — it is
+also the one surface in the product that makes Objective 4's grounding step
+and Objective 3's active model visible to the user at all, so changes to it
+should keep that legible, not just make it prettier.
+
+Design Principle 1 below (no dashboard-about-the-document) still governs
+the **contract review experience itself** — the clause-by-clause annotated
+view is still the contract, not a BI report about it. It no longer governs
+the shell around it (nav, stats, upload, the list of contracts).
+
 ## Design Principles
 
 1. **Show the document, not a dashboard about the document.** The contract
    itself — real serif body text, real margins, real page numbers — is the
    primary visual object. The product is an annotation layer on the user's
-   paper, not a BI tool that consumed it.
+   paper, not a BI tool that consumed it. *(Scoped to the review surface
+   itself — see "Operate surfaces" above for the dashboard shell.)*
 
 2. **Every claim carries its citation.** Nothing asserts risk without the
    article number attached, on the page and in the product. A screenshot of

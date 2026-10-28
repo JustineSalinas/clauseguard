@@ -1,9 +1,9 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/lib/supabase/middleware";
+import { convexAuthNextjsMiddleware } from "@convex-dev/auth/nextjs/server";
 
-export async function proxy(request: NextRequest) {
-  return await updateSession(request);
-}
+// Replaces lib/supabase/middleware.ts's updateSession: refreshes the Convex
+// Auth session cookie on every matched request, same job the Supabase
+// version did for its session.
+export default convexAuthNextjsMiddleware();
 
 export const config = {
   matcher: [

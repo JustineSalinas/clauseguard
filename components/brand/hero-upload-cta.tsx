@@ -4,7 +4,11 @@ import { useRef, useState, type DragEvent } from "react";
 import Link from "next/link";
 import { UploadCloud, FileCheck2 } from "lucide-react";
 
-const ACCEPTED = [".pdf", ".doc", ".docx"];
+// Matches what the pipeline actually reads: a PDF text layer, or a photo
+// via OCR (lib/pipeline/extract/ocr.ts). Never .doc/.docx -- nothing in
+// the pipeline has ever parsed that format; claiming it here would be the
+// same dishonest-affordance bug this dropzone was built to avoid.
+const ACCEPTED = [".pdf", ".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"];
 
 function isAccepted(file: File) {
   const name = file.name.toLowerCase();
@@ -83,7 +87,7 @@ export function HeroUploadCta() {
       <div className="flex items-center">
         <UploadCloud className="size-4 text-[#b04000] mr-2.5 shrink-0" />
         <span className="text-xs sm:text-sm text-[#868c98] group-hover:text-[#525866]">
-          {isDragging ? "Drop it here" : "Drop a contract PDF or DOCX to analyze..."}
+          {isDragging ? "Drop it here" : "Drop a contract PDF or photo to analyze..."}
         </span>
       </div>
       <span className="shrink-0 ml-2 text-xs font-medium bg-[#08090a] text-white px-3 py-1 rounded-[4px]">

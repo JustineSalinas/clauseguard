@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Tinos } from "next/font/google";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { ConvexClientProvider } from "@/components/convex-client-provider";
 import "./globals.css";
 
 const SITE_URL =
@@ -60,7 +62,7 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -70,7 +72,11 @@ export default function RootLayout({
       className={`${inter.variable} ${tinos.variable} font-sans`}
     >
       <body className="bg-white text-black antialiased">
-        <SmoothScroll>{children}</SmoothScroll>
+        <ConvexAuthNextjsServerProvider>
+          <ConvexClientProvider>
+            <SmoothScroll>{children}</SmoothScroll>
+          </ConvexClientProvider>
+        </ConvexAuthNextjsServerProvider>
       </body>
     </html>
   );
