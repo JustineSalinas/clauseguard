@@ -106,10 +106,10 @@ export function InteractiveAuthPanel({
   }
 
   return (
-    <div className="flex min-h-full w-full flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 xl:px-16 bg-white">
-      <div className="mx-auto w-full max-w-[420px]">
-        {/* Mobile-only logo */}
-        <div className="mb-6 lg:hidden">
+    <div className="w-full max-w-[440px] rounded-2xl border border-[#e5e7eb] bg-white p-6 sm:p-9 shadow-xs">
+      <div className="w-full">
+        {/* Brand Logo */}
+        <div className="mb-6 flex justify-center">
           <Logo size="md" theme="light" />
         </div>
 
