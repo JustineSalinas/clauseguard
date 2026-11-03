@@ -353,11 +353,6 @@ export function InteractiveAuthPanel({
             )}
           </div>
         </form>
-
-        {/* Legal & Privacy Compliance */}
-        <div className="mt-8 border-t border-[#f2f2f2] pt-4 text-center text-[0.6875rem] text-[#868c98]">
-          Philippine Civil Code &middot; Labor Code &middot; RA 10173 Compliant
-        </div>
       </div>
     </div>
   );
