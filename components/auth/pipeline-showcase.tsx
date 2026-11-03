@@ -1,542 +1,332 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   FileText,
-  Layers,
   Scale,
   ShieldCheck,
-  CheckCircle2,
-  Copy,
-  Check,
-  ArrowRight,
   Lock,
-  Play,
-  Pause,
-  AlertTriangle,
+  Cloud,
+  ArrowRight,
 } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 
-interface PipelineStep {
-  id: "ingest" | "segment" | "ground" | "pushback";
-  stepNumber: string;
-  name: string;
-  shortName: string;
-  badge: string;
-  icon: typeof FileText;
-  tagline: string;
-}
-
-const PIPELINE_STEPS: PipelineStep[] = [
-  {
-    id: "ingest",
-    stepNumber: "01",
-    name: "Document Ingestion & OCR",
-    shortName: "Ingestion & OCR",
-    badge: "Step 1: Document Verification",
-    icon: FileText,
-    tagline: "PDF & photo scan anti-tampering verification",
-  },
-  {
-    id: "segment",
-    stepNumber: "02",
-    name: "Covenant Segmentation",
-    shortName: "Segmentation",
-    badge: "Step 2: Covenant Isolation",
-    icon: Layers,
-    tagline: "Extracts individual obligations & terms",
-  },
-  {
-    id: "ground",
-    stepNumber: "03",
-    name: "Philippine Statutory Grounding",
-    shortName: "Statutory Grounding",
-    badge: "Step 3: Philippine Law Audit",
-    icon: Scale,
-    tagline: "Cross-references against 320+ codified statutes",
-  },
-  {
-    id: "pushback",
-    stepNumber: "04",
-    name: "Calibrated Risk & Redlines",
-    shortName: "Fair Redlines",
-    badge: "Step 4: Output & Pushback",
-    icon: ShieldCheck,
-    tagline: "Generates protective counter-proposals",
-  },
-];
-
-const STEP_DURATION_MS = 5000;
-
 export function PipelineShowcase() {
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [copied, setCopied] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const activeStep = PIPELINE_STEPS[currentStepIndex];
-
-  // Auto-advance loop: advance to next step every STEP_DURATION_MS unless paused or hovered
-  useEffect(() => {
-    if (!isPlaying || isHovered) return;
-
-    const timer = setInterval(() => {
-      setCurrentStepIndex((prev) => (prev + 1) % PIPELINE_STEPS.length);
-    }, STEP_DURATION_MS);
-
-    return () => clearInterval(timer);
-  }, [isPlaying, isHovered, currentStepIndex]);
-
-  const handleCopy = useCallback((text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, []);
-
-  const handleStepSelect = (index: number) => {
-    setCurrentStepIndex(index);
-  };
-
-  const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
-  };
-
   return (
-    <div
-      className="flex flex-col justify-between h-full p-6 lg:p-8 xl:p-10 bg-[#fafbfc] select-none"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      {/* 1. Header with Logo & Live Visual Pipeline Status */}
-      <div>
+    <div className="relative flex flex-col justify-between h-full p-6 lg:p-8 xl:p-10 bg-[#fafbfc] select-none overflow-hidden">
+      {/* Decorative Background Schematic Circuit Lines (Inspired by Reference Pipeline) */}
+      <svg
+        className="absolute inset-y-0 left-0 w-64 h-full pointer-events-none opacity-30 text-slate-400"
+        viewBox="0 0 240 700"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M 40 0 V 180 C 40 230 85 250 85 300 V 700" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M 90 0 V 130 C 90 170 50 190 50 240 V 700" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M 140 0 V 90 C 140 130 110 160 110 220 V 700" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M 60 150 C 60 200 130 220 130 270 V 440 C 130 480 70 510 70 700" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="40" cy="180" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+        <circle cx="85" cy="300" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+        <circle cx="90" cy="130" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+        <circle cx="50" cy="240" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+        <circle cx="140" cy="90" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+        <circle cx="110" cy="220" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+        <circle cx="130" cy="270" r="3.5" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+      </svg>
+
+      {/* Top Header */}
+      <div className="relative z-10">
         <div className="flex items-center justify-between border-b border-[#e5e7eb] pb-4">
           <Logo size="md" theme="light" showTagline={false} />
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#e2e4e8] bg-white px-2.5 py-1 text-[0.6875rem] font-semibold text-[#525866] shadow-2xs">
               <span className="size-1.5 rounded-full bg-[#0c8c5e] animate-pulse" />
-              Live Visual Pipeline
+              Automated Legal Pipeline
             </span>
           </div>
         </div>
 
-        <div className="mt-4">
-          <h2 className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#08090a]">
-            How ClauseGuard audits your contract
+        <div className="mt-4 text-center sm:text-left">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#08090a]">
+            ClauseGuard Data Pipeline
           </h2>
           <p className="mt-1 text-xs sm:text-sm text-[#525866]">
-            Watch our automated 4-stage engine evaluate contract covenants against codified Philippine law — hands-free.
+            How contracts travel from raw PDF uploads into verified Philippine statutory redlines.
           </p>
         </div>
       </div>
 
-      {/* 2. Visual Pipeline Flow Bar (Auto-advancing connected stepper) */}
-      <div className="my-5">
-        <div className="grid grid-cols-4 gap-2 sm:gap-3">
-          {PIPELINE_STEPS.map((step, idx) => {
-            const isActive = idx === currentStepIndex;
-            const isPassed = idx < currentStepIndex;
-            const StepIcon = step.icon;
+      {/* Main Visual Pipeline Infographic Diagram (Matches User Reference Image) */}
+      <div className="relative z-10 my-auto py-6 sm:py-8">
+        <div className="rounded-2xl border border-[#e2e4e8] bg-white/95 p-6 lg:p-7 shadow-xs backdrop-blur-xs">
+          {/* Centered Infographic Heading */}
+          <div className="mb-8 text-center">
+            <span className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#08090a]">
+              Statutory Audit Pipeline
+            </span>
+            <p className="text-xs text-[#868c98] mt-0.5">
+              Continuous end-to-end data flow · Zero manual steps required
+            </p>
+          </div>
 
-            return (
-              <button
-                key={step.id}
-                type="button"
-                onClick={() => handleStepSelect(idx)}
-                className={`group relative text-left rounded-xl p-2.5 sm:p-3 transition-all cursor-pointer border ${
-                  isActive
-                    ? "bg-white border-[#b04000] shadow-sm ring-1 ring-[#b04000]/25"
-                    : isPassed
-                    ? "bg-white/80 border-[#d1d5db] hover:border-[#b04000]/40"
-                    : "bg-[#f4f5f7]/60 border-[#e5e7eb] hover:bg-white hover:border-[#d1d5db]"
-                }`}
-                title={`Jump to ${step.name}`}
-              >
-                {/* Visual Progress Bar on the active step */}
-                {isActive && isPlaying && !isHovered && (
-                  <motion.div
-                    key={`progress-${idx}`}
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: STEP_DURATION_MS / 1000, ease: "linear" }}
-                    className="absolute top-0 left-0 h-[2.5px] bg-[#b04000] rounded-t-xl"
-                  />
-                )}
-                {isActive && (!isPlaying || isHovered) && (
-                  <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-[#b04000] rounded-t-xl" />
-                )}
-
-                <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
-                  <div
-                    className={`flex size-5 sm:size-6 shrink-0 items-center justify-center rounded-md text-[0.625rem] font-bold transition-colors ${
-                      isActive
-                        ? "bg-[#b04000] text-white shadow-2xs"
-                        : isPassed
-                        ? "bg-[#0c8c5e]/15 text-[#0c8c5e]"
-                        : "bg-[#e5e7eb] text-[#6b7280]"
-                    }`}
-                  >
-                    {isPassed ? <Check className="size-3 stroke-[2.5]" /> : <StepIcon className="size-3" />}
+          {/* The 4-Node Horizontal Infographic Canvas */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-2 items-center justify-between relative">
+            
+            {/* NODE 1: Contract Ingestion & OCR (Cloud / Raw Contract Sources) */}
+            <div className="flex flex-col items-center text-center">
+              <div className="relative flex flex-col items-center">
+                {/* Simulated Cloud & Contract Nodes */}
+                <div className="flex items-center justify-center -space-x-2 mb-1.5">
+                  <div className="flex size-7 items-center justify-center rounded-full bg-blue-50 border border-blue-200 text-blue-600 shadow-2xs">
+                    <Cloud className="size-4" />
                   </div>
-                  <span
-                    className={`font-mono text-[0.625rem] font-bold ${
-                      isActive ? "text-[#b04000]" : "text-[#6b7280]"
-                    }`}
-                  >
-                    {step.stepNumber}
-                  </span>
+                  <div className="flex size-8 items-center justify-center rounded-full bg-[#fbeee4] border border-[#e8c6a8] text-[#b04000] shadow-2xs z-10">
+                    <FileText className="size-4.5" />
+                  </div>
                 </div>
 
-                <p
-                  className={`font-display text-[0.6875rem] sm:text-xs font-semibold truncate ${
-                    isActive ? "text-[#08090a]" : "text-[#525866]"
-                  }`}
-                >
-                  {step.shortName}
-                </p>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Visual Connector Wire with Arrow indicators */}
-        <div className="mt-2 flex items-center justify-between px-2 text-[0.625rem] font-mono text-[#868c98]">
-          <div className="flex items-center gap-1">
-            <span className="size-1.5 rounded-full bg-[#b04000]" />
-            <span>Raw PDF Scan</span>
-          </div>
-          <ArrowRight className="size-3 text-[#d1d5db]" />
-          <span>Extracted Clauses</span>
-          <ArrowRight className="size-3 text-[#d1d5db]" />
-          <span>Statutory Articles</span>
-          <ArrowRight className="size-3 text-[#d1d5db]" />
-          <div className="flex items-center gap-1 text-[#0c8c5e] font-semibold">
-            <CheckCircle2 className="size-3" />
-            <span>Protected Redline</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. The Visual Stage Workbench: Real-time simulation of the active step */}
-      <div className="my-auto flex-1 min-h-[300px] flex flex-col justify-center">
-        <div className="rounded-2xl border border-[#e2e4e8] bg-white p-5 sm:p-6 shadow-xs flex flex-col justify-between">
-          {/* Workbench Top Bar */}
-          <div className="flex items-center justify-between border-b border-[#f2f2f2] pb-3">
-            <div className="flex items-center gap-2">
-              <span className="size-2 rounded-full bg-[#b04000] animate-pulse" />
-              <span className="font-mono text-[0.6875rem] font-bold text-[#b04000] uppercase tracking-wider">
-                {activeStep.badge}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="rounded bg-[#f4f5f7] px-2 py-0.5 font-mono text-[0.625rem] font-medium text-[#525866]">
-                {activeStep.id === "ingest" && "OCR Engine: Active"}
-                {activeStep.id === "segment" && "Regex + Parser: Active"}
-                {activeStep.id === "ground" && "Corpus: 320+ Statutes"}
-                {activeStep.id === "pushback" && "Redline Diff: Ready"}
-              </span>
-            </div>
-          </div>
-
-          {/* Workbench Dynamic Body */}
-          <div className="py-4">
-            <AnimatePresence mode="wait">
-              {/* STAGE 1: DOCUMENT INGESTION & ANTI-TAMPERING OCR */}
-              {activeStep.id === "ingest" && (
-                <motion.div
-                  key="stage-ingest"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-3.5"
-                >
-                  <div className="flex items-center justify-between rounded-xl border border-[#e5e7eb] bg-[#fafbfc] p-3.5">
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-lg bg-white border border-[#e2e4e8] text-[#b04000] shadow-2xs">
-                        <FileText className="size-5" />
-                      </div>
-                      <div>
-                        <p className="font-display text-xs font-semibold text-[#08090a]">
-                          Freelance_Agreement_Draft_v2.pdf
-                        </p>
-                        <p className="text-[0.6875rem] text-[#868c98]">
-                          12 pages · 4,820 words · Coordinate bounding boxes indexed
-                        </p>
-                      </div>
-                    </div>
-                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[0.625rem] font-semibold text-emerald-800">
-                      Clean Scan
-                    </span>
+                {/* Contract Sheet Preview */}
+                <div className="w-28 rounded-lg border border-[#e2e4e8] bg-white p-2 shadow-xs text-left">
+                  <div className="h-1.5 w-12 rounded bg-[#b04000]/70 mb-1" />
+                  <div className="h-1 w-full rounded bg-slate-200 mb-0.5" />
+                  <div className="h-1 w-4/5 rounded bg-slate-200 mb-0.5" />
+                  <div className="h-1 w-3/5 rounded bg-slate-200" />
+                  <div className="mt-1.5 flex items-center justify-between text-[0.5625rem] font-mono text-[#0c8c5e]">
+                    <span>✓ OCR OK</span>
+                    <span>12 pgs</span>
                   </div>
+                </div>
+              </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                    <div className="rounded-lg border border-[#e5e7eb] bg-white p-3 space-y-1">
-                      <div className="flex items-center gap-1.5 font-semibold text-[#08090a]">
-                        <CheckCircle2 className="size-3.5 text-[#0c8c5e]" />
-                        <span>Anti-Tampering Pass</span>
-                      </div>
-                      <p className="text-[0.6875rem] text-[#525866] leading-relaxed">
-                        0 hidden tokens detected. Scanned for microscopic 1pt fonts &amp; white-on-white text designed to deceive reviewers.
-                      </p>
-                    </div>
-
-                    <div className="rounded-lg border border-[#e5e7eb] bg-white p-3 space-y-1">
-                      <div className="flex items-center gap-1.5 font-semibold text-[#08090a]">
-                        <Lock className="size-3.5 text-[#b04000]" />
-                        <span>Zero Data Retention</span>
-                      </div>
-                      <p className="text-[0.6875rem] text-[#525866] leading-relaxed">
-                        Compliant with RA 10173 (Data Privacy Act). Contract text resides in ephemeral memory and is never used for training.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[0.6875rem] text-[#868c98] pt-1 border-t border-[#f2f2f2]">
-                    <span>Status: Text stream normalized</span>
-                    <span className="font-medium text-[#b04000]">Streaming to Covenant Segmenter ➔</span>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* STAGE 2: COVENANT SEGMENTATION */}
-              {activeStep.id === "segment" && (
-                <motion.div
-                  key="stage-segment"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-3"
-                >
-                  <p className="text-xs text-[#525866]">
-                    Continuous contract text is dissected into discrete, individually auditable covenants:
-                  </p>
-
-                  <div className="space-y-2 font-mono text-[0.6875rem]">
-                    <div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50/60 p-2.5">
-                      <div className="flex items-center gap-2">
-                        <AlertTriangle className="size-3.5 text-red-600 shrink-0" />
-                        <span className="font-bold text-red-950">§ 14.2 termination.unilateral</span>
-                      </div>
-                      <span className="rounded bg-red-100 px-2 py-0.5 text-[0.625rem] font-bold text-red-800">
-                        High Risk Predatory
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50/60 p-2.5">
-                      <div className="flex items-center gap-2">
-                        <AlertTriangle className="size-3.5 text-red-600 shrink-0" />
-                        <span className="font-bold text-red-950">§ 9.1 indemnity.uncapped</span>
-                      </div>
-                      <span className="rounded bg-red-100 px-2 py-0.5 text-[0.625rem] font-bold text-red-800">
-                        High Risk One-Sided
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50/60 p-2.5">
-                      <div className="flex items-center gap-2">
-                        <span className="size-1.5 rounded-full bg-amber-500 shrink-0" />
-                        <span className="font-bold text-amber-950">§ 6.3 ip.assignment.broad</span>
-                      </div>
-                      <span className="rounded bg-amber-100 px-2 py-0.5 text-[0.625rem] font-bold text-amber-800">
-                        Caution: Moral Rights
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between rounded-lg border border-emerald-200 bg-emerald-50/60 p-2.5">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="size-3.5 text-emerald-600 shrink-0" />
-                        <span className="font-bold text-emerald-950">§ 3.1 payment.net30</span>
-                      </div>
-                      <span className="rounded bg-emerald-100 px-2 py-0.5 text-[0.625rem] font-bold text-emerald-800">
-                        Standard Commercial Term
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[0.6875rem] text-[#868c98] pt-1 border-t border-[#f2f2f2]">
-                    <span>Identified 4 key covenants</span>
-                    <span className="font-medium text-[#b04000]">Routing § 14.2 to Statutory Grounding ➔</span>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* STAGE 3: PHILIPPINE STATUTORY GROUNDING */}
-              {activeStep.id === "ground" && (
-                <motion.div
-                  key="stage-ground"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-3"
-                >
-                  {/* Flagged Draft language */}
-                  <div className="rounded-lg border border-red-100 bg-red-50/40 p-2.5">
-                    <span className="font-mono text-[0.625rem] font-bold text-red-700 uppercase tracking-wider">
-                      Flagged Contract Term (§ 14.2)
-                    </span>
-                    <p className="mt-0.5 text-xs italic text-[#08090a] font-contract leading-relaxed">
-                      &ldquo;Company reserves the unilateral right to cancel this Agreement at any time without notice, while Contractor is bound to complete pending deliverables.&rdquo;
-                    </p>
-                  </div>
-
-                  {/* Primary Law Citation */}
-                  <div className="rounded-xl border border-[#e8c6a8] bg-[#fbf6f1] p-3 sm:p-3.5 space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#b04000]">
-                        <Scale className="size-3.5 text-[#b04000]" />
-                        <span>Art. 1308, Civil Code of the Philippines</span>
-                      </div>
-                      <span className="rounded-full bg-[#b04000] px-2 py-0.5 font-mono text-[0.5625rem] font-semibold text-white">
-                        Primary Law
-                      </span>
-                    </div>
-
-                    <p className="font-contract text-xs text-[#08090a] leading-relaxed italic border-l-2 border-[#b04000] pl-2.5">
-                      &ldquo;The contract must bind both contracting parties; its validity or compliance cannot be left to the will of one of them.&rdquo;
-                    </p>
-
-                    <p className="text-[0.6875rem] text-[#7a2e02] leading-relaxed pt-0.5">
-                      <span className="font-bold">Mutuality Doctrine:</span> Under Philippine civil law, an unreciprocal cancellation clause that allows a client to cancel at will without compensation is legally void.
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[0.6875rem] text-[#868c98] pt-1 border-t border-[#f2f2f2]">
-                    <span>Grounding Confidence: 94% Match</span>
-                    <span className="font-medium text-[#b04000]">Generating Fair Redline ➔</span>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* STAGE 4: CALIBRATED RISK & REDLINES */}
-              {activeStep.id === "pushback" && (
-                <motion.div
-                  key="stage-pushback"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25 }}
-                  className="space-y-3"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#08090a]">
-                      Clause Health Score:
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-bold text-red-800">
-                      <AlertTriangle className="size-3" />
-                      94% Calibrated High Risk
-                    </span>
-                  </div>
-
-                  {/* Redline Diff Before/After */}
-                  <div className="space-y-2 text-xs">
-                    <div className="rounded-lg border border-red-200 bg-red-50/50 p-2.5">
-                      <span className="text-[0.625rem] font-mono font-bold text-red-700 uppercase">
-                        Predatory Clause (Remove)
-                      </span>
-                      <p className="mt-0.5 text-red-950 font-contract italic line-through">
-                        &ldquo;Company reserves unilateral right to cancel at any time without notice or payment for pending work.&rdquo;
-                      </p>
-                    </div>
-
-                    <div className="rounded-lg border border-emerald-200 bg-emerald-50/70 p-2.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[0.625rem] font-mono font-bold text-emerald-800 uppercase">
-                          ClauseGuard Fair Counter-Proposal (Insert)
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleCopy(
-                              "Either party may terminate this agreement upon 14 days' written notice, subject to full compensation for all approved deliverables completed to date."
-                            )
-                          }
-                          className="inline-flex items-center gap-1 text-[0.6875rem] font-semibold text-emerald-800 hover:text-emerald-950 cursor-pointer"
-                        >
-                          {copied ? (
-                            <>
-                              <Check className="size-3 text-emerald-600" />
-                              <span>Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="size-3" />
-                              <span>Copy Redline</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                      <p className="mt-0.5 text-emerald-950 font-mono text-[0.6875rem] leading-relaxed">
-                        &ldquo;Either party may terminate this agreement upon 14 days&rsquo; written notice, subject to full compensation for all approved deliverables completed to date.&rdquo;
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[0.6875rem] text-[#868c98] pt-1 border-t border-[#f2f2f2]">
-                    <span className="text-[#0c8c5e] font-medium">✓ Ready to paste into contract counter-offer</span>
-                    <span className="font-mono text-[0.625rem]">Cycle repeats automatically ↺</span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Workbench Footer: Hands-free playback indicator & subtle user controls */}
-          <div className="border-t border-[#f2f2f2] pt-3 flex items-center justify-between text-[0.6875rem] text-[#868c98]">
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={togglePlay}
-                className="inline-flex items-center gap-1.5 rounded-md border border-[#e5e7eb] bg-[#fafbfc] px-2 py-1 text-[0.625rem] font-semibold text-[#525866] hover:bg-white hover:text-[#08090a] transition-colors cursor-pointer"
-                title={isPlaying ? "Pause auto-advance" : "Resume auto-advance"}
-              >
-                {isPlaying ? (
-                  <>
-                    <Pause className="size-2.5" />
-                    <span>Pause</span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="size-2.5 text-[#b04000]" />
-                    <span>Auto-Play</span>
-                  </>
-                )}
-              </button>
-
-              <span className="hidden sm:inline text-[#868c98]">
-                {isHovered ? "Paused on hover" : "Auto-playing live demo (5s per step)"}
-              </span>
+              <div className="mt-2.5">
+                <p className="font-display text-xs font-bold text-[#08090a]">Contract Sources</p>
+                <p className="text-[0.6875rem] text-[#868c98]">Digital PDF &amp; Photo Scans</p>
+              </div>
             </div>
 
-            <div className="flex items-center gap-1">
-              {PIPELINE_STEPS.map((_, i) => (
-                <button
-                  key={`dot-${i}`}
-                  type="button"
-                  onClick={() => handleStepSelect(i)}
-                  className={`size-1.5 rounded-full transition-all cursor-pointer ${
-                    i === currentStepIndex
-                      ? "w-4 bg-[#b04000]"
-                      : "bg-[#d1d5db] hover:bg-[#868c98]"
-                  }`}
-                  aria-label={`Go to step ${i + 1}`}
+            {/* CONNECTOR 1: Extraction & OCR */}
+            <div className="hidden md:flex flex-col items-center justify-center px-1">
+              <span className="text-[0.625rem] font-semibold text-[#525866] mb-1">
+                Data Extraction
+              </span>
+              <div className="relative w-full flex items-center justify-center">
+                <div className="w-full h-[2px] bg-gradient-to-r from-[#d1d5db] via-[#b04000] to-[#d1d5db]" />
+                <ArrowRight className="size-3.5 text-[#b04000] absolute -right-1" />
+                {/* Animated traveling data particle */}
+                <motion.div
+                  className="absolute size-2 rounded-full bg-[#b04000] shadow-xs"
+                  animate={{ left: ["0%", "100%"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
                 />
-              ))}
+              </div>
+              <span className="text-[0.5625rem] text-[#868c98] mt-1 font-mono">Font &amp; OCR Scan</span>
             </div>
+
+            {/* NODE 2: Covenant Staging Area (3D Isometric Pillar) */}
+            <div className="flex flex-col items-center text-center">
+              <div className="relative flex items-center justify-center">
+                {/* 3D Isometric Staging Pillar (Styled like reference) */}
+                <div className="relative w-24 h-28 rounded-md bg-white border-2 border-blue-400 shadow-sm flex flex-col justify-between p-2 overflow-hidden">
+                  {/* Top isometric angled cap */}
+                  <div className="absolute top-0 left-0 right-0 h-3 bg-blue-500/15 border-b border-blue-200" />
+                  
+                  {/* Front Text */}
+                  <div className="pt-2 text-center">
+                    <span className="font-mono text-[0.625rem] font-black tracking-wider text-blue-700 uppercase">
+                      Staging
+                    </span>
+                    <span className="block font-mono text-[0.5625rem] font-bold text-blue-600">
+                      Area
+                    </span>
+                  </div>
+
+                  {/* Staged Covenant Blocks */}
+                  <div className="space-y-1">
+                    <div className="rounded bg-red-100/80 px-1 py-0.5 text-[0.5rem] font-mono font-semibold text-red-800 truncate">
+                      § 14.2 Termination
+                    </div>
+                    <div className="rounded bg-amber-100/80 px-1 py-0.5 text-[0.5rem] font-mono font-semibold text-amber-800 truncate">
+                      § 9.1 Indemnity
+                    </div>
+                    <div className="rounded bg-emerald-100/80 px-1 py-0.5 text-[0.5rem] font-mono font-semibold text-emerald-800 truncate">
+                      § 3.1 Payment
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3D Depth Shadow/Edge */}
+                <div className="absolute -right-1.5 top-1 bottom-1 w-2 bg-blue-600/20 rounded-r-sm transform skew-y-12" />
+              </div>
+
+              <div className="mt-2.5">
+                <p className="font-display text-xs font-bold text-[#08090a]">Covenant Staging</p>
+                <p className="text-[0.6875rem] text-[#868c98]">Isolated Clause Units</p>
+              </div>
+            </div>
+
+            {/* CONNECTOR 2: Transform & Load */}
+            <div className="hidden md:flex flex-col items-center justify-center px-1">
+              <span className="text-[0.625rem] font-semibold text-[#525866] mb-1">
+                Transform &amp; Ground
+              </span>
+              <div className="relative w-full flex items-center justify-center">
+                <div className="w-full h-[2px] bg-gradient-to-r from-[#d1d5db] via-[#b04000] to-[#d1d5db]" />
+                <ArrowRight className="size-3.5 text-[#b04000] absolute -right-1" />
+                {/* Animated traveling data particle */}
+                <motion.div
+                  className="absolute size-2 rounded-full bg-[#b04000] shadow-xs"
+                  animate={{ left: ["0%", "100%"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: 0.8 }}
+                />
+              </div>
+              <span className="text-[0.5625rem] text-[#868c98] mt-1 font-mono">Civil &amp; Labor Code</span>
+            </div>
+
+            {/* NODE 3: Codified Philippine Legal Database (Cylinder with Shield) */}
+            <div className="flex flex-col items-center text-center">
+              <div className="relative flex items-center justify-center">
+                {/* 3D Database Cylinder */}
+                <div className="relative w-22 h-26 rounded-xl border border-slate-300 bg-gradient-to-b from-white via-slate-50 to-slate-100 p-2 shadow-xs flex flex-col justify-between items-center">
+                  {/* Top Cylinder Disc */}
+                  <div className="w-16 h-3 rounded-full border border-slate-300 bg-slate-200/60" />
+                  
+                  {/* Database Mid Rings */}
+                  <div className="w-full h-[1px] bg-slate-200" />
+                  <div className="w-full h-[1px] bg-slate-200" />
+
+                  {/* Prominent Shield Emblem on Front (Matches Reference) */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex size-9 items-center justify-center rounded-full bg-[#b04000] text-white shadow-sm ring-2 ring-white">
+                      <Scale className="size-4.5" />
+                    </div>
+                  </div>
+
+                  {/* Bottom disc */}
+                  <div className="w-16 h-2 rounded-full bg-slate-300/60" />
+                </div>
+              </div>
+
+              <div className="mt-2.5">
+                <p className="font-display text-xs font-bold text-[#08090a]">Philippine Legal Corpus</p>
+                <p className="text-[0.6875rem] text-[#868c98]">320+ Codified Statutes</p>
+              </div>
+            </div>
+
+            {/* CONNECTOR 3: Transform & Redline */}
+            <div className="hidden md:flex flex-col items-center justify-center px-1">
+              <span className="text-[0.625rem] font-semibold text-[#525866] mb-1">
+                Calibrate &amp; Redline
+              </span>
+              <div className="relative w-full flex items-center justify-center">
+                <div className="w-full h-[2px] bg-gradient-to-r from-[#d1d5db] via-[#b04000] to-[#d1d5db]" />
+                <ArrowRight className="size-3.5 text-[#b04000] absolute -right-1" />
+                {/* Animated traveling data particle */}
+                <motion.div
+                  className="absolute size-2 rounded-full bg-[#b04000] shadow-xs"
+                  animate={{ left: ["0%", "100%"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "linear", delay: 1.6 }}
+                />
+              </div>
+              <span className="text-[0.5625rem] text-[#868c98] mt-1 font-mono">Risk Scoring</span>
+            </div>
+
+            {/* NODE 4: Protective Laptop Dashboard with Orbiting Reports (Matches Reference) */}
+            <div className="flex flex-col items-center text-center">
+              <div className="relative flex items-center justify-center py-1">
+                {/* Orbiting Curved Ribbon Arc */}
+                <div className="absolute -inset-2 rounded-full border-2 border-dashed border-blue-400/40 pointer-events-none transform -rotate-12 scale-x-125" />
+
+                {/* Floating Orbiting Mini Badges */}
+                <div className="absolute -top-2 -right-3 rounded-md bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 text-[0.5rem] font-bold text-emerald-800 shadow-2xs">
+                  Fair Redline
+                </div>
+                <div className="absolute -bottom-2 -left-3 rounded-md bg-red-50 border border-red-200 px-1.5 py-0.5 text-[0.5rem] font-bold text-red-800 shadow-2xs">
+                  94% Risk Flag
+                </div>
+
+                {/* Laptop Device Workstation */}
+                <div className="relative w-28 rounded-t-md border-2 border-slate-700 bg-slate-900 p-1 shadow-sm">
+                  {/* Laptop Screen Content */}
+                  <div className="rounded bg-white p-1 text-left min-h-[46px]">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-0.5 mb-1">
+                      <span className="text-[0.4375rem] font-mono font-bold text-[#b04000]">ClauseGuard</span>
+                      <span className="size-1 rounded-full bg-[#0c8c5e]" />
+                    </div>
+                    {/* Simulated Redline Diff */}
+                    <div className="h-1 w-full bg-red-200 rounded mb-0.5 line-through" />
+                    <div className="h-1 w-5/6 bg-emerald-300 rounded mb-0.5" />
+                    <div className="h-1 w-3/4 bg-slate-200 rounded" />
+                  </div>
+                </div>
+              </div>
+              {/* Laptop base */}
+              <div className="w-32 h-1.5 rounded-b-md bg-slate-600 shadow-xs" />
+
+              <div className="mt-2.5">
+                <p className="font-display text-xs font-bold text-[#08090a]">Audit Dashboard</p>
+                <p className="text-[0.6875rem] text-[#868c98]">Pushback Counter-Offer</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
 
-      {/* 4. Bottom Philippine Statutory Trust Anchors */}
-      <div className="border-t border-[#e5e7eb] pt-4 mt-4">
+      {/* 4 Architectural Milestone Explanations for Non-Tech Users */}
+      <div className="relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-3 my-2 text-left">
+        <div className="rounded-xl border border-[#e5e7eb] bg-white p-3 shadow-2xs">
+          <div className="flex items-center gap-1.5 font-mono text-[0.625rem] font-bold text-[#b04000]">
+            <span>01</span>
+            <span>EXTRACT</span>
+          </div>
+          <p className="mt-1 text-xs font-semibold text-[#08090a]">OCR &amp; Font Scan</p>
+          <p className="mt-0.5 text-[0.6875rem] text-[#525866] leading-relaxed">
+            Identifies invisible 1pt fonts &amp; malicious white-on-white text.
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-[#e5e7eb] bg-white p-3 shadow-2xs">
+          <div className="flex items-center gap-1.5 font-mono text-[0.625rem] font-bold text-[#b04000]">
+            <span>02</span>
+            <span>STAGE</span>
+          </div>
+          <p className="mt-1 text-xs font-semibold text-[#08090a]">Covenant Isolation</p>
+          <p className="mt-0.5 text-[0.6875rem] text-[#525866] leading-relaxed">
+            Splits continuous legalese into independent, testable covenants.
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-[#e5e7eb] bg-white p-3 shadow-2xs">
+          <div className="flex items-center gap-1.5 font-mono text-[0.625rem] font-bold text-[#b04000]">
+            <span>03</span>
+            <span>GROUND</span>
+          </div>
+          <p className="mt-1 text-xs font-semibold text-[#08090a]">Philippine Law</p>
+          <p className="mt-0.5 text-[0.6875rem] text-[#525866] leading-relaxed">
+            Tests against Civil Code Art. 1308 (Mutuality) and DOLE DO 174.
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-[#e5e7eb] bg-white p-3 shadow-2xs">
+          <div className="flex items-center gap-1.5 font-mono text-[0.625rem] font-bold text-[#b04000]">
+            <span>04</span>
+            <span>SHIELD</span>
+          </div>
+          <p className="mt-1 text-xs font-semibold text-[#08090a]">Actionable Redlines</p>
+          <p className="mt-0.5 text-[0.6875rem] text-[#525866] leading-relaxed">
+            Generates fair counter-clauses ready to paste into client replies.
+          </p>
+        </div>
+      </div>
+
+      {/* Bottom Legal Trust Guarantees */}
+      <div className="relative z-10 border-t border-[#e5e7eb] pt-4 mt-2">
         <div className="grid grid-cols-3 gap-3 text-left">
           <div className="flex items-center gap-2 sm:gap-2.5">
             <Scale className="size-4 shrink-0 text-[#b04000]" />
             <div>
               <p className="font-display text-xs font-semibold text-[#08090a]">320+ Statutes</p>
-              <p className="text-[0.6875rem] text-[#868c98]">Civil &amp; Labor Code</p>
+              <p className="text-[0.6875rem] text-[#868c98]">Civil Code &amp; Labor Code</p>
             </div>
           </div>
 
@@ -544,7 +334,7 @@ export function PipelineShowcase() {
             <Lock className="size-4 shrink-0 text-[#b04000]" />
             <div>
               <p className="font-display text-xs font-semibold text-[#08090a]">RA 10173</p>
-              <p className="text-[0.6875rem] text-[#868c98]">Data Privacy Act</p>
+              <p className="text-[0.6875rem] text-[#868c98]">Data Privacy Act of 2012</p>
             </div>
           </div>
 
