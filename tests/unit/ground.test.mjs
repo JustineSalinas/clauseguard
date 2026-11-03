@@ -35,12 +35,37 @@ describe("groundClause", () => {
     assert.deepEqual(result, { arm: "none", provisions: [] });
   });
 
-  test("arm 'rag' throws RagNotReadyError", async () => {
+  test("arm 'rag' throws RagNotReadyError when no retriever is provided", async () => {
     const db = fakeDb();
     await assert.rejects(
       () => groundClause({ db, clauseType: "force.majeure", arm: "rag" }),
       RagNotReadyError,
     );
+  });
+
+  test("arm 'rag' with ragRetriever returns retrieved provisions", async () => {
+    const retriever = async (text) => [
+      { code: "CIVIL", article: "1308", text: "Mutuality of contracts." },
+    ];
+    const result = await groundClause({
+      clauseText: "This agreement may be terminated at sole discretion of Client.",
+      arm: "rag",
+      ragRetriever: retriever,
+    });
+    assert.deepEqual(result, {
+      arm: "rag",
+      provisions: [{ code: "CIVIL", article: "1308", text: "Mutuality of contracts." }],
+    });
+  });
+
+  test("arm 'rag' with ragRetriever returning empty results handles NoRelevantProvision cleanly", async () => {
+    const retriever = async () => [];
+    const result = await groundClause({
+      clauseText: "Standard boilerplate text with no legal provision match.",
+      arm: "rag",
+      ragRetriever: retriever,
+    });
+    assert.deepEqual(result, { arm: "rag", provisions: [] });
   });
 
   test("arm 'static' with no clause type returns no provisions (NoRelevantProvision)", async () => {

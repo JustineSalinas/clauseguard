@@ -119,8 +119,92 @@ export const remove = mutation({
       throw new Error("Document not found.");
     }
 
-    await ctx.storage.delete(doc.storagePath as never);
+    // 1. Delete associated storage file
+    if (doc.storagePath) {
+      try {
+        await ctx.storage.delete(doc.storagePath as never);
+      } catch (err) {
+        console.warn(`[documents.remove] Could not delete storage file ${doc.storagePath}`, err);
+      }
+    }
+
+    // 2. Cascade delete extractions
+    const extractions = await ctx.db
+      .query("extractions")
+      .withIndex("by_document", (q) => q.eq("documentId", id))
+      .collect();
+    for (const ex of extractions) {
+      await ctx.db.delete(ex._id);
+    }
+
+    // 3. Cascade delete clauses and their child scores & retrievals
+    const clauses = await ctx.db
+      .query("clauses")
+      .withIndex("by_document_ordinal", (q) => q.eq("documentId", id))
+      .collect();
+    for (const c of clauses) {
+      const scores = await ctx.db
+        .query("clauseScores")
+        .withIndex("by_clause", (q) => q.eq("clauseId", c._id))
+        .collect();
+      for (const s of scores) {
+        await ctx.db.delete(s._id);
+      }
+
+      const retrievals = await ctx.db
+        .query("clauseRetrievals")
+        .withIndex("by_clause_run_rank", (q) => q.eq("clauseId", c._id))
+        .collect();
+      for (const r of retrievals) {
+        await ctx.db.delete(r._id);
+      }
+
+      await ctx.db.delete(c._id);
+    }
+
+    // 4. Cascade delete stage runs
+    const stageRuns = await ctx.db
+      .query("stageRuns")
+      .withIndex("by_document_stage", (q) => q.eq("documentId", id))
+      .collect();
+    for (const sr of stageRuns) {
+      await ctx.db.delete(sr._id);
+    }
+
+    // 5. Delete document record itself
     await ctx.db.delete(id);
+  },
+});
+
+export const sweepStuck = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return 0;
+
+    const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+    const docs = await ctx.db
+      .query("documents")
+      .withIndex("by_owner_created", (q) => q.eq("ownerId", userId))
+      .collect();
+
+    let recovered = 0;
+    for (const doc of docs) {
+      if (
+        PROCESSING_STATUSES.has(doc.status) &&
+        doc.stageStartedAt &&
+        doc.stageStartedAt < fiveMinutesAgo
+      ) {
+        await ctx.db.patch(doc._id, {
+          status: "failed",
+          failedStage: doc.status,
+          failedReason: "Processing timed out. Please retry the review.",
+          updatedAt: Date.now(),
+        });
+        recovered++;
+      }
+    }
+    return recovered;
   },
 });
 
@@ -178,5 +262,46 @@ export const setPageCount = internalMutation({
   args: { id: v.id("documents"), pageCount: v.number() },
   handler: async (ctx, { id, pageCount }) => {
     await ctx.db.patch(id, { pageCount, updatedAt: Date.now() });
+  },
+});
+
+export const resetForRetry = internalMutation({
+  args: { id: v.id("documents") },
+  handler: async (ctx, { id }) => {
+    const doc = await ctx.db.get(id);
+    if (!doc) return false;
+
+    // Cascade delete any partial clauses and extractions
+    const clauses = await ctx.db
+      .query("clauses")
+      .withIndex("by_document_ordinal", (q) => q.eq("documentId", id))
+      .collect();
+    for (const c of clauses) {
+      const scores = await ctx.db
+        .query("clauseScores")
+        .withIndex("by_clause", (q) => q.eq("clauseId", c._id))
+        .collect();
+      for (const s of scores) {
+        await ctx.db.delete(s._id);
+      }
+      await ctx.db.delete(c._id);
+    }
+
+    const extractions = await ctx.db
+      .query("extractions")
+      .withIndex("by_document", (q) => q.eq("documentId", id))
+      .collect();
+    for (const ex of extractions) {
+      await ctx.db.delete(ex._id);
+    }
+
+    await ctx.db.patch(id, {
+      status: "uploaded",
+      failedStage: undefined,
+      failedReason: undefined,
+      stageStartedAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+    return true;
   },
 });

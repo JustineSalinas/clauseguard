@@ -77,19 +77,27 @@ function normalizeProvision(
   return { code: p.code, article: p.article, text: p.text };
 }
 
+export type RagRetriever = (clauseText: string) => Promise<StatutoryProvision[]>;
+
 export async function groundClause(params: {
-  db: GroundingDb;
-  clauseType: ClauseTypeId | null;
+  db?: GroundingDb;
+  clauseType?: ClauseTypeId | null;
+  clauseText?: string;
   arm: GroundingArm;
+  ragRetriever?: RagRetriever;
 }): Promise<GroundResult> {
-  const { db, clauseType, arm } = params;
+  const { db, clauseType, clauseText, arm, ragRetriever } = params;
 
   if (arm === "none") {
     return { arm, provisions: [] };
   }
 
   if (arm === "rag") {
-    throw new RagNotReadyError();
+    if (!ragRetriever) {
+      throw new RagNotReadyError();
+    }
+    const provisions = await ragRetriever(clauseText ?? "");
+    return { arm, provisions };
   }
 
   // arm === "static". A clause with no type (segmentation couldn't guess,
@@ -97,6 +105,10 @@ export async function groundClause(params: {
   // a legitimate empty result, not an error.
   if (!clauseType || clauseType === "other") {
     return { arm, provisions: [] };
+  }
+
+  if (!db) {
+    throw new Error("Database client is required for the static grounding arm.");
   }
 
   const { data, error } = await db

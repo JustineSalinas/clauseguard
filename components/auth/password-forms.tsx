@@ -4,23 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, AlertCircle, Mail, Lock, KeyRound } from "lucide-react";
 
-/**
- * Convex Auth's Password provider reset flow is code-based, not
- * link-based: "reset" emails a short code, "reset-verification" takes that
- * code plus the new password in one call. That's a real UX difference from
- * Supabase's magic-link flow (which is why /auth/confirm and the branded
- * reset-password email template existed) -- not a drop-in swap.
- *
- * KNOWN GAP: no email provider (e.g. Resend) is configured on the Password
- * provider yet (see convex/auth.ts), so `flow: "reset"` below will not
- * actually send an email until that's wired up. The form is correct for
- * when it is; right now it fails honestly (shows an error) rather than
- * pretending to have sent something.
- */
 export function RequestResetForm() {
   const { signIn } = useAuthActions();
   const [email, setEmail] = useState("");
@@ -37,7 +24,7 @@ export function RequestResetForm() {
       setSent(true);
     } catch {
       setError(
-        "Couldn't send a reset code right now. Password-reset email isn't fully configured yet -- contact support if this persists.",
+        "Password reset email delivery is not configured yet. Please contact support or your capstone administrator."
       );
     } finally {
       setPending(false);
@@ -46,10 +33,10 @@ export function RequestResetForm() {
 
   if (sent) {
     return (
-      <div className="flex flex-col gap-5">
-        <Alert className="border-[#e8c6a8] bg-[#fbeee4] px-4 py-3">
-          <AlertDescription className="text-[#8a3300]">
-            If that email has an account, a reset code is on its way. Enter it below along with your new password.
+      <div className="flex flex-col gap-4">
+        <Alert className="border-[#e8c6a8]/40 bg-[#fbeee4]/10 p-3 text-white backdrop-blur-md">
+          <AlertDescription className="text-xs text-[#e8c6a8]">
+            If that email has an account, a verification code is on its way. Enter it below along with your new password.
           </AlertDescription>
         </Alert>
         <UpdatePasswordForm email={email} />
@@ -58,29 +45,50 @@ export function RequestResetForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      {error ? (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {error && (
+        <Alert
+          variant="destructive"
+          className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-200 backdrop-blur-md"
+        >
+          <AlertCircle className="size-4 shrink-0 text-red-400" />
+          <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
         </Alert>
-      ) : null}
+      )}
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="email" className="text-xs font-medium text-white/80">
+          Email address
+        </Label>
+        <div className="relative">
+          <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            placeholder="Enter your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+          />
+        </div>
       </div>
 
-      <Button type="submit" size="hero" className="w-full" disabled={pending}>
-        {pending ? "Sending…" : "Send reset code"}
-      </Button>
+      <button
+        type="submit"
+        disabled={pending}
+        className="mt-2 flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-[#b04000] via-[#c84805] to-[#dc580f] px-4 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(176,64,0,0.35)] transition-all hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {pending ? (
+          <span className="inline-flex items-center gap-2">
+            <Loader2 className="size-4 animate-spin" />
+            <span>Sending code…</span>
+          </span>
+        ) : (
+          <span>Send reset code</span>
+        )}
+      </button>
     </form>
   );
 }
@@ -107,66 +115,99 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
       });
       router.push("/dashboard");
     } catch {
-      setError("That code didn't work. It may have expired -- request a new one.");
+      setError("That verification code is invalid or has expired. Please request a new code.");
     } finally {
       setPending(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      {error ? (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {error && (
+        <Alert
+          variant="destructive"
+          className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-200 backdrop-blur-md"
+        >
+          <AlertCircle className="size-4 shrink-0 text-red-400" />
+          <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
         </Alert>
-      ) : null}
+      )}
 
-      {!initialEmail ? (
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="reset-email">Email</Label>
-          <Input
-            id="reset-email"
-            type="email"
-            autoComplete="email"
+      {!initialEmail && (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="reset-email" className="text-xs font-medium text-white/80">
+            Email address
+          </Label>
+          <div className="relative">
+            <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+            <input
+              id="reset-email"
+              type="email"
+              autoComplete="email"
+              required
+              placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="code" className="text-xs font-medium text-white/80">
+          Verification code
+        </Label>
+        <div className="relative">
+          <KeyRound className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <input
+            id="code"
+            type="text"
+            inputMode="numeric"
+            autoComplete="one-time-code"
             required
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Code from your email"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
           />
         </div>
-      ) : null}
-
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="code">Reset code</Label>
-        <Input
-          id="code"
-          type="text"
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          required
-          placeholder="Code from your email"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-        />
       </div>
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password">New password</Label>
-        <Input
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          required
-          minLength={8}
-          placeholder="At least 8 characters"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="password" className="text-xs font-medium text-white/80">
+          New password
+        </Label>
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <input
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            required
+            minLength={8}
+            placeholder="At least 8 characters"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+          />
+        </div>
       </div>
 
-      <Button type="submit" size="hero" className="w-full" disabled={pending}>
-        {pending ? "Saving…" : "Save new password"}
-      </Button>
+      <button
+        type="submit"
+        disabled={pending}
+        className="mt-2 flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-[#b04000] via-[#c84805] to-[#dc580f] px-4 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(176,64,0,0.35)] transition-all hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {pending ? (
+          <span className="inline-flex items-center gap-2">
+            <Loader2 className="size-4 animate-spin" />
+            <span>Saving new password…</span>
+          </span>
+        ) : (
+          <span>Save new password</span>
+        )}
+      </button>
     </form>
   );
 }

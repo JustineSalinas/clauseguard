@@ -1,0 +1,138 @@
+[
+  {
+    "id": "PH-001",
+    "clauseLabel": "Clause 8.1 - Termination at Will",
+    "clauseType": "termination.unilateral",
+    "clauseText": "Client may terminate this Agreement at any time, with or without cause, immediately upon written notice to Contractor, without incurring any penalty or further financial liability. Contractor shall not have the reciprocal right to terminate early.",
+    "groundTruthRisk": "high",
+    "expectedProvisions": ["CIVIL 1308"],
+    "contractSource": "Software Development Services Agreement"
+  },
+  {
+    "id": "PH-002",
+    "clauseLabel": "Clause 8.2 - Mutual Termination",
+    "clauseType": "termination.mutual",
+    "clauseText": "Either party may terminate this Agreement without cause upon giving thirty (30) days prior written notice to the other party. Upon termination, Client shall pay Contractor for all services satisfactorily performed up to the effective date of termination.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1159"],
+    "contractSource": "Consulting Master Services Agreement"
+  },
+  {
+    "id": "PH-003",
+    "clauseLabel": "Clause 11.2 - Indemnification",
+    "clauseType": "indemnity.uncapped",
+    "clauseText": "Contractor shall indemnify, defend, and hold harmless Client, its affiliates, directors, officers, and employees against any and all claims, losses, damages, liabilities, and expenses (including attorney's fees) arising out of or related to Contractor's performance, whether direct, indirect, or consequential, without limitation on amount.",
+    "groundTruthRisk": "high",
+    "expectedProvisions": ["CIVIL 1308", "CIVIL 2201"],
+    "contractSource": "Creative Freelance Master Contract"
+  },
+  {
+    "id": "PH-004",
+    "clauseLabel": "Clause 11.4 - Mutual Limitation of Liability",
+    "clauseType": "liability.limitation",
+    "clauseText": "Except for breaches of confidentiality or gross negligence, neither party's total cumulative liability under this Agreement shall exceed the total fees paid or payable by Client to Contractor in the preceding three (3) months.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1170"],
+    "contractSource": "Web Design Retainer Agreement"
+  },
+  {
+    "id": "PH-005",
+    "clauseLabel": "Clause 5.1 - IP Assignment",
+    "clauseType": "ip.assignment.broad",
+    "clauseText": "Contractor hereby irrevocably assigns to Client all right, title, and interest worldwide in and to all intellectual property, inventions, designs, and know-how created, conceived, or reduced to practice by Contractor during the term of this Agreement, including pre-existing tools, background code, and unrelated personal projects.",
+    "groundTruthRisk": "high",
+    "expectedProvisions": ["CIVIL 1306"],
+    "contractSource": "UI/UX Design Contract"
+  },
+  {
+    "id": "PH-006",
+    "clauseLabel": "Clause 5.2 - Limited Deliverables Assignment",
+    "clauseType": "ip.assignment.limited",
+    "clauseText": "Upon receipt of full payment, Contractor assigns to Client all copyright and ownership in the final customized deliverables specifically created for Client. Contractor retains all rights to general skills, pre-existing assets, and background libraries.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1159"],
+    "contractSource": "Graphic Design Agreement"
+  },
+  {
+    "id": "PH-007",
+    "clauseLabel": "Clause 4.3 - Payment Penalty and Forfeiture",
+    "clauseType": "payment.penalty",
+    "clauseText": "Should Contractor deliver any milestone more than twenty-four (24) hours past the estimated timeline, Client reserves the right to withhold all accrued payments and impose a daily penalty of twenty percent (20%) of the total project fee.",
+    "groundTruthRisk": "high",
+    "expectedProvisions": ["CIVIL 1229", "CIVIL 1169"],
+    "contractSource": "Content Writing Agreement"
+  },
+  {
+    "id": "PH-008",
+    "clauseLabel": "Clause 4.1 - Invoicing and Payment Terms",
+    "clauseType": "payment.terms",
+    "clauseText": "Contractor shall submit invoices bi-weekly. Client shall pay all undisputed invoice amounts within fifteen (15) calendar days from receipt of invoice via direct bank transfer.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1159"],
+    "contractSource": "Virtual Assistant Agreement"
+  },
+  {
+    "id": "PH-009",
+    "clauseLabel": "Clause 9.1 - Restrictive Covenant / Non-Compete",
+    "clauseType": "non.compete",
+    "clauseText": "During the term of this Agreement and for a period of five (5) years following its termination, Contractor shall not directly or indirectly provide services to, work for, or engage in any business competing with Client anywhere within the Philippines or Southeast Asia.",
+    "groundTruthRisk": "high",
+    "expectedProvisions": ["CIVIL 1306", "CIVIL 19"],
+    "contractSource": "E-commerce Operations Contractor Agreement"
+  },
+  {
+    "id": "PH-010",
+    "clauseLabel": "Clause 9.3 - Non-Solicitation",
+    "clauseType": "non.solicitation",
+    "clauseText": "For a period of twelve (12) months after termination of this Agreement, Contractor shall not actively solicit or induce any employee or active client of Client to terminate their relationship with Client.",
+    "groundTruthRisk": "medium",
+    "expectedProvisions": ["CIVIL 1306"],
+    "contractSource": "Agency Contractor Agreement"
+  },
+  {
+    "id": "PH-011",
+    "clauseLabel": "Clause 14.1 - Force Majeure",
+    "clauseType": "force.majeure",
+    "clauseText": "Neither party shall be liable for failure or delay in performing obligations due to events beyond reasonable control, including acts of God, typhoons, severe flooding, armed conflict, or nationwide telecommunication grid blackouts, provided prompt written notice is given.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1174"],
+    "contractSource": "Freelance IT Support Agreement"
+  },
+  {
+    "id": "PH-012",
+    "clauseLabel": "Clause 15.2 - Exclusive Foreign Venue",
+    "clauseType": "dispute.venue",
+    "clauseText": "Any legal dispute arising from this contract shall be submitted exclusively to the courts of Wilmington, Delaware, USA. Contractor explicitly waives the right to initiate legal proceedings in the Philippines.",
+    "groundTruthRisk": "high",
+    "expectedProvisions": ["CIVIL 1306"],
+    "contractSource": "Overseas Remote Freelance Agreement"
+  },
+  {
+    "id": "PH-013",
+    "clauseLabel": "Clause 16.1 - Severability",
+    "clauseType": "severability",
+    "clauseText": "If any provision of this Agreement is held to be invalid or unenforceable under Philippine law, such provision shall be severed and the remaining provisions shall continue in full force and effect.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1420"],
+    "contractSource": "Standard Contractor Template"
+  },
+  {
+    "id": "PH-014",
+    "clauseLabel": "Clause 17.1 - Entire Agreement",
+    "clauseType": "entire.agreement",
+    "clauseText": "This Agreement constitutes the entire understanding between the parties regarding the subject matter hereof and supersedes all prior oral or written discussions, representations, or understandings.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": ["CIVIL 1370"],
+    "contractSource": "Standard Contractor Template"
+  },
+  {
+    "id": "PH-015",
+    "clauseLabel": "Clause 3.4 - Miscellaneous Communications",
+    "clauseType": "other",
+    "clauseText": "The parties agree to communicate primary project updates via Slack during normal business hours Monday through Friday, 9:00 AM to 6:00 PM Philippine Standard Time.",
+    "groundTruthRisk": "low",
+    "expectedProvisions": [],
+    "contractSource": "Digital Marketing Contract"
+  }
+]
+

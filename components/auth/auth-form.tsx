@@ -8,19 +8,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
+import { Eye, EyeOff, Lock, Mail, Loader2, AlertCircle } from "lucide-react";
 
 function GoogleButton({ pending, onClick }: { pending: boolean; onClick: () => void }) {
   return (
-    <Button
+    <button
       type="button"
-      variant="outline"
-      size="hero"
-      className="w-full"
       disabled={pending}
       onClick={onClick}
+      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-white/[0.12] bg-white/[0.06] px-4 text-sm font-medium text-white transition-all hover:bg-white/[0.1] hover:border-white/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
     >
-      <svg viewBox="0 0 18 18" className="size-4" aria-hidden="true">
+      <svg viewBox="0 0 18 18" className="size-4.5 shrink-0" aria-hidden="true">
         <path
           fill="#4285F4"
           d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"
@@ -38,21 +36,11 @@ function GoogleButton({ pending, onClick }: { pending: boolean; onClick: () => v
           d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.42 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
         />
       </svg>
-      Continue with Google
-    </Button>
+      <span>Continue with Google</span>
+    </button>
   );
 }
 
-/**
- * Supabase Auth let this form submit via a server action (useActionState +
- * formAction) -- the whole formNoValidate fix lived there. Convex Auth's
- * client owns its own session/token storage, so sign-in has to happen
- * client-side through useAuthActions() instead; there's no formAction to
- * attach a second provider to, so the Google button is a plain onClick
- * rather than a second submit button sharing the form's required fields --
- * which incidentally means the earlier formNoValidate bug class can't
- * recur here, there's no shared native form validation to collide with.
- */
 export function AuthForm({
   mode,
   next = "/dashboard",
@@ -66,6 +54,7 @@ export function AuthForm({
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -73,6 +62,7 @@ export function AuthForm({
     e.preventDefault();
     setError(null);
     setPending(true);
+
     try {
       await signIn("password", {
         email,
@@ -81,14 +71,10 @@ export function AuthForm({
       });
       router.push(next);
     } catch {
-      // Convex Auth throws on bad credentials / duplicate account without a
-      // stable machine-readable code yet, same ambiguity Supabase's error
-      // had -- stay vague for the same reason the old comment gave: don't
-      // let the form be used to discover which addresses are registered.
       setError(
         isSignUp
-          ? "That account could not be created. The email may already be in use."
-          : "That email and password combination didn't work.",
+          ? "Unable to create account. This email may already be registered."
+          : "Invalid email or password combination. Please double-check your credentials."
       );
     } finally {
       setPending(false);
@@ -100,73 +86,117 @@ export function AuthForm({
     setPending(true);
     try {
       await signIn("google", { redirectTo: next });
-    } catch {
-      setError("Google sign-in didn't complete. Try again, or use your email and password.");
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error && err.message
+          ? err.message
+          : "Google sign-in is not configured yet. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex to enable Google OAuth. Please sign in with email and password.";
+      setError(
+        message.includes("AUTH_GOOGLE")
+          ? message
+          : "Google sign-in is not configured yet. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex to enable Google OAuth. Please use your email and password."
+      );
       setPending(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      {error ? (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {error && (
+        <Alert
+          variant="destructive"
+          className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-200 backdrop-blur-md"
+        >
+          <AlertCircle className="size-4 shrink-0 text-red-400" />
+          <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
         </Alert>
-      ) : null}
+      )}
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          autoComplete="email"
-          required
-          placeholder="you@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      {/* Email input */}
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="email" className="text-xs font-medium text-white/80">
+          Email address
+        </Label>
+        <div className="relative">
+          <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <Input
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            placeholder="Enter your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11 rounded-xl border border-white/[0.12] bg-white/[0.06] pl-10 text-sm text-white placeholder:text-white/35 transition-colors hover:border-white/20 focus-visible:border-[#b04000] focus-visible:ring-1 focus-visible:ring-[#b04000]"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-baseline justify-between gap-3">
-          <Label htmlFor="password">Password</Label>
-          {!isSignUp ? (
+      {/* Password input */}
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password" className="text-xs font-medium text-white/80">
+            Password
+          </Label>
+          {!isSignUp && (
             <Link
               href="/reset-password"
-              className="text-[0.8125rem] text-ink-2 underline-offset-4 hover:underline"
+              className="text-xs text-white/50 transition-colors hover:text-[#e8c6a8]"
             >
               Forgot password?
             </Link>
-          ) : null}
+          )}
         </div>
-        <Input
-          id="password"
-          type="password"
-          autoComplete={isSignUp ? "new-password" : "current-password"}
-          required
-          minLength={isSignUp ? 8 : undefined}
-          placeholder={isSignUp ? "At least 8 characters" : ""}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div className="relative">
+          <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            autoComplete={isSignUp ? "new-password" : "current-password"}
+            required
+            minLength={isSignUp ? 8 : undefined}
+            placeholder={isSignUp ? "At least 8 characters" : "Password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-11 rounded-xl border border-white/[0.12] bg-white/[0.06] pl-10 pr-10 text-sm text-white placeholder:text-white/35 transition-colors hover:border-white/20 focus-visible:border-[#b04000] focus-visible:ring-1 focus-visible:ring-[#b04000]"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 transition-colors hover:text-white"
+            tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+          </button>
+        </div>
       </div>
 
-      <Button type="submit" size="hero" className="w-full" disabled={pending}>
-        {pending
-          ? isSignUp
-            ? "Creating account…"
-            : "Signing in…"
-          : isSignUp
-            ? "Create account"
-            : "Sign in"}
+      {/* Submit button in ClauseGuard signature copper */}
+      <Button
+        type="submit"
+        disabled={pending}
+        className="mt-1 h-11 w-full cursor-pointer rounded-xl bg-[#b04000] text-sm font-semibold text-white shadow-lg shadow-[#b04000]/25 transition-all hover:bg-[#8a3300] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {pending ? (
+          <span className="inline-flex items-center gap-2">
+            <Loader2 className="size-4 animate-spin" />
+            <span>{isSignUp ? "Creating account…" : "Signing in…"}</span>
+          </span>
+        ) : (
+          <span>{isSignUp ? "Sign up" : "Sign in"}</span>
+        )}
       </Button>
 
-      <div className="flex items-center gap-3">
-        <Separator className="flex-1" />
-        <span className="text-[0.75rem] tracking-wide text-ink-3 uppercase">or</span>
-        <Separator className="flex-1" />
+      {/* Subtle Hairline Divider */}
+      <div className="relative my-1 flex items-center justify-center">
+        <div className="w-full border-t border-white/[0.08]" />
+        <span className="absolute bg-[#121316] px-3 font-mono text-[0.625rem] font-medium tracking-widest text-white/40 uppercase">
+          OR
+        </span>
       </div>
 
+      {/* Google OAuth button */}
       <GoogleButton pending={pending} onClick={handleGoogle} />
     </form>
   );

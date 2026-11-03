@@ -22,7 +22,7 @@ import {
   NoContentGeneratedError,
 } from "ai";
 import { ScoreResponseSchema, buildScorePrompt, PROMPT_VERSION, type StatutoryProvision } from "@/lib/prompts/score.v1";
-import { requireApiKeyFor, type ModelId } from "@/lib/models";
+import { requireApiKeyFor, resolveLanguageModel, type ModelId } from "@/lib/models";
 import type { ClauseTypeId } from "@/lib/pipeline/taxonomy";
 import type { GroundingArm, RiskLevel, ScoreOutcome } from "@/lib/types";
 
@@ -112,7 +112,7 @@ export async function scoreClause(input: ScoreClauseInput): Promise<ScoreClauseR
 
   try {
     const { object, usage } = await generateObject({
-      model: input.modelId,
+      model: resolveLanguageModel(input.modelId),
       schema: ScoreResponseSchema,
       prompt,
     });

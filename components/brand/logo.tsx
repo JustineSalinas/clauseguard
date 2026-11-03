@@ -3,50 +3,64 @@ import Link from "next/link";
 import { LogoBadge } from "@/components/brand/logo-badge";
 
 interface LogoMarkProps {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }
 
-const PX = { sm: 26, md: 30, lg: 36 };
+const PX = { sm: 26, md: 32, lg: 38, xl: 48 };
 
-/**
- * ClauseGuard brand mark for the nav bar and footer -- the only two places
- * this renders. The detailed shield/scale/book (shield-mark.tsx) needs
- * ~40px and up before it reads as a shape rather than texture; every real
- * usage here is smaller than that, so it uses the same solid copper badge
- * as the browser tab icon instead. One mark, used everywhere it actually
- * appears, rather than two different unfinished-looking attempts.
- */
 export function LogoMark({ size = "md", className = "" }: LogoMarkProps) {
   return <LogoBadge size={PX[size]} className={className} />;
 }
 
 interface LogoProps {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   href?: string;
   showWordmark?: boolean;
+  showTagline?: boolean;
   className?: string;
+  theme?: "light" | "dark";
 }
 
 const WORDMARK_TEXT = {
-  sm: "text-base",
-  md: "text-lg",
+  sm: "text-[15px]",
+  md: "text-[17px]",
   lg: "text-xl",
+  xl: "text-2xl",
 };
 
 export function Logo({
   size = "md",
   href = "/",
   showWordmark = true,
+  showTagline = false,
   className = "",
+  theme = "light",
 }: LogoProps) {
+  const isDark = theme === "dark";
+
   const content = (
     <div className={`inline-flex items-center gap-2.5 group select-none ${className}`}>
       <LogoMark size={size} />
       {showWordmark && (
-        <span className={`font-display ${WORDMARK_TEXT[size]} font-semibold tracking-[-0.01em] text-ink`}>
-          Clause<span className="text-brand">Guard</span>
-        </span>
+        <div className="flex flex-col">
+          <span
+            className={`font-display ${WORDMARK_TEXT[size]} font-bold tracking-tight leading-none ${
+              isDark ? "text-white" : "text-[#08090a]"
+            }`}
+          >
+            Clause<span className="text-[#b04000]">Guard</span>
+          </span>
+          {showTagline && (
+            <span
+              className={`text-[10px] uppercase font-mono tracking-[0.08em] mt-1 ${
+                isDark ? "text-white/50" : "text-[#868c98]"
+              }`}
+            >
+              Statutory Contract Review
+            </span>
+          )}
+        </div>
       )}
     </div>
   );

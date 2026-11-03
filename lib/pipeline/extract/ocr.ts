@@ -21,7 +21,7 @@
  */
 
 import { generateText } from "ai";
-import { OCR_MODEL, requireApiKeyFor } from "@/lib/models";
+import { OCR_MODEL, requireApiKeyFor, resolveLanguageModel } from "@/lib/models";
 import type { ExtractionResult } from "./index";
 
 export class OcrUnreadableError extends Error {
@@ -57,7 +57,7 @@ export async function extractImageOcr(
   requireApiKeyFor(OCR_MODEL);
 
   const { text } = await generateText({
-    model: OCR_MODEL,
+    model: resolveLanguageModel(OCR_MODEL),
     messages: [
       {
         role: "user",

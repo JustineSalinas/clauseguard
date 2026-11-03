@@ -22,21 +22,14 @@ const RISK_LABEL: Record<RiskLevel, string> = {
   low: "Looks standard",
 };
 
-/**
- * Deliberately not a shadcn Badge. The three verdicts differ in shape as well
- * as colour: filled for a confident call, hatched for one we will not make,
- * outlined for a clause we could not read.
- */
 export function VerdictBadge({ clause }: { clause: ScoredClause }) {
   const verdict = verdictFor(clause);
   const base =
-    "inline-flex items-center gap-1.5 rounded-sm px-2 py-1 font-body text-[0.6875rem] font-semibold tracking-[0.08em] uppercase";
+    "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 font-body text-[0.6875rem] font-semibold tracking-[0.06em] uppercase border";
 
   if (verdict === "unreadable") {
     return (
-      <span
-        className={`${base} border border-dashed border-rule-2 text-ink-3`}
-      >
+      <span className={`${base} border-dashed border-rule-2 bg-raised text-ink-3`}>
         Couldn&rsquo;t analyse
       </span>
     );
@@ -44,14 +37,8 @@ export function VerdictBadge({ clause }: { clause: ScoredClause }) {
 
   if (verdict === "review") {
     return (
-      <span
-        className={`${base} border border-caution/40 bg-caution-wash text-caution`}
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(-45deg, rgb(0 0 0 / 0.05) 0 4px, transparent 4px 8px)",
-        }}
-      >
-        Needs a person
+      <span className={`${base} border-amber-300 bg-amber-50 text-amber-800`}>
+        Needs human review
       </span>
     );
   }
@@ -59,10 +46,10 @@ export function VerdictBadge({ clause }: { clause: ScoredClause }) {
   const risk = clause.riskLevel ?? "low";
   const tone =
     risk === "high"
-      ? "bg-flag-wash text-flag"
+      ? "bg-red-50 text-red-700 border-red-200"
       : risk === "medium"
-        ? "bg-caution-wash text-caution"
-        : "bg-clear-wash text-clear";
+        ? "bg-amber-50 text-amber-800 border-amber-200"
+        : "bg-emerald-50 text-emerald-800 border-emerald-200";
 
   return <span className={`${base} ${tone}`}>{RISK_LABEL[risk]}</span>;
 }
@@ -86,7 +73,7 @@ export function ConfidenceNote({ clause }: { clause: ScoredClause }) {
   }
 
   return (
-    <p className="text-[0.8125rem] text-ink-3">Confidence {pct}%</p>
+    <p className="text-xs font-mono text-ink-3">Confidence {pct}%</p>
   );
 }
 

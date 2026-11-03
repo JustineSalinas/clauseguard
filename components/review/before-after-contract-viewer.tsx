@@ -15,40 +15,86 @@ function SummaryStat({
   n,
   label,
   tone,
+  active,
+  onClick,
 }: {
   n: number;
   label: string;
   tone: string;
+  active?: boolean;
+  onClick?: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-0.5 px-4 py-3">
-      <span className={`font-sans text-2xl font-semibold tabular-nums ${tone}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex flex-col gap-0.5 px-4 py-3 text-left transition-all cursor-pointer ${
+        active
+          ? "bg-[#fbeee4]/60 ring-2 ring-inset ring-[#b04000]"
+          : "hover:bg-[#fafbfc]"
+      }`}
+    >
+      <span className={`font-sans text-2xl font-bold tabular-nums ${tone}`}>
         {n}
       </span>
-      <span className="text-[0.75rem] leading-tight text-[#525866]">{label}</span>
-    </div>
+      <span className="text-[0.75rem] font-medium leading-tight text-[#525866]">{label}</span>
+    </button>
   );
 }
 
-function Summary({ clauses }: { clauses: ScoredClause[] }) {
+function Summary({
+  clauses,
+  activeFilter,
+  onSelectFilter,
+}: {
+  clauses: ScoredClause[];
+  activeFilter: string;
+  onSelectFilter: (filter: string) => void;
+}) {
   const s = documentSummary(clauses);
 
   return (
     <div className="rounded-[16px] border border-[#dddddd] bg-white shadow-[0_2px_4px_rgba(8,9,10,0.02)] overflow-hidden">
       <div className="grid grid-cols-2 divide-x divide-y divide-[#f2f2f2] sm:grid-cols-3 lg:grid-cols-5 lg:divide-y-0">
-        <SummaryStat n={s.high} label="High risk" tone="text-[#dc2626]" />
-        <SummaryStat n={s.medium} label="Worth checking" tone="text-[#d97706]" />
-        <SummaryStat n={s.low} label="Look standard" tone="text-[#0c8c5e]" />
-        <SummaryStat n={s.review} label="Need human review" tone="text-[#d97706]" />
+        <SummaryStat
+          n={s.high}
+          label="High risk"
+          tone="text-[#dc2626]"
+          active={activeFilter === "high"}
+          onClick={() => onSelectFilter(activeFilter === "high" ? "all" : "high")}
+        />
+        <SummaryStat
+          n={s.medium}
+          label="Worth checking"
+          tone="text-[#d97706]"
+          active={activeFilter === "medium"}
+          onClick={() => onSelectFilter(activeFilter === "medium" ? "all" : "medium")}
+        />
+        <SummaryStat
+          n={s.low}
+          label="Look standard"
+          tone="text-[#0c8c5e]"
+          active={activeFilter === "low"}
+          onClick={() => onSelectFilter(activeFilter === "low" ? "all" : "low")}
+        />
+        <SummaryStat
+          n={s.review}
+          label="Need human review"
+          tone="text-[#d97706]"
+          active={activeFilter === "review"}
+          onClick={() => onSelectFilter(activeFilter === "review" ? "all" : "review")}
+        />
         <SummaryStat
           n={s.unreadable}
           label="Unanalyzed / refusal"
           tone="text-[#868c98]"
+          active={activeFilter === "unreadable"}
+          onClick={() => onSelectFilter(activeFilter === "unreadable" ? "all" : "unreadable")}
         />
       </div>
 
       {s.incomplete ? (
-        <p className="border-t border-[#f2f2f2] bg-[#f8f9fa] px-5 py-3.5 text-xs sm:text-sm leading-relaxed text-[#525866]">
+        <p className="border-t border-[#f2f2f2] bg-[#f8f9fa] px-5 py-3 text-xs sm:text-sm leading-relaxed text-[#525866]">
           <span className="font-semibold text-[#08090a]">
             Incomplete verification threshold:
           </span>{" "}
@@ -100,11 +146,25 @@ function DocumentView({ clauses }: { clauses: ScoredClause[] }) {
 export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProps) {
   const [viewMode, setViewMode] = useState<"before" | "after">("after");
   const [afterSubTab, setAfterSubTab] = useState<"cards" | "document">("cards");
+  const [severityFilter, setSeverityFilter] = useState<
+    "all" | "high" | "medium" | "low" | "review" | "unreadable"
+  >("all");
   const [isScanning, setIsScanning] = useState(false);
   const [scanStage, setScanStage] = useState<number>(0);
 
   const inOrder = [...doc.clauses].sort((a, b) => a.ordinal - b.ordinal);
   const ranked = [...doc.clauses].sort(bySeverity);
+  const summary = documentSummary(doc.clauses);
+
+  const filteredClauses = ranked.filter((c) => {
+    if (severityFilter === "all") return true;
+    if (severityFilter === "high") return c.riskLevel === "high";
+    if (severityFilter === "medium") return c.riskLevel === "medium";
+    if (severityFilter === "low") return c.riskLevel === "low" && verdictFor(c) !== "unreadable";
+    if (severityFilter === "review") return verdictFor(c) === "review";
+    if (severityFilter === "unreadable") return verdictFor(c) === "unreadable";
+    return true;
+  });
 
   const runScanAnimation = () => {
     setViewMode("before");
@@ -276,13 +336,18 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
       {/* ---------------- AFTER STATE: Audited View ---------------- */}
       {viewMode === "after" && (
         <div className="space-y-6 animate-fadeIn">
-          {/* Summary Metric Bar */}
-          <Summary clauses={doc.clauses} />
+          {/* Summary Metric Bar with interactive filter clicks */}
+          <Summary
+            clauses={doc.clauses}
+            activeFilter={severityFilter}
+            onSelectFilter={(f) => setSeverityFilter(f as typeof severityFilter)}
+          />
 
           {/* Sub-Tabs: Severity Cards vs Whole Document Heat-Map */}
           <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
             <div className="flex items-center bg-[#f2f2f2] p-1 rounded-[4px] border border-[#dddddd]">
               <button
+                type="button"
                 onClick={() => setAfterSubTab("cards")}
                 className={`px-3 py-1.5 text-xs font-medium rounded-[3px] transition-colors cursor-pointer ${
                   afterSubTab === "cards"
@@ -293,6 +358,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                 By Severity ({ranked.length})
               </button>
               <button
+                type="button"
                 onClick={() => setAfterSubTab("document")}
                 className={`px-3 py-1.5 text-xs font-medium rounded-[3px] transition-colors cursor-pointer ${
                   afterSubTab === "document"
@@ -309,12 +375,93 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
             </p>
           </div>
 
+          {/* Severity Filter Pills (when in cards view) */}
+          {afterSubTab === "cards" && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1">
+              <span className="text-xs text-[#868c98] font-medium mr-1">Filter by:</span>
+              <button
+                type="button"
+                onClick={() => setSeverityFilter("all")}
+                className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                  severityFilter === "all"
+                    ? "bg-[#08090a] text-white"
+                    : "border border-rule bg-surface text-ink-2 hover:bg-raised"
+                }`}
+              >
+                All ({ranked.length})
+              </button>
+              {summary.high > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setSeverityFilter("high")}
+                  className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                    severityFilter === "high"
+                      ? "bg-red-600 text-white"
+                      : "border border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                  }`}
+                >
+                  High Risk ({summary.high})
+                </button>
+              )}
+              {summary.medium > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setSeverityFilter("medium")}
+                  className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                    severityFilter === "medium"
+                      ? "bg-amber-600 text-white"
+                      : "border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100"
+                  }`}
+                >
+                  Worth Checking ({summary.medium})
+                </button>
+              )}
+              {summary.review > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setSeverityFilter("review")}
+                  className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                    severityFilter === "review"
+                      ? "bg-amber-700 text-white"
+                      : "border border-amber-200 bg-amber-50/60 text-amber-900 hover:bg-amber-100"
+                  }`}
+                >
+                  Human Review ({summary.review})
+                </button>
+              )}
+              {summary.low > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setSeverityFilter("low")}
+                  className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
+                    severityFilter === "low"
+                      ? "bg-emerald-700 text-white"
+                      : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                  }`}
+                >
+                  Standard ({summary.low})
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Content Pane 1: Ranked by Severity */}
           {afterSubTab === "cards" && (
             <div className="grid gap-4">
-              {ranked.map((c) => (
-                <ClauseCard key={c.id} clause={c} />
-              ))}
+              {filteredClauses.length === 0 ? (
+                <div className="rounded-xl border border-rule bg-surface p-8 text-center">
+                  <p className="text-sm font-medium text-ink">No clauses match the selected filter.</p>
+                  <button
+                    type="button"
+                    onClick={() => setSeverityFilter("all")}
+                    className="mt-2 text-xs font-semibold text-[#b04000] hover:underline"
+                  >
+                    View all {ranked.length} clauses
+                  </button>
+                </div>
+              ) : (
+                filteredClauses.map((c) => <ClauseCard key={c.id} clause={c} />)
+              )}
             </div>
           )}
 

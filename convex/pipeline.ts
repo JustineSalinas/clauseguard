@@ -2,25 +2,19 @@
 
 /**
  * Pipeline orchestration: upload -> extract -> segment -> ground -> score.
- * The Convex-native replacement for lib/pipeline/run.ts, which did this
- * same job against Supabase.
+ * Convex-native replacement for the legacy pipeline.
  *
  * Reuses lib/pipeline/{extract,segment,score}'s existing pure functions
- * as-is -- they don't know or care what database is behind them, so there
- * was nothing to rewrite there. What changes is only the orchestration:
- * every `db.from(...)` call becomes `ctx.runMutation` / `ctx.runQuery`
- * against the functions in convex/documents.ts and convex/clauses.ts.
+ * as-is. Stage execution metrics are recorded to `stageRuns` for audit
+ * telemetry and research evaluation.
  *
- * "use node" at the top because extractPdf (pdfjs-dist) and scoreClause
- * (the `ai` SDK, real network calls to Gemini/Groq) both need the Node
- * runtime, not Convex's default V8 isolate -- same reason actions, not
- * mutations, are the right primitive here: this talks to the outside
- * world and is not deterministic.
+ * Scoring runs with controlled concurrency (chunks of 3-4 parallel LLM calls)
+ * to prevent sequential request timeouts while respecting provider rate limits.
  */
 
 import { v } from "convex/values";
 import { action, internalAction } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { api, internal } from "./_generated/api";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { createHash } from "node:crypto";
 
@@ -32,44 +26,84 @@ import { scoreClause } from "../lib/pipeline/score";
 import { SCORE_STAGE_DEFAULT_MODEL } from "../lib/models";
 import { PROMPT_VERSION } from "../lib/prompts/score.v1";
 
-// Same as the old FIRST_PASS_ARM in lib/pipeline/run.ts, now actually
-// "static" since the corpus and provision_mappings equivalent are seeded
-// (see corpus/README.md for how). "rag" still isn't wired -- no embedding
-// step has been built against the Convex vector index yet either.
-const GROUNDING_ARM = "static" as const;
+// Production default arm is "static", with "rag" and "none" fully supported.
+const DEFAULT_GROUNDING_ARM = "static" as const;
 
-// Public entry point: called from the upload form once the file is in
-// Convex storage and documents.create has returned an id. Kicks off the
-// internal action that does the real work -- scheduled rather than run
-// inline so the upload mutation returns immediately and the dashboard can
-// show "reading your contract" from the document's own status field
-// instead of blocking the HTTP response on a multi-stage pipeline run.
+// Number of clauses scored in parallel. 3 balances high throughput with rate limit safety.
+const SCORING_CONCURRENCY = 3;
+
+/**
+ * Public entry point: called from the upload form once the file is in
+ * Convex storage. Schedules background pipeline execution.
+ */
 export const start = action({
-  args: { documentId: v.id("documents") },
-  handler: async (ctx, { documentId }) => {
+  args: {
+    documentId: v.id("documents"),
+    groundingArm: v.optional(v.union(v.literal("none"), v.literal("static"), v.literal("rag"))),
+    modelId: v.optional(v.string()),
+  },
+  handler: async (ctx, { documentId, groundingArm, modelId }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not signed in.");
 
     const doc = await ctx.runQuery(internal.documents.getForPipeline, { id: documentId });
     if (!doc || doc.ownerId !== userId) throw new Error("Document not found.");
 
-    await ctx.scheduler.runAfter(0, internal.pipeline.run, { documentId });
+    await ctx.scheduler.runAfter(0, internal.pipeline.run, {
+      documentId,
+      groundingArm: groundingArm ?? DEFAULT_GROUNDING_ARM,
+      modelId: modelId ?? SCORE_STAGE_DEFAULT_MODEL,
+    });
+  },
+});
+
+/**
+ * Retry action: resets any failed or partial document and kicks off the pipeline anew.
+ */
+export const retry = action({
+  args: {
+    documentId: v.id("documents"),
+    groundingArm: v.optional(v.union(v.literal("none"), v.literal("static"), v.literal("rag"))),
+    modelId: v.optional(v.string()),
+  },
+  handler: async (ctx, { documentId, groundingArm, modelId }) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not signed in.");
+
+    const doc = await ctx.runQuery(internal.documents.getForPipeline, { id: documentId });
+    if (!doc || doc.ownerId !== userId) throw new Error("Document not found.");
+
+    await ctx.runMutation(internal.documents.resetForRetry, { id: documentId });
+
+    await ctx.scheduler.runAfter(0, internal.pipeline.run, {
+      documentId,
+      groundingArm: groundingArm ?? DEFAULT_GROUNDING_ARM,
+      modelId: modelId ?? SCORE_STAGE_DEFAULT_MODEL,
+    });
   },
 });
 
 export const run = internalAction({
-  args: { documentId: v.id("documents") },
-  handler: async (ctx, { documentId }) => {
+  args: {
+    documentId: v.id("documents"),
+    groundingArm: v.optional(v.union(v.literal("none"), v.literal("static"), v.literal("rag"))),
+    modelId: v.optional(v.string()),
+  },
+  handler: async (ctx, { documentId, groundingArm, modelId }) => {
+    const arm = groundingArm ?? DEFAULT_GROUNDING_ARM;
+    const activeModel = (modelId as typeof SCORE_STAGE_DEFAULT_MODEL) ?? SCORE_STAGE_DEFAULT_MODEL;
+
     const doc = await ctx.runQuery(internal.documents.getForPipeline, { id: documentId });
     if (!doc) return;
 
-    // ---------------------------------------------------------- extract --
+    // ---------------------------------------------------------- EXTRACT --
+    const extractStart = Date.now();
     const claimed = await ctx.runMutation(internal.documents.advanceStatus, {
       id: documentId,
       from: ["uploaded"],
       to: "extracting",
     });
-    if (!claimed) return; // another run already has it
+    if (!claimed) return; // another worker already claimed this document
 
     const blob = await ctx.storage.get(doc.storagePath as never);
     if (!blob) {
@@ -77,6 +111,14 @@ export const run = internalAction({
         id: documentId,
         stage: "extract",
         reason: "The uploaded file could not be read back from storage.",
+      });
+      await ctx.runMutation(internal.stageRuns.insert, {
+        documentId,
+        stage: "extract",
+        outcome: "failed",
+        startedAt: extractStart,
+        finishedAt: Date.now(),
+        latencyMs: Date.now() - extractStart,
       });
       return;
     }
@@ -86,50 +128,39 @@ export const run = internalAction({
 
     let extraction;
     try {
-      // A photographed/scanned image never has a PDF text layer to read, so
-      // it goes straight to vision OCR -- never through extractPdf, which
-      // would just throw NoTextDetectedError on image bytes anyway. A real
-      // PDF always goes through the text-layer path; see ocr.ts's header
-      // for why that split is never optional.
       extraction = isImage ? await extractImageOcr(bytes, blob.type) : await extractPdf(bytes);
     } catch (error) {
-      if (error instanceof EncryptedDocumentError) {
-        await ctx.runMutation(internal.documents.failStage, {
-          id: documentId,
-          stage: "extract",
-          reason: "This PDF is password protected. Remove the password and upload it again.",
-        });
-      } else if (error instanceof NoTextDetectedError) {
-        await ctx.runMutation(internal.documents.failStage, {
-          id: documentId,
-          stage: "extract",
-          // A scanned/image-only PDF (as opposed to a plain photo upload,
-          // which goes through OCR successfully above) still has no OCR
-          // fallback -- rasterizing PDF pages to images isn't wired up yet.
-          // Say that plainly rather than implying a photo wouldn't work.
-          reason: "No readable text found. This PDF looks like a scan with no text layer -- try uploading it as a photo (JPG/PNG) instead, or a PDF exported from a document.",
-        });
-      } else if (error instanceof OcrUnreadableError) {
-        await ctx.runMutation(internal.documents.failStage, {
-          id: documentId,
-          stage: "extract",
-          reason: error.message,
-        });
-      } else {
-        await ctx.runMutation(internal.documents.failStage, {
-          id: documentId,
-          stage: "extract",
-          reason: "This file could not be read.",
-        });
-        console.error(`[extract] ${documentId} unrecognized failure`, error);
-      }
+      const reason =
+        error instanceof EncryptedDocumentError
+          ? "This PDF is password protected. Remove the password and upload it again."
+          : error instanceof NoTextDetectedError
+          ? "No readable text found. This PDF looks like an unlayered scan. Try uploading it as a photo (JPG/PNG) instead."
+          : error instanceof OcrUnreadableError
+          ? error.message
+          : "This file could not be read.";
+
+      await ctx.runMutation(internal.documents.failStage, {
+        id: documentId,
+        stage: "extract",
+        reason,
+      });
+      await ctx.runMutation(internal.stageRuns.insert, {
+        documentId,
+        stage: "extract",
+        outcome: "failed",
+        startedAt: extractStart,
+        finishedAt: Date.now(),
+        latencyMs: Date.now() - extractStart,
+      });
+      console.error(`[extract] ${documentId} failure:`, error);
       return;
     }
 
+    const extractEnd = Date.now();
     const extractionId = await ctx.runMutation(internal.extractions.insert, {
       documentId,
       ocrEngine: extraction.engine,
-      settings: { grounding_arm: GROUNDING_ARM },
+      settings: { grounding_arm: arm },
       pageSizes: extraction.pageSizes,
       suppressedTokenCount: extraction.suppressedTokenCount,
     });
@@ -144,11 +175,22 @@ export const run = internalAction({
       to: "extracted",
     });
 
+    // Record extract stage metrics
+    await ctx.runMutation(internal.stageRuns.insert, {
+      documentId,
+      stage: "extract",
+      outcome: "ok",
+      startedAt: extractStart,
+      finishedAt: extractEnd,
+      latencyMs: extractEnd - extractStart,
+    });
+
     if (extraction.suppressedTokenCount > 0) {
       console.warn(`[extract] ${documentId} suppressed ${extraction.suppressedTokenCount} hidden token(s)`);
     }
 
-    // ---------------------------------------------------------- segment --
+    // ---------------------------------------------------------- SEGMENT --
+    const segmentStart = Date.now();
     await ctx.runMutation(internal.documents.advanceStatus, {
       id: documentId,
       from: ["extracted"],
@@ -163,6 +205,19 @@ export const run = internalAction({
         id: documentId,
         from: ["segmenting"],
         to: "segmented",
+      });
+      await ctx.runMutation(internal.stageRuns.insert, {
+        documentId,
+        stage: "segment",
+        outcome: "ok",
+        startedAt: segmentStart,
+        finishedAt: Date.now(),
+        latencyMs: Date.now() - segmentStart,
+      });
+      await ctx.runMutation(internal.documents.advanceStatus, {
+        id: documentId,
+        from: ["segmented"],
+        to: "complete",
       });
       return;
     }
@@ -182,13 +237,25 @@ export const run = internalAction({
       })),
     });
 
+    const segmentEnd = Date.now();
     await ctx.runMutation(internal.documents.advanceStatus, {
       id: documentId,
       from: ["segmenting"],
       to: "segmented",
     });
 
-    // ------------------------------------------------------------ score --
+    // Record segment stage metrics
+    await ctx.runMutation(internal.stageRuns.insert, {
+      documentId,
+      stage: "segment",
+      outcome: "ok",
+      startedAt: segmentStart,
+      finishedAt: segmentEnd,
+      latencyMs: segmentEnd - segmentStart,
+    });
+
+    // ------------------------------------------------------------ SCORE --
+    const scoreStart = Date.now();
     await ctx.runMutation(internal.documents.advanceStatus, {
       id: documentId,
       from: ["segmented"],
@@ -197,51 +264,99 @@ export const run = internalAction({
 
     const runId = await ctx.runMutation(internal.scoringRuns.insert, {
       label: `pipeline:${documentId.slice(0, 8)}`,
-      modelId: SCORE_STAGE_DEFAULT_MODEL,
+      modelId: activeModel,
       promptVersion: PROMPT_VERSION,
-      groundingArm: GROUNDING_ARM,
+      groundingArm: arm,
       isProduction: true,
     });
 
     let scoredCount = 0;
     let failedCount = 0;
+    let totalTokensIn = 0;
+    let totalTokensOut = 0;
 
     try {
-      for (let i = 0; i < segmented.length; i++) {
-        const clause = segmented[i];
-        const clauseId = clauseIds[i];
+      // Controlled concurrency: score in parallel batches of SCORING_CONCURRENCY
+      for (let i = 0; i < segmented.length; i += SCORING_CONCURRENCY) {
+        const chunk = segmented.slice(i, i + SCORING_CONCURRENCY);
 
-        const provisions = await ctx.runQuery(internal.corpus.listForClauseType, {
-          clauseType: clause.suggestedType ?? undefined,
-        });
+        await Promise.all(
+          chunk.map(async (clause, chunkOffset) => {
+            const index = i + chunkOffset;
+            const clauseId = clauseIds[index];
 
-        const result = await scoreClause({
-          modelId: SCORE_STAGE_DEFAULT_MODEL,
-          clauseText: clause.text,
-          clauseLabel: clause.label,
-          suggestedType: clause.suggestedType,
-          provisions,
-          groundingArm: GROUNDING_ARM,
-        });
+            let provisions: Array<{ code: "CIVIL" | "LABOR"; article: string; text: string }> = [];
 
-        await ctx.runMutation(internal.clauses.insertScore, {
-          clauseId,
-          runId,
-          riskLevel: result.riskLevel ?? undefined,
-          confidence: result.confidence ?? undefined,
-          rationale: result.rationale ?? undefined,
-          deviation: result.deviation ?? undefined,
-          provisionsReliedOn: result.provisionsReliedOn,
-          injectionSuspected: result.injectionSuspected,
-          outcome: result.outcome,
-          tokensIn: result.tokensIn ?? undefined,
-          tokensOut: result.tokensOut ?? undefined,
-          latencyMs: result.latencyMs,
-          retrievalHit: provisions.length > 0,
-        });
+            try {
+              if (arm === "rag") {
+                const matches: any[] = await ctx.runAction(api.corpus.searchProvisions, {
+                  text: clause.text,
+                  limit: 2,
+                  minSimilarity: 0.55,
+                });
 
-        if (result.outcome === "ok") scoredCount++;
-        else failedCount++;
+                for (const m of matches) {
+                  await ctx.runMutation(internal.clauses.insertRetrieval, {
+                    clauseId,
+                    runId,
+                    provisionId: m.provisionId,
+                    rank: m.rank,
+                    similarity: m.similarity,
+                  });
+                }
+
+                provisions = matches.map((m: any) => ({
+                  code: m.code,
+                  article: m.article,
+                  text: m.text,
+                }));
+              } else if (arm === "static") {
+                provisions = await ctx.runQuery(api.corpus.listForClauseType, {
+                  clauseType: clause.suggestedType ?? undefined,
+                });
+              }
+            } catch (groundErr) {
+              console.warn(`[ground] fallback to empty provisions for clause ${index}:`, groundErr);
+              provisions = [];
+            }
+
+            try {
+              const result = await scoreClause({
+                modelId: activeModel,
+                clauseText: clause.text,
+                clauseLabel: clause.label,
+                suggestedType: clause.suggestedType,
+                provisions,
+                groundingArm: arm,
+              });
+
+              await ctx.runMutation(internal.clauses.insertScore, {
+                clauseId,
+                runId,
+                riskLevel: result.riskLevel ?? undefined,
+                confidence: result.confidence ?? undefined,
+                rationale: result.rationale ?? undefined,
+                deviation: result.deviation ?? undefined,
+                provisionsReliedOn: result.provisionsReliedOn,
+                injectionSuspected: result.injectionSuspected,
+                outcome: result.outcome,
+                tokensIn: result.tokensIn ?? undefined,
+                tokensOut: result.tokensOut ?? undefined,
+                latencyMs: result.latencyMs,
+                retrievalHit: provisions.length > 0,
+              });
+
+              if (result.tokensIn) totalTokensIn += result.tokensIn;
+              if (result.tokensOut) totalTokensOut += result.tokensOut;
+
+              if (result.outcome === "ok") scoredCount++;
+              else failedCount++;
+            } catch (clauseScoreErr) {
+              console.error(`[score] clause ${index} error:`, clauseScoreErr);
+              failedCount++;
+            }
+          }),
+        );
       }
     } catch (error) {
       await ctx.runMutation(internal.documents.failStage, {
@@ -249,15 +364,41 @@ export const run = internalAction({
         stage: "score",
         reason: "Scoring could not complete.",
       });
-      console.error(`[score] ${documentId} structural failure`, error);
+      await ctx.runMutation(internal.stageRuns.insert, {
+        documentId,
+        stage: "score",
+        modelId: activeModel,
+        promptVersion: PROMPT_VERSION,
+        outcome: "failed",
+        startedAt: scoreStart,
+        finishedAt: Date.now(),
+        latencyMs: Date.now() - scoreStart,
+      });
+      console.error(`[score] ${documentId} structural failure:`, error);
       return;
     }
 
+    const scoreEnd = Date.now();
     const finalStatus = failedCount === 0 ? "complete" : scoredCount > 0 ? "partial" : "failed";
+
     await ctx.runMutation(internal.documents.advanceStatus, {
       id: documentId,
       from: ["scoring"],
       to: finalStatus,
+    });
+
+    // Record score stage telemetry
+    await ctx.runMutation(internal.stageRuns.insert, {
+      documentId,
+      stage: "score",
+      modelId: activeModel,
+      promptVersion: PROMPT_VERSION,
+      tokensIn: totalTokensIn > 0 ? totalTokensIn : undefined,
+      tokensOut: totalTokensOut > 0 ? totalTokensOut : undefined,
+      latencyMs: scoreEnd - scoreStart,
+      outcome: finalStatus === "complete" ? "ok" : finalStatus === "partial" ? "partial" : "failed",
+      startedAt: scoreStart,
+      finishedAt: scoreEnd,
     });
   },
 });

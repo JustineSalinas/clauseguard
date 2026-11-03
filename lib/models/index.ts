@@ -11,6 +11,10 @@
  * -- interchangeable at the config layer.
  */
 
+import { google } from "@ai-sdk/google";
+import { groq } from "@ai-sdk/groq";
+import type { LanguageModel } from "ai";
+
 export type ModelId =
   | "google/gemini-2.0-flash"
   | "google/gemini-2.0-flash-lite"
@@ -64,12 +68,7 @@ export const SCORE_STAGE_CASCADE_MODEL: ModelId = "google/gemini-2.0-flash";
 /**
  * Vision OCR fallback for a photographed or otherwise image-only upload --
  * never for a normal PDF, which always goes through the text-layer path in
- * lib/pipeline/extract instead (see that module's header comment for why:
- * the prompt-injection research needs to see the real text layer, which a
- * rasterizing OCR cannot). Flash, not Flash-Lite: legibility of a phone
- * photo under bad lighting is exactly where the cheaper model's accuracy
- * gap shows up, and this call happens once per document, not once per
- * clause, so the cost difference is negligible.
+ * lib/pipeline/extract instead.
  */
 export const OCR_MODEL: ModelId = "google/gemini-2.0-flash";
 
@@ -82,4 +81,18 @@ export function requireApiKeyFor(modelId: ModelId): string {
     );
   }
   return key;
+}
+
+export function resolveLanguageModel(modelId: ModelId): LanguageModel {
+  requireApiKeyFor(modelId);
+  switch (modelId) {
+    case "google/gemini-2.0-flash":
+      return google("gemini-2.0-flash") as unknown as LanguageModel;
+    case "google/gemini-2.0-flash-lite":
+      return google("gemini-2.0-flash-lite") as unknown as LanguageModel;
+    case "groq/llama-3.3-70b-versatile":
+      return groq("llama-3.3-70b-versatile") as unknown as LanguageModel;
+    default:
+      return google("gemini-2.0-flash-lite") as unknown as LanguageModel;
+  }
 }

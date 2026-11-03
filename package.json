@@ -11,9 +11,12 @@
     "test:unit": "node --import ./tests/setup/register-aliases.mjs --test \"tests/unit/**/*.test.mjs\"",
     "test": "npm run test:unit && npm run test:security",
     "seed:corpus": "node --env-file-if-exists=.env.local scripts/seed-corpus.mjs",
-    "seed:corpus:mappings": "node --env-file-if-exists=.env.local scripts/seed-provision-mappings.mjs"
+    "seed:corpus:mappings": "node --env-file-if-exists=.env.local scripts/seed-provision-mappings.mjs",
+    "eval": "node --env-file-if-exists=.env.local --import ./tests/setup/register-aliases.mjs eval/harness/run-study.mjs"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.111",
+    "@ai-sdk/groq": "^4.0.76",
     "@auth/core": "^0.41.3",
     "@convex-dev/auth": "^0.0.96",
     "@supabase/ssr": "0.12.5",

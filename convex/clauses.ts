@@ -43,17 +43,46 @@ export const listScoresForDocument = query({
       .withIndex("by_document_ordinal", (q) => q.eq("documentId", documentId))
       .collect();
 
-    const scores = await Promise.all(
-      clauses.map((c: any) =>
-        ctx.db
+    const clauseData = await Promise.all(
+      clauses.map(async (c: any) => {
+        const score = await ctx.db
           .query("clauseScores")
           .withIndex("by_clause", (q: any) => q.eq("clauseId", c._id))
           .order("desc")
-          .first(),
-      ),
+          .first();
+
+        let provisions: Array<{ code: "CIVIL" | "LABOR"; article: string; heading?: string; text: string }> = [];
+
+        if (score) {
+          // 1. Check if there are RAG retrievals for this clause & run
+          const retrievals = await ctx.db
+            .query("clauseRetrievals")
+            .withIndex("by_clause_run_rank", (q: any) => q.eq("clauseId", c._id).eq("runId", score.runId))
+            .collect();
+
+          if (retrievals.length > 0) {
+            const fetched = await Promise.all(retrievals.map((r: any) => ctx.db.get(r.provisionId)));
+            provisions = fetched
+              .filter((p: any) => p !== null)
+              .map((p: any) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
+          } else if (c.clauseType && c.clauseType !== "other") {
+            // 2. Static mapping fallback
+            const mappings = await ctx.db
+              .query("provisionMappings")
+              .withIndex("by_type_rank", (q: any) => q.eq("clauseType", c.clauseType))
+              .collect();
+            const fetched = await Promise.all(mappings.map((m: any) => ctx.db.get(m.provisionId)));
+            provisions = fetched
+              .filter((p: any) => p !== null)
+              .map((p: any) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
+          }
+        }
+
+        return { clause: c, score: score ?? null, provisions };
+      }),
     );
 
-    return clauses.map((clause: any, i: number) => ({ clause, score: scores[i] ?? null }));
+    return clauseData;
   },
 });
 
@@ -120,6 +149,22 @@ export const insertScore = internalMutation({
     return await ctx.db.insert("clauseScores", {
       ...args,
       outcome: args.outcome as never,
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const insertRetrieval = internalMutation({
+  args: {
+    clauseId: v.id("clauses"),
+    runId: v.id("scoringRuns"),
+    provisionId: v.id("provisions"),
+    rank: v.number(),
+    similarity: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.insert("clauseRetrievals", {
+      ...args,
       createdAt: Date.now(),
     });
   },
