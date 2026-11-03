@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, AlertCircle, Mail, Lock, KeyRound } from "lucide-react";
@@ -24,7 +23,7 @@ export function RequestResetForm() {
       setSent(true);
     } catch {
       setError(
-        "Password reset email delivery is not configured yet. Please contact support or your capstone administrator."
+        "Password reset email delivery is not configured yet. Please contact support or your administrator."
       );
     } finally {
       setPending(false);
@@ -34,8 +33,8 @@ export function RequestResetForm() {
   if (sent) {
     return (
       <div className="flex flex-col gap-4">
-        <Alert className="border-[#e8c6a8]/40 bg-[#fbeee4]/10 p-3 text-white backdrop-blur-md">
-          <AlertDescription className="text-xs text-[#e8c6a8]">
+        <Alert className="border-[#e8c6a8] bg-[#fbeee4] p-3 text-[#b04000]">
+          <AlertDescription className="text-xs text-[#8a3300]">
             If that email has an account, a verification code is on its way. Enter it below along with your new password.
           </AlertDescription>
         </Alert>
@@ -49,19 +48,19 @@ export function RequestResetForm() {
       {error && (
         <Alert
           variant="destructive"
-          className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-200 backdrop-blur-md"
+          className="rounded-xl border border-red-200 bg-red-50 p-3 text-red-900"
         >
-          <AlertCircle className="size-4 shrink-0 text-red-400" />
+          <AlertCircle className="size-4 shrink-0 text-red-600" />
           <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
         </Alert>
       )}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="email" className="text-xs font-medium text-white/80">
+        <Label htmlFor="email" className="text-xs font-semibold text-[#374151]">
           Email address
         </Label>
         <div className="relative">
-          <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
           <input
             id="email"
             type="email"
@@ -70,7 +69,7 @@ export function RequestResetForm() {
             placeholder="Enter your email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+            className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-3.5 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
           />
         </div>
       </div>
@@ -78,7 +77,7 @@ export function RequestResetForm() {
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-[#b04000] via-[#c84805] to-[#dc580f] px-4 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(176,64,0,0.35)] transition-all hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-1 flex h-10.5 w-full cursor-pointer items-center justify-center rounded-lg bg-[#b04000] px-4 text-sm font-semibold text-white shadow-2xs transition-all hover:bg-[#8a3300] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {pending ? (
           <span className="inline-flex items-center gap-2">
@@ -86,7 +85,7 @@ export function RequestResetForm() {
             <span>Sending code…</span>
           </span>
         ) : (
-          <span>Send reset code</span>
+          <span>Send Reset Code</span>
         )}
       </button>
     </form>
@@ -126,20 +125,20 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
       {error && (
         <Alert
           variant="destructive"
-          className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-200 backdrop-blur-md"
+          className="rounded-xl border border-red-200 bg-red-50 p-3 text-red-900"
         >
-          <AlertCircle className="size-4 shrink-0 text-red-400" />
+          <AlertCircle className="size-4 shrink-0 text-red-600" />
           <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
         </Alert>
       )}
 
       {!initialEmail && (
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="reset-email" className="text-xs font-medium text-white/80">
+          <Label htmlFor="reset-email" className="text-xs font-semibold text-[#374151]">
             Email address
           </Label>
           <div className="relative">
-            <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+            <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
             <input
               id="reset-email"
               type="email"
@@ -148,18 +147,18 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+              className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-3.5 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
             />
           </div>
         </div>
       )}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="code" className="text-xs font-medium text-white/80">
+        <Label htmlFor="code" className="text-xs font-semibold text-[#374151]">
           Verification code
         </Label>
         <div className="relative">
-          <KeyRound className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <KeyRound className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
           <input
             id="code"
             type="text"
@@ -169,17 +168,17 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
             placeholder="Code from your email"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+            className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-3.5 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="password" className="text-xs font-medium text-white/80">
+        <Label htmlFor="password" className="text-xs font-semibold text-[#374151]">
           New password
         </Label>
         <div className="relative">
-          <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+          <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
           <input
             id="password"
             type="password"
@@ -189,7 +188,7 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
             placeholder="At least 8 characters"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+            className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-3.5 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
           />
         </div>
       </div>
@@ -197,7 +196,7 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-[#b04000] via-[#c84805] to-[#dc580f] px-4 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(176,64,0,0.35)] transition-all hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-1 flex h-10.5 w-full cursor-pointer items-center justify-center rounded-lg bg-[#b04000] px-4 text-sm font-semibold text-white shadow-2xs transition-all hover:bg-[#8a3300] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {pending ? (
           <span className="inline-flex items-center gap-2">
@@ -205,7 +204,7 @@ export function UpdatePasswordForm({ email: initialEmail }: { email?: string }) 
             <span>Saving new password…</span>
           </span>
         ) : (
-          <span>Save new password</span>
+          <span>Save New Password</span>
         )}
       </button>
     </form>

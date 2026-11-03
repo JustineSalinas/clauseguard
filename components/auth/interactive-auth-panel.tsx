@@ -3,10 +3,11 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAuthActions } from "@convex-dev/auth/react";
-import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle, ArrowRight, ShieldCheck, FileSearch } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Logo } from "@/components/brand/logo";
 
 interface InteractiveAuthPanelProps {
   initialMode?: "signin" | "signup";
@@ -42,7 +43,13 @@ export function InteractiveAuthPanel({
     setError(null);
     setMode(newMode);
     startTransition(() => {
-      window.history.replaceState(null, "", newMode === "signup" ? `/signup${next !== "/dashboard" ? `?next=${encodeURIComponent(next)}` : ""}` : `/login${next !== "/dashboard" ? `?next=${encodeURIComponent(next)}` : ""}`);
+      window.history.replaceState(
+        null,
+        "",
+        newMode === "signup"
+          ? `/signup${next !== "/dashboard" ? `?next=${encodeURIComponent(next)}` : ""}`
+          : `/login${next !== "/dashboard" ? `?next=${encodeURIComponent(next)}` : ""}`
+      );
     });
   }
 
@@ -99,34 +106,39 @@ export function InteractiveAuthPanel({
   }
 
   return (
-    <div className="flex min-h-full w-full flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 xl:px-18">
-      <div className="mx-auto w-full max-w-[430px]">
-        {/* Welcome Header */}
+    <div className="flex min-h-full w-full flex-col justify-center px-6 py-12 sm:px-10 lg:px-14 xl:px-16 bg-white">
+      <div className="mx-auto w-full max-w-[420px]">
+        {/* Mobile-only logo */}
+        <div className="mb-6 lg:hidden">
+          <Logo size="md" theme="light" />
+        </div>
+
+        {/* Header */}
         <div className="mb-6">
-          <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-            {isSignUp ? "Create Your Account" : "Welcome Back"}
+          <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#08090a]">
+            {isSignUp ? "Create your account" : "Sign in to ClauseGuard"}
           </h1>
-          <p className="mt-1.5 text-sm text-white/55">
+          <p className="mt-1.5 text-sm text-[#525866]">
             {isSignUp
-              ? "Start reviewing contracts with statutory leverage in seconds."
-              : "Ready to continue defending your agreements?"}
+              ? "Start reviewing contracts against Philippine statutory law."
+              : "Welcome back. Enter your credentials to access your workspace."}
           </p>
         </div>
 
-        {/* Tab Switcher - Seamless underline indicator matching user's inspiration image */}
-        <div className="relative mb-8 flex border-b border-white/[0.08]">
+        {/* Tab Switcher - Minimalist Underline */}
+        <div className="relative mb-6 flex border-b border-[#e5e7eb]">
           <button
             type="button"
             onClick={() => switchMode("signin")}
             className={`relative pb-3 text-sm font-semibold transition-colors cursor-pointer mr-8 ${
-              !isSignUp ? "text-white" : "text-white/40 hover:text-white/70"
+              !isSignUp ? "text-[#08090a]" : "text-[#868c98] hover:text-[#525866]"
             }`}
           >
-            <span>Login</span>
+            <span>Sign In</span>
             {!isSignUp && (
               <motion.div
-                layoutId="authTabUnderline"
-                className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#b04000] to-[#f97316]"
+                layoutId="authTabUnderlineLight"
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#b04000]"
                 transition={{ type: "spring", stiffness: 450, damping: 35 }}
               />
             )}
@@ -136,14 +148,14 @@ export function InteractiveAuthPanel({
             type="button"
             onClick={() => switchMode("signup")}
             className={`relative pb-3 text-sm font-semibold transition-colors cursor-pointer ${
-              isSignUp ? "text-white" : "text-white/40 hover:text-white/70"
+              isSignUp ? "text-[#08090a]" : "text-[#868c98] hover:text-[#525866]"
             }`}
           >
-            <span>Sign Up</span>
+            <span>Create Account</span>
             {isSignUp && (
               <motion.div
-                layoutId="authTabUnderline"
-                className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#b04000] to-[#f97316]"
+                layoutId="authTabUnderlineLight"
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#b04000]"
                 transition={{ type: "spring", stiffness: 450, damping: 35 }}
               />
             )}
@@ -154,52 +166,52 @@ export function InteractiveAuthPanel({
         {error && (
           <Alert
             variant="destructive"
-            className="mb-5 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-red-200 backdrop-blur-md"
+            className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-red-900"
           >
-            <AlertCircle className="size-4 shrink-0 text-red-400" />
+            <AlertCircle className="size-4 shrink-0 text-red-600" />
             <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
           </Alert>
         )}
 
-        {/* Form Body */}
+        {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Email field with Mail leading icon */}
+          {/* Email field */}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="auth-email" className="text-xs font-medium text-white/75">
+            <label htmlFor="auth-email" className="text-xs font-semibold text-[#374151]">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+              <Mail className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
               <input
                 id="auth-email"
                 type="email"
                 autoComplete="email"
                 required
-                placeholder="hero@example.com"
+                placeholder="you@company.ph"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+                className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-3.5 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
               />
             </div>
           </div>
 
-          {/* Password field with Lock leading icon and Eye trailing toggle */}
+          {/* Password field */}
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="auth-password" className="text-xs font-medium text-white/75">
+              <label htmlFor="auth-password" className="text-xs font-semibold text-[#374151]">
                 Password
               </label>
               {!isSignUp && (
                 <Link
                   href="/reset-password"
-                  className="text-xs text-[#e8c6a8]/80 transition-colors hover:text-[#f97316] hover:underline"
+                  className="text-xs font-medium text-[#b04000] transition-colors hover:underline"
                 >
                   Forgot password?
                 </Link>
               )}
             </div>
             <div className="relative">
-              <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+              <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
               <input
                 id="auth-password"
                 type={showPassword ? "text" : "password"}
@@ -209,12 +221,12 @@ export function InteractiveAuthPanel({
                 placeholder={isSignUp ? "At least 8 characters" : "••••••••"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-10 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+                className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-10 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/40 transition-colors hover:text-white"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#868c98] transition-colors hover:text-[#08090a]"
                 tabIndex={-1}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
@@ -223,19 +235,18 @@ export function InteractiveAuthPanel({
             </div>
           </div>
 
-          {/* Confirm Password field (Sign Up mode only) */}
+          {/* Confirm Password (Sign Up mode only) */}
           {isSignUp && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
               className="flex flex-col gap-1.5"
             >
-              <label htmlFor="auth-confirm-password" className="text-xs font-medium text-white/75">
+              <label htmlFor="auth-confirm-password" className="text-xs font-semibold text-[#374151]">
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/40" />
+                <Lock className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#868c98]" />
                 <input
                   id="auth-confirm-password"
                   type={showPassword ? "text" : "password"}
@@ -244,30 +255,30 @@ export function InteractiveAuthPanel({
                   placeholder="Repeat your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="h-11 w-full rounded-xl border border-white/[0.12] bg-[#12141a]/85 pl-10 pr-3.5 text-sm text-white placeholder:text-white/30 transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-white/20"
+                  className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white pl-10 pr-3.5 text-sm text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
                 />
               </div>
             </motion.div>
           )}
 
-          {/* Keep me logged in checkbox */}
-          <div className="mt-1 flex items-center justify-between">
-            <label className="flex items-center gap-2.5 text-xs text-white/60 cursor-pointer select-none">
+          {/* Remember me checkbox */}
+          <div className="mt-0.5 flex items-center justify-between">
+            <label className="flex items-center gap-2 text-xs text-[#525866] cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="size-4 rounded border-white/20 bg-white/10 text-[#b04000] accent-[#b04000] focus:ring-0"
+                className="size-4 rounded border-[#d1d5db] text-[#b04000] accent-[#b04000] focus:ring-0"
               />
-              <span>Keep me logged in to ClauseGuard</span>
+              <span>Keep me signed in</span>
             </label>
           </div>
 
-          {/* Primary Action Button */}
+          {/* Primary Submit Button */}
           <button
             type="submit"
             disabled={pending}
-            className="mt-2 flex h-11 w-full cursor-pointer items-center justify-center rounded-xl bg-gradient-to-r from-[#b04000] via-[#c84805] to-[#dc580f] px-4 text-sm font-semibold text-white shadow-[0_4px_20px_rgba(176,64,0,0.35)] transition-all hover:brightness-110 hover:shadow-[0_6px_28px_rgba(176,64,0,0.45)] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="mt-1 flex h-10.5 w-full cursor-pointer items-center justify-center rounded-lg bg-[#b04000] px-4 text-sm font-semibold text-white shadow-2xs transition-all hover:bg-[#8a3300] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {pending ? (
               <span className="inline-flex items-center gap-2">
@@ -275,67 +286,55 @@ export function InteractiveAuthPanel({
                 <span>{isSignUp ? "Creating account…" : "Signing in…"}</span>
               </span>
             ) : (
-              <span>{isSignUp ? "Create Account" : "Sign In to Workspace"}</span>
+              <span>{isSignUp ? "Create Free Account" : "Sign In"}</span>
             )}
           </button>
 
           {/* Divider */}
           <div className="relative my-2 flex items-center justify-center">
-            <div className="w-full border-t border-white/[0.08]" />
-            <span className="absolute bg-[#090b0e] px-3 font-mono text-[0.625rem] font-medium tracking-widest text-white/35 uppercase">
-              OR CONTINUE WITH
+            <div className="w-full border-t border-[#e5e7eb]" />
+            <span className="absolute bg-white px-3 font-mono text-[0.625rem] font-medium tracking-widest text-[#868c98] uppercase">
+              OR
             </span>
           </div>
 
-          {/* Social / Alternative Access Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-            {/* Google OAuth Button */}
-            <button
-              type="button"
-              disabled={pending}
-              onClick={handleGoogle}
-              className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3 text-xs font-medium text-white transition-all hover:bg-white/[0.08] hover:border-white/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <svg viewBox="0 0 18 18" className="size-4 shrink-0" aria-hidden="true">
-                <path
-                  fill="#4285F4"
-                  d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"
-                />
-                <path
-                  fill="#34A853"
-                  d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"
-                />
-                <path
-                  fill="#FBBC05"
-                  d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33Z"
-                />
-                <path
-                  fill="#EA4335"
-                  d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.42 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
-                />
-              </svg>
-              <span>Google</span>
-            </button>
+          {/* Clean Google OAuth Button (Full Width, Live Sample removed per instruction) */}
+          <button
+            type="button"
+            disabled={pending}
+            onClick={handleGoogle}
+            className="inline-flex h-10.5 w-full cursor-pointer items-center justify-center gap-2.5 rounded-lg border border-[#d1d5db] bg-white px-4 text-sm font-medium text-[#374151] shadow-2xs transition-all hover:bg-[#f9fafb] hover:border-[#9ca3af] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <svg viewBox="0 0 18 18" className="size-4.5 shrink-0" aria-hidden="true">
+              <path
+                fill="#4285F4"
+                d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"
+              />
+              <path
+                fill="#34A853"
+                d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33Z"
+              />
+              <path
+                fill="#EA4335"
+                d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.42 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
+              />
+            </svg>
+            <span>Continue with Google</span>
+          </button>
 
-            {/* Live Interactive Sample Demo Button */}
-            <Link
-              href="/dashboard/sample"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-3 text-xs font-medium text-white transition-all hover:bg-white/[0.08] hover:border-white/20 active:scale-[0.99]"
-            >
-              <FileSearch className="size-3.5 text-[#f97316]" />
-              <span>Live Sample</span>
-            </Link>
-          </div>
-
-          {/* Footer Tab Switch Link matching user inspo: "Don't have an account yet? Create Account" */}
-          <div className="mt-4 text-center text-xs text-white/50">
+          {/* Footer toggle */}
+          <div className="mt-4 text-center text-xs text-[#525866]">
             {isSignUp ? (
               <span>
                 Already have an account?{" "}
                 <button
                   type="button"
                   onClick={() => switchMode("signin")}
-                  className="font-medium text-white transition-colors hover:text-[#f97316] hover:underline underline-offset-4 cursor-pointer"
+                  className="font-semibold text-[#b04000] hover:underline cursor-pointer"
                 >
                   Sign In
                 </button>
@@ -346,7 +345,7 @@ export function InteractiveAuthPanel({
                 <button
                   type="button"
                   onClick={() => switchMode("signup")}
-                  className="font-medium text-white transition-colors hover:text-[#f97316] hover:underline underline-offset-4 cursor-pointer"
+                  className="font-semibold text-[#b04000] hover:underline cursor-pointer"
                 >
                   Create Account
                 </button>
@@ -356,11 +355,10 @@ export function InteractiveAuthPanel({
         </form>
 
         {/* Legal & Privacy Compliance */}
-        <div className="mt-10 border-t border-white/[0.06] pt-4 text-center text-[0.6875rem] text-white/35">
+        <div className="mt-8 border-t border-[#f2f2f2] pt-4 text-center text-[0.6875rem] text-[#868c98]">
           Philippine Civil Code &middot; Labor Code &middot; RA 10173 Compliant
         </div>
       </div>
     </div>
   );
 }
-
