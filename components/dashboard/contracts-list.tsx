@@ -334,7 +334,7 @@ export function ContractsList({ documents }: { documents: DocumentItem[] }) {
                       </span>
                       {d.pageCount ? <span>· {d.pageCount} pages</span> : null}
                       <span>·</span>
-                      <span>
+                      <span title={new Date(d.createdAt).toLocaleString()}>
                         {new Date(d.createdAt).toLocaleDateString(undefined, {
                           month: "short",
                           day: "numeric",
@@ -354,7 +354,7 @@ export function ContractsList({ documents }: { documents: DocumentItem[] }) {
                       type="button"
                       disabled={activeActionId === d._id}
                       onClick={(e) => handleRetry(e, d._id)}
-                      className="inline-flex items-center gap-1 rounded-md border border-rule bg-surface px-2.5 py-1 text-xs font-medium text-[#b04000] hover:bg-[#fbeee4] transition-colors"
+                      className="inline-flex items-center gap-1 rounded-md border border-rule bg-surface px-2.5 py-1 text-xs font-medium text-[#b04000] hover:bg-[#fbeee4] transition-colors disabled:opacity-50 cursor-pointer"
                       title="Retry analysis"
                     >
                       <RotateCw
@@ -368,10 +368,14 @@ export function ContractsList({ documents }: { documents: DocumentItem[] }) {
                     type="button"
                     disabled={activeActionId === d._id}
                     onClick={(e) => handleDelete(e, d._id, d.filename)}
-                    className="inline-flex size-8 items-center justify-center rounded-md text-ink-3 hover:bg-red-50 hover:text-red-600 transition-colors"
-                    title="Delete contract"
+                    className="inline-flex size-8 items-center justify-center rounded-md text-ink-3 hover:bg-red-50 hover:text-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+                    title="Delete contract and review data"
                   >
-                    <Trash2 className="size-3.5" />
+                    {activeActionId === d._id ? (
+                      <Loader2 className="size-3.5 animate-spin text-red-600" />
+                    ) : (
+                      <Trash2 className="size-3.5" />
+                    )}
                   </button>
 
                   <div className="hidden items-center gap-1 text-[0.8125rem] font-medium text-ink-3 transition-colors group-hover:text-ink sm:flex">
