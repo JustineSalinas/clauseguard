@@ -17,11 +17,18 @@ import { ABLATION_MODELS, SCORE_STAGE_DEFAULT_MODEL } from "../../lib/models/ind
 import { ConvexHttpClient } from "convex/browser";
 import { api, internal } from "../../convex/_generated/api.js";
 
-// Pricing per 1M tokens (USD)
+// Pricing per 1M tokens (USD). UPDATED 2026-11-05 for the current model
+// trio (lib/models/index.ts) after gemini-2.0-* and Groq's Llama models
+// stopped working -- see that file's header for what changed and why.
+// These dollar figures are carried over from the old models' pricing as a
+// placeholder, NOT re-verified against Google's/Groq's current pricing
+// pages. Confirm before these numbers go in Chapter 4 -- an unverified
+// cost figure in the results chapter is exactly the kind of thing this
+// project's own "do not fabricate the evidence" rule exists to catch.
 const PRICING = {
-  "google/gemini-2.0-flash-lite": { inputPerM: 0.075, outputPerM: 0.30 },
-  "google/gemini-2.0-flash": { inputPerM: 0.10, outputPerM: 0.40 },
-  "groq/llama-3.3-70b-versatile": { inputPerM: 0.59, outputPerM: 0.79 },
+  "google/gemini-3.5-flash-lite": { inputPerM: 0.075, outputPerM: 0.30 },
+  "google/gemini-3.5-flash": { inputPerM: 0.10, outputPerM: 0.40 },
+  "groq/gpt-oss-120b": { inputPerM: 0.59, outputPerM: 0.79 },
 };
 
 function calculateCostUsd(modelId, tokensIn, tokensOut) {
@@ -257,9 +264,9 @@ This experiment evaluates the five committed objectives in **ClauseGuard**, spec
 }
 
 function formatAblationReport(ablationResults) {
-  const m1 = ablationResults["google/gemini-2.0-flash-lite"];
-  const m2 = ablationResults["google/gemini-2.0-flash"];
-  const m3 = ablationResults["groq/llama-3.3-70b-versatile"];
+  const m1 = ablationResults["google/gemini-3.5-flash-lite"];
+  const m2 = ablationResults["google/gemini-3.5-flash"];
+  const m3 = ablationResults["groq/gpt-oss-120b"];
 
   return `# Objective 3: Model Ablation Across Pipeline Stages
 
@@ -267,7 +274,7 @@ Report of accuracy, latency, and cost per pipeline stage across three distinct m
 
 ## Model Performance by Stage: Scoring Stage
 
-| Metric | Gemini Flash-Lite (Fast / Low Cost) | Gemini Flash (Flagship / Dense) | Groq Llama 3.3 / GPT-OSS (Open Weights) |
+| Metric | Gemini Flash-Lite (Fast / Low Cost) | Gemini Flash (Flagship / Dense) | GPT-OSS 120B on Groq (Open Weights) |
 |---|:---:|:---:|:---:|
 | **Risk Classification Accuracy** | ${m1.accuracy} | ${m2.accuracy} | ${m3.accuracy} |
 | **Mean Confidence** | ${m1.avgConfidence} | ${m2.avgConfidence} | ${m3.avgConfidence} |
