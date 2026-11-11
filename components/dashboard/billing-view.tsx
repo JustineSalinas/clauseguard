@@ -73,8 +73,8 @@ const TIERS: BillingTier[] = [
     id: "pro",
     name: "Professional",
     tagline: "For active freelancers, consultants, and developers signing recurring client retainers.",
-    monthlyPrice: 299,
-    annualPrice: 249,
+    monthlyPrice: 349,
+    annualPrice: 279,
     popular: true,
     badge: "Most Popular",
     ctaText: "Active in Research Preview (₱0)",
@@ -102,8 +102,8 @@ const TIERS: BillingTier[] = [
     id: "agency",
     name: "Studio & Agency",
     tagline: "For creative agencies, dev boutiques, and collectives managing client and subcontractor MSAs.",
-    monthlyPrice: 899,
-    annualPrice: 749,
+    monthlyPrice: 1499,
+    annualPrice: 1199,
     badge: "Teams & Studios",
     ctaText: "Inquire for Team Pilot",
     ctaDisabled: false,
@@ -544,9 +544,9 @@ export function BillingView({ email }: { email: string }) {
                   <th className="py-3 pr-4 font-semibold w-2/5">Capability</th>
                   <th className="py-3 px-3 font-semibold text-center w-1/5">Starter (₱0)</th>
                   <th className="py-3 px-3 font-semibold text-center w-1/5 text-[#b04000]">
-                    Professional (₱299)
+                    Professional (₱349)
                   </th>
-                  <th className="py-3 pl-3 font-semibold text-center w-1/5">Studio (₱899)</th>
+                  <th className="py-3 pl-3 font-semibold text-center w-1/5">Studio (₱1,499)</th>
                 </tr>
               </thead>
               <tbody>

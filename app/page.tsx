@@ -46,6 +46,12 @@ export default function Home() {
               How it Works
             </Link>
             <Link
+              href="#pricing"
+              className="transition-colors hover:text-[#000000]"
+            >
+              Pricing
+            </Link>
+            <Link
               href="#faq"
               className="transition-colors hover:text-[#000000]"
             >
@@ -160,7 +166,7 @@ export default function Home() {
                   Model accuracy &amp; cost ablation
                 </div>
                 <div className="text-[11px] text-[#b04000] font-medium mt-1">
-                  Gemini Flash &middot; Flash-Lite &middot; Llama 3.3 70B
+                  Gemini Flash &middot; Flash-Lite &middot; GPT-OSS-120B (Groq)
                 </div>
               </div>
             </Reveal>
@@ -585,6 +591,103 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ---------------- Pricing ---------------- */}
+      <section id="pricing" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-[#fcfdfd]">
+        <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
+          <Reveal>
+            <div className="max-w-2xl">
+              <span className="text-[13px] font-semibold text-[#b04000] uppercase tracking-[0.05em]">
+                Pricing
+              </span>
+              <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
+                Priced for freelancers, not enterprise legal budgets.
+              </h2>
+              <p className="mt-3 text-base text-[#525866] leading-relaxed">
+                Philippine pesos, no US-dollar markup, no seat minimums. Every account is unlocked at Professional capability, free, during the research preview.
+              </p>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Starter */}
+            <Reveal delay={0}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">Starter</h3>
+                  <p className="mt-1 text-xs text-[#868c98]">For occasional reviews</p>
+                  <div className="mt-5 flex items-baseline gap-1">
+                    <span className="font-sans text-3xl font-bold tracking-tight text-[#08090a]">₱0</span>
+                    <span className="text-xs text-[#868c98]">/ forever</span>
+                  </div>
+                  <ul className="mt-6 space-y-2.5 text-sm text-[#525866]">
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />3 contract reviews / month</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Up to 15 pages per document</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Core Civil Code grounding</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />14-day review history</li>
+                  </ul>
+                </div>
+                <Button asChild size="default" variant="outline" className="mt-7 w-full">
+                  <Link href="/signup">Start for free</Link>
+                </Button>
+              </div>
+            </Reveal>
+
+            {/* Professional */}
+            <Reveal delay={0.1}>
+              <div className="relative h-full rounded-[16px] border-2 border-[#b04000] bg-white p-7 flex flex-col justify-between shadow-[0_16px_32px_rgba(176,64,0,0.1)]">
+                <span className="absolute -top-3 left-7 rounded-full bg-[#b04000] px-3 py-0.5 text-[0.6875rem] font-bold uppercase tracking-wider text-white">
+                  Most Popular
+                </span>
+                <div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">Professional</h3>
+                  <p className="mt-1 text-xs text-[#868c98]">For active freelancers &amp; consultants</p>
+                  <div className="mt-5 flex items-baseline gap-1">
+                    <span className="font-sans text-3xl font-bold tracking-tight text-[#08090a]">₱349</span>
+                    <span className="text-xs text-[#868c98]">/ month</span>
+                  </div>
+                  <ul className="mt-6 space-y-2.5 text-sm text-[#525866]">
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Unlimited contract reviews</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Full statutory corpus (320+ articles)</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Redline diff viewer &amp; PDF export</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Pushback Playbook negotiation scripts</li>
+                  </ul>
+                </div>
+                <Button asChild size="default" variant="default" className="mt-7 w-full">
+                  <Link href="/signup">Start for free</Link>
+                </Button>
+              </div>
+            </Reveal>
+
+            {/* Agency */}
+            <Reveal delay={0.2}>
+              <div className="h-full rounded-[16px] border border-[#dddddd] bg-white p-7 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[#e8c6a8] hover:shadow-[0_16px_32px_rgba(176,64,0,0.08)]">
+                <div>
+                  <h3 className="text-lg font-semibold text-[#08090a]">Studio &amp; Agency</h3>
+                  <p className="mt-1 text-xs text-[#868c98]">For teams managing client MSAs</p>
+                  <div className="mt-5 flex items-baseline gap-1">
+                    <span className="font-sans text-3xl font-bold tracking-tight text-[#08090a]">₱1,499</span>
+                    <span className="text-xs text-[#868c98]">/ month</span>
+                  </div>
+                  <ul className="mt-6 space-y-2.5 text-sm text-[#525866]">
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Everything in Professional, 5 seats</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Centralized team contract repository</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />White-label audit report export</li>
+                    <li className="flex items-start gap-2"><CheckCircle className="size-3.5 text-[#b04000] shrink-0 mt-0.5" />Priority support</li>
+                  </ul>
+                </div>
+                <Button asChild size="default" variant="outline" className="mt-7 w-full">
+                  <Link href="/signup">Start for free</Link>
+                </Button>
+              </div>
+            </Reveal>
+          </div>
+
+          <p className="mt-6 text-center text-xs text-[#868c98] font-mono">
+            Research preview active &middot; all accounts unlocked at Professional capability, free, while the capstone study runs
+          </p>
+        </div>
+      </section>
+
       {/* ---------------- FAQ Section ---------------- */}
       <section id="faq" className="py-20 sm:py-24 border-b border-[#f2f2f2] bg-white">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6">
@@ -724,6 +827,11 @@ export default function Home() {
                 <li>
                   <Link href="#statutory-grounding" className="hover:text-[#000000]">
                     Why It&rsquo;s Different
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#pricing" className="hover:text-[#000000]">
+                    Pricing
                   </Link>
                 </li>
               </ul>
