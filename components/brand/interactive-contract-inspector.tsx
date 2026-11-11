@@ -303,7 +303,7 @@ export function InteractiveContractInspector() {
                   </div>
 
                   <p className="text-[11px] text-[#868c98] font-mono pt-2">
-                    Private Supabase private bucket &middot; Signed URLs only &middot; Never used to train public LLMs
+                    Private storage &middot; Signed URLs only &middot; Never used to train public LLMs
                   </p>
                 </div>
               )}

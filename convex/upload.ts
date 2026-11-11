@@ -1,6 +1,5 @@
 /**
- * Replaces the Supabase 'contracts' private bucket + its storage.objects RLS
- * policies. Convex's generateUploadUrl pattern is the equivalent of a
+ * Private contract storage. Convex's generateUploadUrl pattern is the equivalent of a
  * short-lived signed URL: the client asks for one, uploads the file
  * directly to Convex storage over it, then calls documents.create with the
  * storageId it gets back. No ownership check needed on the upload URL

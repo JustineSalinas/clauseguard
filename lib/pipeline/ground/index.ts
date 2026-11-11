@@ -5,7 +5,7 @@
  *
  * Not a pure function like segment/index.ts: the `static` arm genuinely
  * needs a database read (provision_mappings joined to provisions), so this
- * takes a Supabase client rather than hiding one behind a module-level
+ * takes a database client rather than hiding one behind a module-level
  * import, the same shape lib/pipeline/score keeps its model call behind an
  * explicit input rather than a hidden client.
  *
@@ -22,8 +22,8 @@ import type { ClauseTypeId } from "@/lib/pipeline/taxonomy";
 import type { GroundingArm } from "@/lib/types";
 import type { StatutoryProvision } from "@/lib/prompts/score.v1";
 
-/** The minimal slice of the Supabase client this stage touches. Typed by
- *  hand rather than importing SupabaseClient, so a unit test can pass a
+/** The minimal slice of the database client this stage touches. Typed by
+ *  hand rather than importing a client type, so a unit test can pass a
  *  tiny fake instead of mocking the full client surface. */
 export type GroundingDb = {
   from(table: "provision_mappings"): {
@@ -66,7 +66,7 @@ export type GroundResult = {
 };
 
 /** provisions(...) comes back as an object for a to-one relationship, but
- *  supabase-js's typed client sometimes infers it as an array depending on
+ *  a typed client sometimes infers it as an array depending on
  *  how the FK is declared -- normalize both shapes here rather than trust
  *  one. */
 function normalizeProvision(

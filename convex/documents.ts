@@ -4,9 +4,8 @@
  * is written here by hand -- `getAuthUserId(ctx)` plus an explicit
  * `doc.ownerId === userId` check on every read/write. There is no RLS
  * backstop in Convex: a missing check here is a cross-tenant leak, full
- * stop, the same failure Navarro's old Postgres cross-tenant tests existed
- * to catch. tests/security needs a Convex-native equivalent -- not built
- * yet, see convex/README.md.
+ * stop, the failure a cross-tenant test suite exists to catch. That suite
+ * needs a Convex-native version -- not built yet.
  *
  * No `update` mutation is exposed to the client, same as the old schema's
  * "no UPDATE policy -- status transitions belong to the pipeline." Status
@@ -210,10 +209,8 @@ export const sweepStuck = mutation({
 
 // -------------------------------------------------- pipeline-internal ----
 // Nothing below this line is reachable from the browser. The pipeline
-// action (convex/pipeline.ts, not built yet) calls these the same way
-// lib/pipeline/run.ts used the Supabase service-role client -- except here
-// "service role" just means "this is an internalMutation," not a separate
-// key that could leak.
+// action (convex/pipeline.ts, not built yet) calls these. "Server-only" here just means "this is an
+// internalMutation," not a separate key that could leak.
 
 export const getForPipeline = internalQuery({
   args: { id: v.id("documents") },

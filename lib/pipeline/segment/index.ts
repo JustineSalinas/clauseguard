@@ -1,9 +1,9 @@
 /**
  * Clause segmentation. Pure function: given extracted page text, produce
- * clause records. No Supabase import here on purpose -- this can be written,
+ * clause records. No database import here on purpose -- this can be written,
  * run, and unit tested today, entirely independent of a live database. The
  * orchestration layer that persists these to the `clauses` table (owned by
- * whoever wires the pipeline to Supabase) is a thin wrapper around this.
+ * whoever wires the pipeline to the database) is a thin wrapper around this.
  *
  * Real contracts are almost always numbered ("14.2", "9.1", "5.2"), so that
  * is the primary strategy. A contract with no numbering at all falls back to

@@ -1,8 +1,8 @@
 // Unit tests for clause segmentation. Pure functions, no network, no
-// database -- these run today regardless of Supabase's status.
+// database.
 //
 // Written against the compiled output so this runs with plain `node --test`
-// like tests/security does, with no extra build step. Run `npm run build`
+// with no extra build step. Run `npm run build`
 // (or `npx tsc`) first if you've edited lib/pipeline/segment since the last
 // build -- see the README in this folder for the exact command once one
 // exists.

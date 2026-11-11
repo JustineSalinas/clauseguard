@@ -1,9 +1,7 @@
 /**
- * ClauseGuard schema, translated from supabase/migrations/0001_init.sql and
- * 0002_stage_runs_and_retrievals.sql. Table-for-table, same shape and same
- * reasoning (see those files' comments for *why* each table is split the
- * way it is -- that reasoning doesn't change just because the storage
- * engine did).
+ * ClauseGuard schema. Each table is split the way it is for a reason: results
+ * live on clauseScores/scoringRuns, never on clauses, because Objectives 3
+ * and 4 run several scoring passes over identical clauses.
  *
  * What does NOT carry over, because Convex has no equivalent primitive:
  *
