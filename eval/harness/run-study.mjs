@@ -37,7 +37,7 @@ function calculateCostUsd(modelId, tokensIn, tokensOut) {
 }
 
 async function safeScoreClause(input) {
-  for (let attempt = 1; attempt <= 6; attempt++) {
+  for (let attempt = 1; attempt <= 10; attempt++) {
     try {
       const res = await scoreClause(input);
       // Pacing delay (4.2s) ensures we stay under Google Free Tier's 15 requests/minute limit
@@ -46,8 +46,15 @@ async function safeScoreClause(input) {
     } catch (err) {
       const errStr = String(err);
       if (errStr.includes("429") || errStr.includes("RESOURCE_EXHAUSTED") || errStr.includes("quota")) {
-        console.warn(`[Quota limit] Pausing 40s before retry (attempt ${attempt}/6)...`);
+        console.warn(`[Quota limit] Pausing 40s before retry (attempt ${attempt}/10)...`);
         await new Promise((r) => setTimeout(r, 40000));
+      } else if (errStr.includes("503") || errStr.includes("UNAVAILABLE") || errStr.includes("high demand")) {
+        // Transient capacity errors, not quota -- seen on both gemini-3.5-flash
+        // and gemini-3.8-flash (see lib/models/index.ts's header). A short
+        // backoff is usually enough; this must not crash a multi-hour eval run
+        // over a few seconds of upstream unavailability.
+        console.warn(`[Model unavailable] Pausing 20s before retry (attempt ${attempt}/10)...`);
+        await new Promise((r) => setTimeout(r, 20000));
       } else {
         throw err;
       }
@@ -240,37 +247,132 @@ async function runModelAblationStudy(benchmark, client) {
   return ablationResults;
 }
 
-function formatGroundingReport(groundingResults) {
+function pct(str) {
+  return parseFloat(str);
+}
+
+function rankDescending(entries) {
+  // entries: [{label, value}] -> sorted copy, highest value first
+  return [...entries].sort((a, b) => b.value - a.value);
+}
+
+export function formatGroundingReport(groundingResults, n) {
+  const arms = {
+    none: { label: "ARM 1 (Ungrounded Baseline)", ...groundingResults.none },
+    static: { label: "ARM 2 (Static Mapping)", ...groundingResults.static },
+    rag: { label: "ARM 3 (RAG Vector Retrieval)", ...groundingResults.rag },
+  };
+
+  const accuracyRank = rankDescending(
+    Object.entries(arms).map(([key, a]) => ({ key, label: a.label, value: pct(a.accuracy) })),
+  );
+  const citationRank = rankDescending(
+    Object.entries(arms).map(([key, a]) => ({ key, label: a.label, value: pct(a.citationHitRate) })),
+  );
+
+  const accLeader = accuracyRank[0];
+  const accTied = accuracyRank.filter((e) => e.value === accLeader.value);
+  const citeLeader = citationRank[0];
+
+  const accuracyRunnersUp = accuracyRank.filter((e) => !accTied.includes(e));
+  const accuracySentence =
+    accTied.length === accuracyRank.length
+      ? `All arms tied at ${accLeader.value}% accuracy in this run.`
+      : accTied.length > 1
+        ? `${accTied.map((e) => e.label).join(" and ")} tied for the highest accuracy in this run (${accLeader.value}%); ${accuracyRunnersUp
+            .map((e) => `${e.label} scored ${e.value}%`)
+            .join(", ")}.`
+        : `${accLeader.label} had the highest accuracy this run at ${accLeader.value}% (${accuracyRank
+            .slice(1)
+            .map((e) => `${e.label}: ${e.value}%`)
+            .join(", ")}).`;
+
+  const citationSentence = `${citeLeader.label} had the highest statutory citation hit rate (${citeLeader.value}%): ${citationRank
+    .map((e) => `${e.label} ${e.value}%`)
+    .join(", ")}.`;
+
+  const ragWorseThanStatic = pct(arms.rag.citationHitRate) < pct(arms.static.citationHitRate);
+  const ragWorseThanBaseline = pct(arms.rag.accuracy) < pct(arms.none.accuracy);
+
+  const warnings = [];
+  if (ragWorseThanStatic) {
+    warnings.push(
+      `RAG's citation hit rate (${arms.rag.citationHitRate}) is *lower* than the static mapping's (${arms.static.citationHitRate}) in this run. ` +
+        `Before writing this up as "RAG improves grounding," check the retrieval recipe (embedding taskType, similarity threshold, top-k) and consider re-running with a larger n -- a difference this size on ${n} clauses is a small number of individual misses, not yet a settled result.`,
+    );
+  }
+  if (ragWorseThanBaseline) {
+    warnings.push(
+      `RAG's accuracy (${arms.rag.accuracy}) is *lower* than the ungrounded baseline's (${arms.none.accuracy}) in this run. ` +
+        `This does not mean grounding hurts -- it means retrieved-but-irrelevant provisions can distract the model on a small, noisy sample. Re-run with more clauses before drawing a Chapter 4 conclusion either way.`,
+    );
+  }
+
   return `# Objective 4: Statutory Grounding Comparison (Civil Code & Labor Code)
 
-This experiment evaluates the five committed objectives in **ClauseGuard**, specifically comparing an ungrounded LLM baseline (**ARM 1: none**) against a curated rule-based statutory mapping (**ARM 2: static**) and semantic vector retrieval over the 320 statutory provisions (**ARM 3: rag**).
+This experiment compares an ungrounded LLM baseline (**ARM 1: none**) against a curated rule-based statutory mapping (**ARM 2: static**) and semantic vector retrieval over the 320 statutory provisions (**ARM 3: rag**), on ${n} benchmark clauses.
+
+**Sample size note:** n=${n}. A one-clause difference in outcome moves accuracy by ${(100 / n).toFixed(1)} percentage points -- treat small gaps between arms as noise, not a settled finding, until this is re-run on a larger annotated set.
 
 ## Summary Table
 
 | Metric | ARM 1 (Ungrounded Baseline) | ARM 2 (Static Mapping) | ARM 3 (RAG Vector Retrieval) |
 |---|:---:|:---:|:---:|
-| **Risk Classification Accuracy** | ${groundingResults.none.accuracy} | ${groundingResults.static.accuracy} | ${groundingResults.rag.accuracy} |
-| **Mean Calibrated Confidence** | ${groundingResults.none.avgConfidence} | ${groundingResults.static.avgConfidence} | ${groundingResults.rag.avgConfidence} |
-| **Statutory Citation Hit Rate** | ${groundingResults.none.citationHitRate} | ${groundingResults.static.citationHitRate} | ${groundingResults.rag.citationHitRate} |
-| **Average Latency (ms)** | ${groundingResults.none.avgLatencyMs} ms | ${groundingResults.static.avgLatencyMs} ms | ${groundingResults.rag.avgLatencyMs} ms |
-| **Estimated Cost / 1,000 Clauses** | ${groundingResults.none.costPer1kClauses} | ${groundingResults.static.costPer1kClauses} | ${groundingResults.rag.costPer1kClauses} |
+| **Risk Classification Accuracy** | ${arms.none.accuracy} | ${arms.static.accuracy} | ${arms.rag.accuracy} |
+| **Mean Calibrated Confidence** | ${arms.none.avgConfidence} | ${arms.static.avgConfidence} | ${arms.rag.avgConfidence} |
+| **Statutory Citation Hit Rate** | ${arms.none.citationHitRate} | ${arms.static.citationHitRate} | ${arms.rag.citationHitRate} |
+| **Average Latency (ms)** | ${arms.none.avgLatencyMs} ms | ${arms.static.avgLatencyMs} ms | ${arms.rag.avgLatencyMs} ms |
+| **Estimated Cost / 1,000 Clauses** | ${arms.none.costPer1kClauses} | ${arms.static.costPer1kClauses} | ${arms.rag.costPer1kClauses} |
 
-## Key Findings for Chapter 4
+## Findings, derived from this run's actual numbers
 
-1. **Hallucination Elimination**: The ungrounded arm frequently invents generalized legal doctrine or generic American common-law principles without statutory basis. Grounded arms (Static and RAG) bind every flagged risk to specific Philippine Civil Code articles (e.g., Art. 1308 for unilateral termination, Art. 1229 for penalty clauses).
-2. **Confidence Calibration**: Grounded prompts produce higher and better-calibrated confidence on genuine statutory violations, and properly route uncertain / novel stipulations to manual review.
-3. **Retrieval Resilience**: The RAG retrieval arm effectively captures clauses that diverge in wording from typical templates, yielding reliable citations even where taxonomy heuristics produce "other".
+1. **Accuracy**: ${accuracySentence}
+2. **Citation grounding**: ${citationSentence} The ungrounded arm's citation hit rate is defined as 0% by construction -- it is never given statutory text to cite.
+${warnings.length > 0 ? warnings.map((w, i) => `${i + 3}. **Flag for review**: ${w}`).join("\n") : ""}
 `;
 }
 
-function formatAblationReport(ablationResults) {
-  const m1 = ablationResults["google/gemini-3.5-flash-lite"];
-  const m2 = ablationResults["google/gemini-3.5-flash"];
-  const m3 = ablationResults["groq/gpt-oss-120b"];
+export function formatAblationReport(ablationResults, n) {
+  const models = {
+    "google/gemini-3.5-flash-lite": { label: "Gemini Flash-Lite (Fast / Low Cost)" },
+    "google/gemini-3.5-flash": { label: "Gemini Flash (Flagship / Dense)" },
+    "groq/gpt-oss-120b": { label: "GPT-OSS 120B on Groq (Open Weights)" },
+  };
+  for (const id of Object.keys(models)) {
+    models[id] = { ...models[id], ...ablationResults[id] };
+  }
+  const [m1, m2, m3] = Object.values(models);
+
+  const accuracyRank = rankDescending(Object.values(models).map((m) => ({ label: m.label, value: pct(m.accuracy) })));
+  const latencyRank = rankDescending(
+    Object.values(models).map((m) => ({ label: m.label, value: -m.avgLatencyMs })),
+  ); // negate so rankDescending (highest value first) means fastest first
+  const costRank = rankDescending(
+    Object.values(models).map((m) => ({ label: m.label, value: -parseFloat(m.costPer1kClauses.replace("$", "")) })),
+  );
+
+  const accLeader = accuracyRank[0];
+  const accTied = accuracyRank.filter((e) => e.value === accLeader.value);
+  const fastest = latencyRank[0];
+  const cheapest = costRank[0];
+
+  const accuracySentence =
+    accTied.length > 1
+      ? `${accTied.map((e) => e.label).join(" and ")} tied for the highest accuracy this run (${accLeader.value}%).`
+      : `${accLeader.label} had the highest accuracy this run (${accLeader.value}%).`;
+
+  const latencyNote =
+    Math.max(...Object.values(models).map((m) => m.avgLatencyMs)) /
+      Math.min(...Object.values(models).map((m) => m.avgLatencyMs)) >
+    3
+      ? `\n\n**Latency caveat**: the spread between fastest and slowest average latency this run is more than 3x. On a free-tier API key, per-call latency is dominated by rate-limit backoff, not the model's real inference speed -- these latency numbers should not be cited as "Model X is inherently faster than Model Y" without re-running on a paid tier or inspecting per-call latency variance first.`
+      : "";
 
   return `# Objective 3: Model Ablation Across Pipeline Stages
 
-Report of accuracy, latency, and cost per pipeline stage across three distinct model classes evaluated under the ClauseGuard pipeline.
+Report of accuracy, latency, and cost per pipeline stage across three distinct model classes evaluated under the ClauseGuard pipeline, on ${n} benchmark clauses.
+
+**Sample size note:** n=${n}. A one-clause difference in outcome moves accuracy by ${(100 / n).toFixed(1)} percentage points -- treat small gaps between models as noise, not a settled finding, until this is re-run on a larger annotated set.
 
 ## Model Performance by Stage: Scoring Stage
 
@@ -284,9 +386,11 @@ Report of accuracy, latency, and cost per pipeline stage across three distinct m
 | **Cost per 1,000 Clauses** | ${m1.costPer1kClauses} | ${m2.costPer1kClauses} | ${m3.costPer1kClauses} |
 | **Call Completion Rate** | ${m1.successRate} | ${m2.successRate} | ${m3.successRate} |
 
-## Architectural Recommendations
+## Findings, derived from this run's actual numbers
 
-* **Staged Model Cascade**: The ~${m1.costPer1kClauses} cost of Gemini Flash-Lite makes it optimal for the first-pass review of all contract clauses. Only low-confidence or high-risk clauses require escalation to Gemini Flash (${m2.costPer1kClauses}), achieving 98%+ enterprise-grade accuracy at 80% lower cost.
+* **Accuracy**: ${accuracySentence}
+* **Latency**: ${fastest.label} was fastest this run.
+* **Cost**: ${cheapest.label} was cheapest per 1,000 clauses this run.${latencyNote}
 `;
 }
 
@@ -298,30 +402,44 @@ async function main() {
   const benchmark = await loadBenchmark();
   console.log(`Loaded benchmark with ${benchmark.length} Philippine contract clauses.`);
 
-  const groundingResults = await runGroundingStudy(benchmark, client);
-  const ablationResults = await runModelAblationStudy(benchmark, client);
-
   await mkdir("eval/results", { recursive: true });
 
-  const groundingMd = formatGroundingReport(groundingResults);
+  // Each study's results are written to disk as soon as that study finishes,
+  // not held in memory until both complete. A free-tier quota exhaustion in
+  // the (much heavier) ablation study previously discarded an already-
+  // completed grounding study's results entirely, because nothing was
+  // persisted until the very end -- a real data loss this harness hit on a
+  // live run, not a hypothetical.
+  const groundingResults = await runGroundingStudy(benchmark, client);
+  const groundingMd = formatGroundingReport(groundingResults, benchmark.length);
   await writeFile("eval/results/grounding-study.md", groundingMd, "utf-8");
-  console.log("Wrote eval/results/grounding-study.md");
+  await writeFile(
+    "eval/results/grounding-raw-data.json",
+    JSON.stringify({ groundingResults, timestamp: new Date().toISOString() }, null, 2),
+    "utf-8",
+  );
+  console.log("Wrote eval/results/grounding-study.md + grounding-raw-data.json");
 
-  const ablationMd = formatAblationReport(ablationResults);
+  const ablationResults = await runModelAblationStudy(benchmark, client);
+  const ablationMd = formatAblationReport(ablationResults, benchmark.length);
   await writeFile("eval/results/model-ablation.md", ablationMd, "utf-8");
-  console.log("Wrote eval/results/model-ablation.md");
-
   await writeFile(
     "eval/results/study-raw-data.json",
     JSON.stringify({ groundingResults, ablationResults, timestamp: new Date().toISOString() }, null, 2),
     "utf-8"
   );
-  console.log("Wrote eval/results/study-raw-data.json");
+  console.log("Wrote eval/results/model-ablation.md + study-raw-data.json");
   console.log("\nALL EXPERIMENTS COMPLETED SUCCESSFULLY!");
 }
 
-main().catch((err) => {
-  console.error("Evaluation failed:", err);
-  process.exit(1);
-});
+// Guarded so this module can be imported (e.g. to reuse the report
+// formatters against already-saved raw data) without re-running the whole
+// study -- each full run spends real, rate-limited API quota.
+const { pathToFileURL } = await import("node:url");
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((err) => {
+    console.error("Evaluation failed:", err);
+    process.exit(1);
+  });
+}
 

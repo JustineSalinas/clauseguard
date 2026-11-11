@@ -157,7 +157,12 @@ export const listNeedingEmbeddings = internalQuery({
   handler: async (ctx) => {
     const all = await ctx.db.query("provisions").collect();
     return all
-      .filter((p) => !p.embedding || p.embedding.length !== 768)
+      .filter(
+        (p) =>
+          !p.embedding ||
+          p.embedding.length !== 768 ||
+          p.embeddingModel !== EMBEDDING_RECIPE_VERSION,
+      )
       .map((p) => ({
         _id: p._id,
         code: p.code,
@@ -170,6 +175,17 @@ export const listNeedingEmbeddings = internalQuery({
 
 const EMBEDDING_MODEL = "gemini-embedding-001";
 const EMBEDDING_DIMS = 768;
+// Bumped 2026-11-11 after discovering v1 embeddings (no taskType set on
+// either side) didn't discriminate between clause types at all -- the same
+// two Labor Code provisions ranked in the top 3 for five completely
+// unrelated clause types (termination, indemnity, liability, IP
+// assignment) when checked against raw similarity scores. Gemini's
+// embedding API needs an explicit RETRIEVAL_QUERY / RETRIEVAL_DOCUMENT
+// taskType for asymmetric query-vs-passage retrieval to separate properly;
+// neither call site set one. Changing this string forces
+// listNeedingEmbeddings to treat every existing provision as stale so
+// embedAllProvisions re-embeds the whole corpus with the fix.
+const EMBEDDING_RECIPE_VERSION = "gemini-embedding-001-retrieval-v2";
 
 async function embedText(text: string, apiKey: string): Promise<number[]> {
   const res = await fetch(
@@ -180,6 +196,7 @@ async function embedText(text: string, apiKey: string): Promise<number[]> {
       body: JSON.stringify({
         model: `models/${EMBEDDING_MODEL}`,
         content: { parts: [{ text }] },
+        taskType: "RETRIEVAL_QUERY",
         outputDimensionality: EMBEDDING_DIMS,
       }),
     },
@@ -267,6 +284,7 @@ export const embedAllProvisions = action({
         content: {
           parts: [{ text: `${p.code} Code Article ${p.article}${p.heading ? ` (${p.heading})` : ""}: ${p.text}` }],
         },
+        taskType: "RETRIEVAL_DOCUMENT",
         outputDimensionality: EMBEDDING_DIMS,
       }));
 
@@ -288,7 +306,7 @@ export const embedAllProvisions = action({
       const updates = chunk.map((p: any, idx: number) => ({
         id: p._id as Id<"provisions">,
         embedding: data.embeddings[idx].values,
-        embeddingModel: EMBEDDING_MODEL,
+        embeddingModel: EMBEDDING_RECIPE_VERSION,
       }));
 
       await ctx.runMutation(internal.corpus.saveEmbeddingsBatch, { updates });
