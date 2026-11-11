@@ -36,8 +36,7 @@ export const listAll = query({
 
 // -------------------------------------------------- corpus seed (admin) --
 // Run once from the dashboard's Functions tab (or a one-off script) after
-// the project is provisioned -- replaces npm run seed:corpus /
-// seed:corpus:mappings. Upserts by (code, article) so it's safe to re-run.
+// the project is provisioned -- Upserts by (code, article) so it's safe to re-run.
 
 export const upsertProvision = internalMutation({
   args: {

@@ -13,7 +13,7 @@
  * concern out of it. It is also why the heat map is a lookup rather than the
  * fuzzy alignment against a re-rendered page that PLAN.md prices at six days.
  *
- * Pure and Supabase-free, like the stages either side of it.
+ * Pure and database-free, like the stages either side of it.
  */
 
 import type { BoundingBox } from "@/lib/types";

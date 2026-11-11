@@ -403,7 +403,7 @@ export const run = internalAction({
   },
 });
 
-// content hash helper, same as the old lib/pipeline/run.ts -- never stores
+// content hash helper, never stores
 // contract text for diagnostics, only its hash.
 export function hash(text: string): string {
   return createHash("sha256").update(text).digest("hex").slice(0, 16);

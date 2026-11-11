@@ -7,11 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:security": "node --env-file-if-exists=.env.local --test \"tests/security/**/*.test.mjs\"",
     "test:unit": "node --import ./tests/setup/register-aliases.mjs --test \"tests/unit/**/*.test.mjs\"",
-    "test": "npm run test:unit && npm run test:security",
-    "seed:corpus": "node --env-file-if-exists=.env.local scripts/seed-corpus.mjs",
-    "seed:corpus:mappings": "node --env-file-if-exists=.env.local scripts/seed-provision-mappings.mjs",
+    "test": "npm run test:unit",
     "eval": "node --env-file-if-exists=.env.local --import ./tests/setup/register-aliases.mjs eval/harness/run-study.mjs"
   },
   "dependencies": {
@@ -19,8 +16,6 @@
     "@ai-sdk/groq": "^4.0.76",
     "@auth/core": "^0.41.3",
     "@convex-dev/auth": "^0.0.96",
-    "@supabase/ssr": "0.12.5",
-    "@supabase/supabase-js": "2.112.4",
     "ai": "7.0.93",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

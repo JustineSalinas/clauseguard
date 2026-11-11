@@ -1,6 +1,6 @@
 // Unit tests for the grounding stage. The `static` arm's only external
 // dependency is the database read, so these pass a tiny fake implementing
-// just the GroundingDb surface rather than a real Supabase client.
+// just the GroundingDb surface rather than a real database client.
 
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";

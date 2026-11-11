@@ -1,6 +1,6 @@
 /**
  * The extraction stage. Pure function: given PDF bytes, produce page text,
- * per-token bounding boxes, and page geometry. No Supabase import here on
+ * per-token bounding boxes, and page geometry. No database import here on
  * purpose -- same convention as lib/pipeline/segment, so this runs and unit
  * tests under plain `node --test` with no database and no network.
  *
