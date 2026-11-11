@@ -4,13 +4,14 @@ import React from "react";
 
 /**
  * ClauseGuard Brand Mark: lucide's own "shield" outline (node_modules/
- * lucide-react/dist/esm/icons/shield.mjs), filled solid copper, holding a
- * pilcrow (¶) -- the actual typographic mark for "clause" -- instead of
- * the scale-of-justice every other legal-adjacent product already uses.
- * Rendered as live <text>, not a hand-drawn path: at ~28px a hand-built
- * pilcrow's counter-hole anti-aliases shut and reads as a blocky "A"
- * (tried, rejected) -- the browser's own font hinting at small sizes
- * beats approximating glyph geometry by hand.
+ * lucide-react/dist/esm/icons/shield.mjs), filled solid copper, holding
+ * the section sign (§) -- the universal mark for a statutory provision,
+ * which is literally what this product grounds every risk flag in --
+ * instead of the scale-of-justice every other legal-adjacent product
+ * already uses. Rendered as live <text>, not a hand-drawn path: at ~28px
+ * a hand-built glyph's counters anti-alias shut and lose legibility
+ * (tried with a pilcrow first, rejected) -- the browser's own font
+ * hinting at small sizes beats approximating glyph geometry by hand.
  */
 export function LogoBadge({
   size = 28,
@@ -53,7 +54,7 @@ export function LogoBadge({
           fontSize="15"
           fill="#ffffff"
         >
-          &#182;
+          &#167;
         </text>
       </svg>
     </span>
