@@ -5,10 +5,12 @@ import React from "react";
 /**
  * ClauseGuard Brand Mark: lucide's own "shield" outline (node_modules/
  * lucide-react/dist/esm/icons/shield.mjs), filled solid copper, holding a
- * simplified scale-of-justice drawn in the same stroke language lucide
- * uses elsewhere in this app (round caps/joins, one weight) -- not the
- * old filled gradient + separate pillar + triangular trays, which read as
- * three different icon styles fighting inside one badge.
+ * pilcrow (¶) -- the actual typographic mark for "clause" -- instead of
+ * the scale-of-justice every other legal-adjacent product already uses.
+ * Rendered as live <text>, not a hand-drawn path: at ~28px a hand-built
+ * pilcrow's counter-hole anti-aliases shut and reads as a blocky "A"
+ * (tried, rejected) -- the browser's own font hinting at small sizes
+ * beats approximating glyph geometry by hand.
  */
 export function LogoBadge({
   size = 28,
@@ -41,21 +43,18 @@ export function LogoBadge({
           fill="#b04000"
         />
 
-        {/* Scale of justice, drawn at lucide's own stroke weight/caps, scaled
-            down and centered inside the shield's interior. */}
-        <g
-          transform="translate(12 12.8) scale(0.46) translate(-12 -12)"
-          stroke="#ffffff"
-          strokeWidth="2.4"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <text
+          x="12"
+          y="13.4"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontFamily="Georgia, 'Times New Roman', serif"
+          fontWeight="700"
+          fontSize="15"
+          fill="#ffffff"
         >
-          <path d="M12 3v18" />
-          <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />
-          <path d="m5 8 3 8a5 5 0 0 1-6 0z" />
-          <path d="m19 8 3 8a5 5 0 0 1-6 0z" />
-          <path d="M7 21h10" />
-        </g>
+          &#182;
+        </text>
       </svg>
     </span>
   );
