@@ -54,6 +54,7 @@ npm run build           # next build
 npm run lint            # eslint
 npm run test:unit       # node --test tests/unit/**/*.test.mjs (pure pipeline stages, no DB)
 npm test                # same as test:unit
+npm run test:security   # node --test tests/security/**/*.test.mjs (real cross-tenant checks, live deployment)
 npm run eval            # eval/harness/run-study.mjs (model study, not a test)
 npx convex dev          # syncs convex/, writes CONVEX_DEPLOYMENT + NEXT_PUBLIC_CONVEX_URL to .env.local
 npx convex codegen      # regenerates convex/_generated (fails if CONVEX_DEPLOYMENT is empty)
@@ -67,10 +68,17 @@ supplies the `@/` import alias. `tests/integration/` is still a placeholder.
 The eval harness under `eval/` is invoked separately from `tests/`; do not
 conflate the two — `eval/` measures the model, `tests/` measures the software.
 
-**There is no cross-tenant/authorization test suite.** The Supabase-era
-`tests/security/` suite was deleted with the Supabase code and no Convex
-equivalent exists yet (`convex/documents.ts` says so). Authorization is
-currently verified only by reading each function.
+**A Convex-native cross-tenant test suite exists at `tests/security/`**
+(rebuilt 2026-11-11, replacing the Supabase-era suite that was deleted with
+the Supabase code). It signs in two real accounts against the live
+deployment named in `NEXT_PUBLIC_CONVEX_URL` — no mock db, same reasoning
+as the old RLS suite: authorization has to be exercised for real to catch
+the way a missing `ownerId` check actually fails. `OWNED_TABLES` in
+`tests/security/helpers.mjs` lists every table a new cross-tenant check
+must cover when a table holding user data is added to the schema.
+`no-public-surface.test.mjs` separately guards `groundTruthLabels` (the
+annotated dataset's answer key) by asserting zero Convex functions
+anywhere reference it, not just that a query returns empty.
 
 Corpus seeding is done through Convex now (`internalMutation`s in
 `convex/corpus.ts`: `upsertProvision`, `seedMappings`; `embedAllProvisions`
