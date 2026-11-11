@@ -10,15 +10,23 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, Mail, Loader2, AlertCircle } from "lucide-react";
 
-function GoogleButton({ pending, onClick }: { pending: boolean; onClick: () => void }) {
+/**
+ * Display only, by request -- does not call signIn("google", ...) at all,
+ * so it can never attempt a real OAuth round-trip or surface a confusing
+ * "not configured" error. Disabled + a visible "Coming soon" label is the
+ * honest version of a not-yet-wired button: present, but not pretending to
+ * work. Re-enable and wire to handleGoogle once AUTH_GOOGLE_ID/SECRET are
+ * actually set (see .env.local for the placeholder and setup steps).
+ */
+function GoogleButton() {
   return (
     <button
       type="button"
-      disabled={pending}
-      onClick={onClick}
-      className="inline-flex h-11 w-full cursor-pointer items-center justify-center gap-2.5 rounded-xl border border-white/[0.12] bg-white/[0.06] px-4 text-sm font-medium text-white transition-all hover:bg-white/[0.1] hover:border-white/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+      disabled
+      title="Google sign-in isn't set up yet"
+      className="inline-flex h-11 w-full cursor-not-allowed items-center justify-center gap-2.5 rounded-xl border border-white/[0.12] bg-white/[0.06] px-4 text-sm font-medium text-white/50 opacity-60"
     >
-      <svg viewBox="0 0 18 18" className="size-4.5 shrink-0" aria-hidden="true">
+      <svg viewBox="0 0 18 18" className="size-4.5 shrink-0 opacity-70" aria-hidden="true">
         <path
           fill="#4285F4"
           d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"
@@ -37,6 +45,9 @@ function GoogleButton({ pending, onClick }: { pending: boolean; onClick: () => v
         />
       </svg>
       <span>Continue with Google</span>
+      <span className="ml-1 rounded-full bg-white/10 px-2 py-0.5 text-[0.625rem] font-medium tracking-wide text-white/50 uppercase">
+        Soon
+      </span>
     </button>
   );
 }
@@ -77,25 +88,6 @@ export function AuthForm({
           : "Invalid email or password combination. Please double-check your credentials."
       );
     } finally {
-      setPending(false);
-    }
-  }
-
-  async function handleGoogle() {
-    setError(null);
-    setPending(true);
-    try {
-      await signIn("google", { redirectTo: next });
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error && err.message
-          ? err.message
-          : "Google sign-in is not configured yet. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex to enable Google OAuth. Please sign in with email and password.";
-      setError(
-        message.includes("AUTH_GOOGLE")
-          ? message
-          : "Google sign-in is not configured yet. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex to enable Google OAuth. Please use your email and password."
-      );
       setPending(false);
     }
   }
@@ -196,8 +188,8 @@ export function AuthForm({
         </span>
       </div>
 
-      {/* Google OAuth button */}
-      <GoogleButton pending={pending} onClick={handleGoogle} />
+      {/* Google OAuth button -- display only, see GoogleButton's comment */}
+      <GoogleButton />
     </form>
   );
 }
