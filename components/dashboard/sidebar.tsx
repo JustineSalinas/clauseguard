@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+import { TourButton } from "@/components/dashboard/product-tour";
 import {
   FileText,
   FileSearch,
@@ -13,12 +14,12 @@ import {
 } from "lucide-react";
 
 export const NAV_ITEMS = [
-  { href: "/dashboard", label: "Your contracts", icon: FileText },
-  { href: "/dashboard/sample", label: "Sample review", icon: FileSearch },
-  { href: "/dashboard/corpus", label: "Legal corpus", icon: BookOpen },
-  { href: "/dashboard/playbook", label: "Pushback playbook", icon: BookMarked },
-  { href: "/dashboard/billing", label: "Plan & billing", icon: CreditCard },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard", label: "Your contracts", icon: FileText, tourId: "nav-contracts" },
+  { href: "/dashboard/sample", label: "Sample review", icon: FileSearch, tourId: "nav-sample" },
+  { href: "/dashboard/corpus", label: "Legal corpus", icon: BookOpen, tourId: "nav-corpus" },
+  { href: "/dashboard/playbook", label: "Pushback playbook", icon: BookMarked, tourId: "nav-playbook" },
+  { href: "/dashboard/billing", label: "Plan & billing", icon: CreditCard, tourId: "nav-billing" },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings, tourId: "nav-settings" },
 ] as const;
 
 export function Sidebar({ email, activeHref }: { email: string; activeHref: string }) {
@@ -29,8 +30,12 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col justify-between overflow-y-auto border-r border-rule bg-surface lg:flex">
         <div>
           {/* Logo header */}
-          <div className="flex items-center gap-2 border-b border-rule px-6 py-5">
+          <div className="flex items-center justify-between gap-2 border-b border-rule px-6 py-5" data-tour="logo">
             <Logo size="sm" href="/" />
+          </div>
+
+          <div className="px-3 pt-3">
+            <TourButton className="w-full justify-center" />
           </div>
 
           {/* Navigation links */}
@@ -44,6 +49,7 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
                 <Link
                   key={item.href}
                   href={item.href}
+                  data-tour={item.tourId}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[0.875rem] font-medium transition-all ${
                     isActive
                       ? "bg-[#fbeee4] text-[#b04000] font-semibold shadow-2xs"
@@ -60,6 +66,7 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
           {/* Statutory Corpus Info Card with clickable link */}
           <Link
             href="/dashboard/corpus"
+            data-tour="corpus-badge"
             className="group mx-3 mt-2 block rounded-lg border border-rule bg-[#fafbfc] p-3.5 transition-colors hover:border-[#b04000]/40"
           >
             <div className="flex items-center justify-between">
@@ -78,7 +85,7 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
         </div>
 
         {/* User profile & session footer */}
-        <div className="border-t border-rule p-4">
+        <div className="border-t border-rule p-4" data-tour="profile">
           <div className="flex items-center justify-between rounded-lg bg-raised p-2.5">
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#08090a] font-display text-xs font-semibold text-white">

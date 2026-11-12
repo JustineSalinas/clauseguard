@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { UploadForm } from "@/components/upload/upload-form";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { ContractsList } from "@/components/dashboard/contracts-list";
+import { ProductTour } from "@/components/dashboard/product-tour";
 import {
   FileText,
   Clock,
@@ -78,6 +79,7 @@ export default async function Dashboard() {
 
   return (
     <div className="min-h-screen bg-[#fafbfc] lg:flex">
+      <ProductTour />
       <Sidebar email={email} activeHref="/dashboard" />
 
       <div className="flex-1">
@@ -104,7 +106,7 @@ export default async function Dashboard() {
           </div>
 
           {/* Metrics summary tiles */}
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4" data-tour="stats">
             <StatTile icon={FileText} label="Total Contracts" value={stats.total} />
             <StatTile icon={Clock} label="In Progress" value={stats.inProgress} accent={stats.inProgress > 0} />
             <StatTile icon={AlertTriangle} label="Needs Attention" value={stats.needsReview} />
@@ -112,7 +114,7 @@ export default async function Dashboard() {
           </div>
 
           {/* Quick Intelligence Tools */}
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3" data-tour="quick-tools">
             <Link
               href="/dashboard/corpus"
               className="group flex items-center justify-between rounded-xl border border-rule bg-surface p-3.5 transition-all hover:border-[#e8c6a8] hover:bg-[#fafbfc] shadow-2xs"
@@ -169,7 +171,7 @@ export default async function Dashboard() {
           </div>
 
           {/* Upload Dropzone Section */}
-          <section className="mt-6 rounded-xl border border-rule bg-surface p-6 shadow-xs">
+          <section className="mt-6 rounded-xl border border-rule bg-surface p-6 shadow-xs" data-tour="upload">
             <div className="mb-4 flex items-center justify-between border-b border-rule pb-3">
               <div>
                 <h2 className="font-display text-base font-semibold text-ink">
@@ -184,7 +186,7 @@ export default async function Dashboard() {
           </section>
 
           {/* 3-Step Legal Reliability Methodology */}
-          <div className="mt-6 grid grid-cols-1 gap-3 rounded-xl border border-rule bg-surface p-5 sm:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-3 rounded-xl border border-rule bg-surface p-5 sm:grid-cols-3" data-tour="methodology">
             <div className="flex items-start gap-3">
               <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#fbeee4] font-mono text-[0.6875rem] font-bold text-[#b04000]">
                 01
@@ -223,7 +225,7 @@ export default async function Dashboard() {
           </div>
 
           {/* Contracts List / Explorer */}
-          <section className="mt-8">
+          <section className="mt-8" data-tour="contracts-list">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-display text-lg font-semibold tracking-tight text-ink">
                 Your Contracts
