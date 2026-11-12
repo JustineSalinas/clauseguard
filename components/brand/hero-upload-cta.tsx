@@ -84,9 +84,9 @@ export function HeroUploadCta() {
         className="sr-only"
         onChange={(e) => handleFiles(e.target.files)}
       />
-      <div className="flex items-center">
+      <div className="flex items-center min-w-0">
         <UploadCloud className="size-4 text-[#b04000] mr-2.5 shrink-0" />
-        <span className="text-xs sm:text-sm text-[#868c98] group-hover:text-[#525866]">
+        <span className="text-xs sm:text-sm text-[#868c98] group-hover:text-[#525866] whitespace-nowrap truncate">
           {isDragging ? "Drop it here" : "Drop a contract PDF or photo to analyze..."}
         </span>
       </div>
