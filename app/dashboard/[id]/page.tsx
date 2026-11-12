@@ -6,6 +6,7 @@ import { convexAuthNextjsToken, isAuthenticatedNextjs } from "@convex-dev/auth/n
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { DocumentStatus, ReviewedDocument, ScoredClause } from "@/lib/types";
+import { computeMarks } from "@/lib/types";
 import { ReviewView } from "@/components/review/review-view";
 import { ContractHealthCard } from "@/components/review/contract-health-card";
 import { PipelineFlow } from "@/components/review/pipeline-flow";
@@ -66,6 +67,7 @@ export default async function DocumentReview({
       outcome: score?.outcome ?? "empty",
       injectionSuspected: score?.injectionSuspected ?? false,
       provisions: provisions ?? [],
+      marks: computeMarks(clause.text, score?.highlightedPhrases),
     }),
   );
 

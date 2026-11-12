@@ -198,6 +198,11 @@ export default defineSchema({
     deviation: v.optional(v.string()),
     provisionsReliedOn: v.array(v.string()),
     injectionSuspected: v.boolean(),
+    // Verbatim quotes from the clause text the model flagged as the risky
+    // wording -- offsets into the clause are computed at read time via
+    // lib/types.ts's computeMarks, never stored as raw indices (added in
+    // prompt_version score.v2; absent/empty on rows scored under score.v1).
+    highlightedPhrases: v.optional(v.array(v.string())),
     outcome: SCORE_OUTCOME,
     tokensIn: v.optional(v.number()),
     tokensOut: v.optional(v.number()),

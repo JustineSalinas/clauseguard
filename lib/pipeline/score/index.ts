@@ -21,7 +21,7 @@ import {
   EmptyResponseBodyError,
   NoContentGeneratedError,
 } from "ai";
-import { ScoreResponseSchema, buildScorePrompt, PROMPT_VERSION, type StatutoryProvision } from "@/lib/prompts/score.v1";
+import { ScoreResponseSchema, buildScorePrompt, PROMPT_VERSION, type StatutoryProvision } from "@/lib/prompts/score.v2";
 import { requireApiKeyFor, resolveLanguageModel, type ModelId } from "@/lib/models";
 import type { ClauseTypeId } from "@/lib/pipeline/taxonomy";
 import type { GroundingArm, RiskLevel, ScoreOutcome } from "@/lib/types";
@@ -46,6 +46,7 @@ export type ScoreClauseResult = {
   deviation: string | null;
   provisionsReliedOn: string[];
   injectionSuspected: boolean;
+  highlightedPhrases: string[];
   tokensIn: number | null;
   tokensOut: number | null;
   latencyMs: number;
@@ -128,6 +129,7 @@ export async function scoreClause(input: ScoreClauseInput): Promise<ScoreClauseR
       deviation: object.deviation,
       provisionsReliedOn: object.provisions_relied_on,
       injectionSuspected: object.injection_suspected,
+      highlightedPhrases: object.highlighted_phrases,
       tokensIn: usage.inputTokens ?? null,
       tokensOut: usage.outputTokens ?? null,
       latencyMs: Date.now() - started,
@@ -145,6 +147,7 @@ export async function scoreClause(input: ScoreClauseInput): Promise<ScoreClauseR
       deviation: null,
       provisionsReliedOn: [],
       injectionSuspected: false,
+      highlightedPhrases: [],
       tokensIn: null,
       tokensOut: null,
       latencyMs: Date.now() - started,

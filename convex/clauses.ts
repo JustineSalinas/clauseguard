@@ -139,6 +139,7 @@ export const insertScore = internalMutation({
     deviation: v.optional(v.string()),
     provisionsReliedOn: v.array(v.string()),
     injectionSuspected: v.boolean(),
+    highlightedPhrases: v.optional(v.array(v.string())),
     outcome: v.string(),
     tokensIn: v.optional(v.number()),
     tokensOut: v.optional(v.number()),

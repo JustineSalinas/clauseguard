@@ -93,6 +93,48 @@ export function verdictFor(clause: ScoredClause): ClauseVerdict {
   return "flagged";
 }
 
+/**
+ * Turns the model's verbatim quoted phrases into character offsets into
+ * `text`, via a plain string search -- never asked of the model directly,
+ * since models are unreliable at counting characters but reliable at
+ * copying text. A phrase that doesn't match exactly (whitespace collapsed,
+ * near-paraphrase) is dropped rather than mis-highlighting the wrong span.
+ * Overlapping/duplicate matches collapse into one; results are sorted so a
+ * caller can walk them in text order without re-sorting.
+ */
+export function computeMarks(
+  text: string,
+  phrases: string[] | undefined,
+): { start: number; end: number }[] {
+  if (!phrases || phrases.length === 0) return [];
+
+  const ranges: { start: number; end: number }[] = [];
+  for (const phrase of phrases) {
+    const needle = phrase.trim();
+    if (needle.length < 3) continue;
+    let fromIndex = 0;
+    while (fromIndex < text.length) {
+      const idx = text.indexOf(needle, fromIndex);
+      if (idx === -1) break;
+      ranges.push({ start: idx, end: idx + needle.length });
+      fromIndex = idx + needle.length;
+    }
+  }
+  if (ranges.length === 0) return [];
+
+  ranges.sort((a, b) => a.start - b.start || a.end - b.end);
+  const merged: { start: number; end: number }[] = [];
+  for (const r of ranges) {
+    const last = merged[merged.length - 1];
+    if (last && r.start <= last.end) {
+      last.end = Math.max(last.end, r.end);
+    } else {
+      merged.push({ ...r });
+    }
+  }
+  return merged;
+}
+
 /** Severity ordering is the service. Document order is just a PDF reader. */
 const RISK_WEIGHT: Record<RiskLevel, number> = { high: 0, medium: 1, low: 2 };
 

@@ -339,6 +339,7 @@ export const run = internalAction({
                 deviation: result.deviation ?? undefined,
                 provisionsReliedOn: result.provisionsReliedOn,
                 injectionSuspected: result.injectionSuspected,
+                highlightedPhrases: result.highlightedPhrases,
                 outcome: result.outcome,
                 tokensIn: result.tokensIn ?? undefined,
                 tokensOut: result.tokensOut ?? undefined,
