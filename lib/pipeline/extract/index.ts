@@ -233,13 +233,47 @@ export async function extractPdf(data: Uint8Array): Promise<ExtractionResult> {
     // item once. Matching by index would be wrong: the two lists have
     // different lengths whenever a run was culled for being off-page, and
     // every token after the first such run would take the wrong geometry.
-    const unclaimed = items.map((item, index) => ({ item, index, taken: false }));
+    //
+    // A single text-content item does not always correspond to a single
+    // showText operator: kerning pairs (and some headline/bold fonts in
+    // particular) routinely split one item's painting into several
+    // consecutive Tj/TJ calls -- e.g. the item "Confidentiality" painted as
+    // three runs "Confiden", "tia", "lity". Matching only on a run equalling
+    // an item's ENTIRE string misses every one of those runs (none of them
+    // equals the full string), so the whole item was silently dropped from
+    // the extracted text and its fragments were miscounted as off-page --
+    // verified against a real Chromium-rendered PDF, where this happened to
+    // most clause headings while full-line body paragraphs (painted as one
+    // Tj each) extracted fine. `matched` accumulates consecutive runs
+    // against the earliest unclaimed item whose string starts with that
+    // accumulation, so a fragmented item is only finalized once fully
+    // matched -- a genuinely off-page run never starts matching any item at
+    // all and still suppresses as before.
+    const unclaimed = items.map((item, index) => ({ item, index, taken: false, matched: "" }));
+
+    // pdfjs's own hasEOL flag misses the gap immediately before a heading
+    // and immediately after one -- verified against a real Chromium-rendered
+    // PDF, where "1. Engagement and Scope of Work" (a heading item) and the
+    // paragraph item that follows it landed on the same reconstructed line
+    // with no separator at all, so segmentClauses() never saw a line
+    // starting with "1." and merged that clause into the one before it. A
+    // baseline-y change between consecutive on-page items is a newline
+    // regardless of what hasEOL says; this is additive (never removes a
+    // newline hasEOL already adds) so it cannot regress the existing
+    // line-wrap behavior within one paragraph.
+    let lastBaselineY: number | null = null;
 
     for (const run of runs) {
-      const needle = run.text.trim();
-      const match = unclaimed.find((c) => !c.taken && c.item.str.trim() === needle);
+      const exact = unclaimed.find((c) => !c.taken && c.item.str.trim() === run.text.trim());
+      const candidate =
+        exact ??
+        unclaimed.find((c) => {
+          if (c.taken) return false;
+          const attempt = c.matched + run.text;
+          return c.item.str.startsWith(attempt) || c.item.str.trim().startsWith(attempt.trim());
+        });
 
-      if (!match) {
+      if (!candidate) {
         // Present in the paint list, absent from the text layer: pdfjs culled
         // it for sitting outside the page box.
         tokens.push({
@@ -254,8 +288,12 @@ export async function extractPdf(data: Uint8Array): Promise<ExtractionResult> {
         continue;
       }
 
-      match.taken = true;
-      const { item } = match;
+      candidate.matched += run.text;
+      const complete = exact !== undefined || candidate.matched.trim() === candidate.item.str.trim();
+      if (!complete) continue; // more fragments of this same item still to come
+
+      candidate.taken = true;
+      const { item } = candidate;
       const transform = item.transform as number[];
       const fontSize = Math.hypot(transform[2], transform[3]);
 
@@ -278,6 +316,13 @@ export async function extractPdf(data: Uint8Array): Promise<ExtractionResult> {
         });
         continue;
       }
+
+      const baselineY = transform[5];
+      if (lastBaselineY !== null && Math.abs(baselineY - lastBaselineY) > 0.5 && parts[parts.length - 1] !== "\n") {
+        parts.push("\n");
+        cursor += 1;
+      }
+      lastBaselineY = baselineY;
 
       const start = cursor;
       parts.push(item.str);

@@ -522,7 +522,7 @@ export default function Home() {
                 Who It&rsquo;s For
               </span>
               <h2 className="mt-2 font-sans text-3xl sm:text-4xl font-semibold tracking-[-0.01em] text-[#08090a]">
-                Built for Philippine freelancers and agency owners.
+                Built for Philippine freelancers and small business owners.
               </h2>
               <p className="mt-3 text-base text-[#525866] leading-relaxed">
                 Designed around the situations independent contractors and small business owners actually run into &mdash; the people who have to sign these contracts without a lawyer on retainer.

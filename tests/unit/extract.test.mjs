@@ -122,6 +122,49 @@ describe("extractPdf — hidden text suppression", () => {
   });
 });
 
+describe("extractPdf — fragmented text runs", () => {
+  // Regression test for a real production bug: a Chromium-rendered contract
+  // PDF (not this suite's synthetic fixtures) split several clause headings
+  // across multiple consecutive Tj operators within one text-content item --
+  // e.g. "Confidentiality" painted as "Confiden" + "tia" + "lity" due to
+  // kerning. The old matching logic required a run to equal an item's ENTIRE
+  // string, so none of those fragments matched and the whole heading
+  // silently vanished from the extracted text -- not suppressed, not
+  // recorded, just gone, which made segmentClauses() merge that clause into
+  // the one before it since it never saw a numbered line to split on.
+  test("reassembles one text item painted as several consecutive Tj calls", async () => {
+    const raw = `0 0 0 rg BT /F1 11 Tf 72 700 Td (Confiden) Tj (tia) Tj (lity) Tj ET`;
+    const result = await extractPdf(makePdf([raw]));
+    assert.match(result.text, /Confidentiality/);
+    assert.equal(result.suppressedTokenCount, 0, "fragments of an on-page item must not count as off-page");
+  });
+
+  test("a fragmented item's suppression still applies correctly", async () => {
+    // Same fragmentation, but painted white-on-white -- the reassembled item
+    // must still be caught as invisible, not accidentally let through because
+    // no single fragment matched the suppression check on its own.
+    const raw = `1 1 1 rg BT /F1 11 Tf 72 700 Td (Hid) Tj (den) Tj (text) Tj ET`;
+    const result = await extractPdf(makePdf([raw]));
+    assert.doesNotMatch(result.text, /Hiddentext/);
+    assert.equal(result.suppressedTokenCount, 1);
+  });
+
+  test("inserts a line break between items at different baselines even without hasEOL", async () => {
+    // A heading followed immediately by a paragraph is exactly the real-world
+    // shape that triggered this: pdfjs's hasEOL can be false across that
+    // boundary, but the two items are never on the same visual line, so
+    // segmentClauses() must still see them as separate lines.
+    const result = await extractPdf(
+      makePdf([
+        drawText({ text: "1. Heading", x: 72, y: 700 }),
+        drawText({ text: "Body text right after the heading.", x: 72, y: 680 }),
+      ]),
+    );
+    const lines = result.text.split("\n").map((l) => l.trim()).filter(Boolean);
+    assert.ok(lines.some((l) => l === "1. Heading"), `expected a standalone heading line, got: ${JSON.stringify(lines)}`);
+  });
+});
+
 describe("extractPdf — failure states", () => {
   test("throws NoTextDetected when there is no text layer", async () => {
     await assert.rejects(() => extractPdf(makePdf([])), NoTextDetectedError);

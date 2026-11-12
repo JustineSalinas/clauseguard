@@ -29,8 +29,13 @@ export default async function SettingsPage() {
   }
 
   const token = await convexAuthNextjsToken();
-  const user = await fetchQuery(api.users.me, {}, { token });
+  const [user, provisions] = await Promise.all([
+    fetchQuery(api.users.me, {}, { token }),
+    fetchQuery(api.corpus.listAll, {}, { token }),
+  ]);
   const email = user?.email ?? "your account";
+  const civilCount = provisions.filter((p: { code: string }) => p.code === "CIVIL").length;
+  const laborCount = provisions.filter((p: { code: string }) => p.code === "LABOR").length;
 
   return (
     <div className="min-h-screen bg-[#fafbfc] lg:flex">
@@ -125,7 +130,7 @@ export default async function SettingsPage() {
                       <Database className="size-4 text-[#b04000]" />
                       <span className="text-sm font-semibold text-ink">Civil Code of the Philippines</span>
                       <span className="rounded bg-raised px-2 py-0.5 font-mono text-[0.625rem] font-medium text-ink-2">
-                        RA 386 · 210 provisions
+                        RA 386 · {civilCount} provisions
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-ink-2 leading-relaxed">
@@ -141,7 +146,7 @@ export default async function SettingsPage() {
                       <Database className="size-4 text-[#b04000]" />
                       <span className="text-sm font-semibold text-ink">Labor Code of the Philippines</span>
                       <span className="rounded bg-raised px-2 py-0.5 font-mono text-[0.625rem] font-medium text-ink-2">
-                        PD 442 · 110 provisions
+                        PD 442 · {laborCount} provisions
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-ink-2 leading-relaxed">
