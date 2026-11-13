@@ -72,14 +72,14 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 text-[0.75rem] font-semibold text-ink group-hover:text-[#b04000]">
                 <Scale className="size-3.5 text-[#b04000]" />
-                <span>PH Legal Corpus</span>
+                <span>Law library</span>
               </div>
               <span className="rounded bg-[#0c8c5e]/10 px-1.5 py-0.5 font-mono text-[0.625rem] font-medium text-[#0c8c5e]">
                 320 Arts.
               </span>
             </div>
             <p className="mt-1 text-xs text-ink-3 leading-relaxed">
-              Civil Code &amp; Labor Code indexed for live RAG grounding.
+              The Civil Code &amp; Labor Code articles we check your contract against.
             </p>
           </Link>
         </div>

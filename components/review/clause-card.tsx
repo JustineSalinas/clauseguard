@@ -10,6 +10,7 @@ import {
   outcomeCopy,
 } from "@/components/review/verdict";
 import { ContractDiffViewer } from "@/components/review/contract-diff-viewer";
+import { clauseTypeLabel } from "@/lib/pipeline/taxonomy";
 import {
   Scale,
   Copy,
@@ -78,7 +79,7 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
           ) : null}
           {clause.clauseType ? (
             <span className="rounded bg-raised px-2 py-0.5 font-mono text-[0.6875rem] font-medium tracking-wide text-ink-2 uppercase">
-              {clause.clauseType.replace(/\./g, " · ")}
+              {clauseTypeLabel(clause.clauseType)}
             </span>
           ) : null}
           <span className="font-mono text-xs text-ink-3">p. {clause.page}</span>
@@ -112,7 +113,7 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
                 <div className="flex items-center gap-2">
                   <Scale className="size-4 text-[#b04000]" />
                   <p className="text-xs font-semibold tracking-wide text-[#b04000] uppercase">
-                    Philippine Statutory Grounding
+                    The law behind this
                   </p>
                 </div>
                 <button
@@ -120,7 +121,7 @@ export function ClauseCard({ clause }: { clause: ScoredClause }) {
                   onClick={() => setShowFullStatute(!showFullStatute)}
                   className="inline-flex cursor-pointer items-center gap-1 text-xs font-medium text-ink-2 transition-colors hover:text-ink"
                 >
-                  <span>{showFullStatute ? "Hide statute text" : "Read official provisions"}</span>
+                  <span>{showFullStatute ? "Hide the legal text" : "Read the law"}</span>
                   {showFullStatute ? (
                     <ChevronUp className="size-3.5" />
                   ) : (

@@ -28,7 +28,7 @@ export function InteractiveAuthPanel({
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(
     errorQuery === "google"
-      ? "Google sign-in could not be completed. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex, or continue with email and password."
+      ? "Google sign-in isn't available right now. Please use your email and password instead."
       : null
   );
   const [pending, setPending] = useState(false);
@@ -91,15 +91,9 @@ export function InteractiveAuthPanel({
     setPending(true);
     try {
       await signIn("google", { redirectTo: next });
-    } catch (err: unknown) {
-      const message =
-        err instanceof Error && err.message
-          ? err.message
-          : "Google sign-in is not configured yet. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex, or sign in with email and password.";
+    } catch {
       setError(
-        message.includes("AUTH_GOOGLE")
-          ? message
-          : "Google sign-in is not configured yet. Set AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET in Convex to enable Google OAuth. Please use your email and password."
+        "Google sign-in isn't available right now. Please use your email and password instead."
       );
       setPending(false);
     }

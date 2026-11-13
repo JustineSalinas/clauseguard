@@ -81,7 +81,7 @@ export function UploadForm() {
 
     setPending(true);
     setError(null);
-    setUploadStep("Securing document storage…");
+    setUploadStep("Saving your file…");
 
     try {
       const uploadUrl = await generateUploadUrl();
@@ -96,7 +96,7 @@ export function UploadForm() {
       if (!result.ok) throw new Error("Upload failed.");
       const { storageId } = await result.json();
 
-      setUploadStep("Starting statutory analysis…");
+      setUploadStep("Starting the review…");
       const documentId = await createDocument({
         filename: selectedFile.name,
         storageId,
@@ -170,7 +170,7 @@ export function UploadForm() {
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-rule bg-surface px-3 py-1 text-[0.75rem] font-medium text-ink-2">
               <ImageIcon className="size-3.5 text-[#b04000]" />
-              Photos / Scans (OCR)
+              Photos / scans
             </span>
             <span className="rounded-full bg-raised px-2.5 py-1 font-mono text-[0.6875rem] font-medium text-ink-3">
               Up to 10 MB
@@ -192,7 +192,7 @@ export function UploadForm() {
                   <span>·</span>
                   <span className="inline-flex items-center gap-1 text-[#0c8c5e]">
                     <CheckCircle2 className="size-3" />
-                    {isPdf ? "PDF Document (Vector Highlight)" : "Scanned Image (Vision OCR)"}
+                    {isPdf ? "PDF document" : "Scanned image"}
                   </span>
                 </div>
               </div>

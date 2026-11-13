@@ -45,10 +45,10 @@ export function ContractHealthCard({
           {/* Score Circle / Badge */}
           <div className="relative flex size-18 shrink-0 flex-col items-center justify-center rounded-2xl border border-rule bg-[#fafbfc] shadow-2xs">
             <span className="font-display text-2xl font-bold tracking-tight text-ink">
-              {health.score}
+              {health.rated ? health.score : "—"}
             </span>
             <span className="font-mono text-[0.625rem] font-semibold text-ink-3 uppercase">
-              Score / 100
+              {health.rated ? "Score / 100" : "No score"}
             </span>
           </div>
 
@@ -60,9 +60,14 @@ export function ContractHealthCard({
                 <Icon className="size-3.5" />
                 <span>{health.label}</span>
               </span>
-              <span className="rounded bg-raised px-2 py-0.5 font-mono text-xs font-bold text-ink">
-                Grade {health.grade}
-              </span>
+              {health.rated ? (
+                <span
+                  title="Starts at 100 and drops for each risky or unchecked clause. A is best, D is worst."
+                  className="rounded bg-raised px-2 py-0.5 font-mono text-xs font-bold text-ink"
+                >
+                  Grade {health.grade}
+                </span>
+              ) : null}
             </div>
             <p className="mt-1.5 text-xs text-ink-2 max-w-xl leading-relaxed">
               {health.summary}
@@ -94,25 +99,25 @@ export function ContractHealthCard({
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 pt-1">
           <div className="flex items-center gap-2 rounded-lg bg-[#fafbfc] px-3 py-2 border border-rule">
             <span className="size-2 rounded-full bg-red-500 shrink-0" />
-            <span className="text-xs text-ink-3">Critical Flags:</span>
+            <span className="text-xs text-ink-3">High risk:</span>
             <span className="font-mono text-xs font-bold text-ink">{health.highRiskCount}</span>
           </div>
 
           <div className="flex items-center gap-2 rounded-lg bg-[#fafbfc] px-3 py-2 border border-rule">
             <span className="size-2 rounded-full bg-amber-500 shrink-0" />
-            <span className="text-xs text-ink-3">Worth Checking:</span>
+            <span className="text-xs text-ink-3">Worth checking:</span>
             <span className="font-mono text-xs font-bold text-ink">{health.mediumRiskCount}</span>
           </div>
 
           <div className="flex items-center gap-2 rounded-lg bg-[#fafbfc] px-3 py-2 border border-rule">
             <span className="size-2 rounded-full bg-emerald-500 shrink-0" />
-            <span className="text-xs text-ink-3">Standard Terms:</span>
+            <span className="text-xs text-ink-3">Looks standard:</span>
             <span className="font-mono text-xs font-bold text-ink">{health.lowRiskCount}</span>
           </div>
 
           <div className="flex items-center gap-2 rounded-lg bg-[#fafbfc] px-3 py-2 border border-rule">
             <span className="size-2 rounded-full bg-slate-400 shrink-0" />
-            <span className="text-xs text-ink-3">Human Review:</span>
+            <span className="text-xs text-ink-3">Second opinion:</span>
             <span className="font-mono text-xs font-bold text-ink">{health.reviewCount}</span>
           </div>
         </div>

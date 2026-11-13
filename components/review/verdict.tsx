@@ -3,17 +3,17 @@ import { verdictFor } from "@/lib/types";
 
 /** Human wording for every non-ok outcome. The reader learns what was missed. */
 const OUTCOME_COPY: Record<string, string> = {
-  refusal: "The model declined to judge this clause.",
-  parse_error: "The model's answer came back malformed.",
-  safety_block: "The model's safety filter blocked this clause.",
-  timeout: "This clause timed out before it could be scored.",
-  rate_limited: "We ran out of quota before reaching this clause.",
-  empty: "The model returned nothing for this clause.",
-  context_limit: "This clause was too long to score in one piece.",
+  refusal: "We couldn't give a reliable rating for this clause.",
+  parse_error: "We couldn't make sense of the result for this clause.",
+  safety_block: "This clause couldn't be checked automatically.",
+  timeout: "This clause took too long to check.",
+  rate_limited: "We were too busy to get to this clause.",
+  empty: "We didn't get a result for this clause.",
+  context_limit: "This clause was too long to check in one go.",
 };
 
 export function outcomeCopy(outcome: string) {
-  return OUTCOME_COPY[outcome] ?? "This clause could not be analysed.";
+  return OUTCOME_COPY[outcome] ?? "This clause couldn't be checked.";
 }
 
 const RISK_LABEL: Record<RiskLevel, string> = {
@@ -30,7 +30,7 @@ export function VerdictBadge({ clause }: { clause: ScoredClause }) {
   if (verdict === "unreadable") {
     return (
       <span className={`${base} border-dashed border-rule-2 bg-raised text-ink-3`}>
-        Couldn&rsquo;t analyse
+        Couldn&rsquo;t check
       </span>
     );
   }
@@ -38,7 +38,7 @@ export function VerdictBadge({ clause }: { clause: ScoredClause }) {
   if (verdict === "review") {
     return (
       <span className={`${base} border-amber-300 bg-amber-50 text-amber-800`}>
-        Needs human review
+        Get a second opinion
       </span>
     );
   }
@@ -61,20 +61,16 @@ export function ConfidenceNote({ clause }: { clause: ScoredClause }) {
   if (verdict === "unreadable") return null;
   if (clause.confidence === null) return null;
 
-  const pct = Math.round(clause.confidence * 100);
-
   if (verdict === "review") {
     return (
       <p className="text-[0.8125rem] leading-relaxed text-caution">
-        We&rsquo;re only {pct}% sure about this one. Take it to someone before
-        you act on it.
+        We&rsquo;re not sure about this one. Show it to a lawyer or someone you
+        trust before you act on it.
       </p>
     );
   }
 
-  return (
-    <p className="text-xs font-mono text-ink-3">Confidence {pct}%</p>
-  );
+  return null;
 }
 
 function markClass(clause: ScoredClause) {
