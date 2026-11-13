@@ -79,3 +79,7 @@ venv/
 
 # graphify
 graphify-out/
+
+# local tooling / sample outputs
+.archify/
+eval/samples/
