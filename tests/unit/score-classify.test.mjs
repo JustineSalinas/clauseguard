@@ -6,7 +6,7 @@
 
 import { test, describe } from "node:test";
 import assert from "node:assert/strict";
-import { NoObjectGeneratedError, APICallError, EmptyResponseBodyError } from "ai";
+import { NoObjectGeneratedError, APICallError, EmptyResponseBodyError, RetryError } from "ai";
 import { classifyError, looksLikeRefusal } from "../../lib/pipeline/score/index.ts";
 
 function fakeNoObjectError({ finishReason, text }) {
@@ -26,6 +26,10 @@ function fakeApiCallError({ statusCode }) {
     requestBodyValues: {},
     statusCode,
   });
+}
+
+function fakeRetryError({ reason, lastError }) {
+  return new RetryError({ message: "test", reason, errors: [lastError] });
 }
 
 describe("classifyError", () => {
@@ -65,6 +69,31 @@ describe("classifyError", () => {
   test("empty response body -> empty", () => {
     const err = new EmptyResponseBodyError({});
     assert.equal(classifyError(err), "empty");
+  });
+
+  test("RetryError (internal retries exhausted) unwraps to its lastError, not rethrown as unknown", () => {
+    // Found live against the dev deployment: a real free-tier 503 ("high
+    // demand") on Gemini. generateObject retries internally, gives up, and
+    // throws RetryError instead of the underlying APICallError -- which,
+    // before this test existed, fell through classifyError's checks
+    // entirely and took the whole batch call down structurally instead of
+    // being counted as the timeout outcome a single unwrapped 503 already
+    // is.
+    const underlying = fakeApiCallError({ statusCode: 503 });
+    const err = fakeRetryError({ reason: "maxRetriesExceeded", lastError: underlying });
+    assert.equal(classifyError(err), "timeout");
+  });
+
+  test("RetryError wrapping a 429 still classifies as rate_limited, not timeout", () => {
+    const underlying = fakeApiCallError({ statusCode: 429 });
+    const err = fakeRetryError({ reason: "maxRetriesExceeded", lastError: underlying });
+    assert.equal(classifyError(err), "rate_limited");
+  });
+
+  test("a RetryError whose lastError is itself unrecognized still rethrows -- unwrapping isn't a catch-all", () => {
+    class SomeOtherError extends Error {}
+    const err = fakeRetryError({ reason: "errorNotRetryable", lastError: new SomeOtherError("unexpected") });
+    assert.throws(() => classifyError(err), SomeOtherError);
   });
 
   test("an unrecognized error is rethrown, never silently bucketed", () => {

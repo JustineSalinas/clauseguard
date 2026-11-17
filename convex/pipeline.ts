@@ -22,16 +22,22 @@ import { extractPdf, EncryptedDocumentError, NoTextDetectedError } from "../lib/
 import { extractImageOcr, isOcrSupportedImage, OcrUnreadableError } from "../lib/pipeline/extract/ocr";
 import { segmentClauses } from "../lib/pipeline/segment";
 import { locateClauses } from "../lib/pipeline/boxes";
-import { scoreClause } from "../lib/pipeline/score";
+import { scoreClauseBatch, SCORE_BATCH_SIZE } from "../lib/pipeline/score";
+import type { ScoreClauseInput } from "../lib/pipeline/score";
 import type { SearchMatch } from "./corpus";
 import { SCORE_STAGE_DEFAULT_MODEL } from "../lib/models";
-import { PROMPT_VERSION } from "../lib/prompts/score.v1";
+import { PROMPT_VERSION } from "../lib/prompts/score.v3";
 
 // Production default arm is "static", with "rag" and "none" fully supported.
 const DEFAULT_GROUNDING_ARM = "static" as const;
 
-// Number of clauses scored in parallel. 3 balances high throughput with rate limit safety.
-const SCORING_CONCURRENCY = 3;
+// How many scoring batches (each up to SCORE_BATCH_SIZE clauses, one API
+// call) run concurrently. Distinct from SCORE_BATCH_SIZE itself: that
+// controls clauses-per-call (cost/throughput), this controls calls-in-flight
+// at once (rate-limit safety). 2 concurrent batches of 8 clauses keeps
+// roughly the same in-flight request count the old 3-at-a-time per-clause
+// loop had, while cutting total call count by ~4x.
+const BATCH_CONCURRENCY = 2;
 
 /**
  * Public entry point: called from the upload form once the file is in
@@ -277,10 +283,19 @@ export const run = internalAction({
     let totalTokensOut = 0;
 
     try {
-      // Controlled concurrency: score in parallel batches of SCORING_CONCURRENCY
-      for (let i = 0; i < segmented.length; i += SCORING_CONCURRENCY) {
-        const chunk = segmented.slice(i, i + SCORING_CONCURRENCY);
+      // ---- Ground every clause first. RAG does a real embedding + vector
+      // search call per clause, so this stays its own concurrency-limited
+      // pass rather than being folded into the scoring batches below --
+      // grounding and scoring have different costs and different failure
+      // modes, and keeping them separate is what lets a grounding fallback
+      // (empty provisions) never block or distort a scoring batch.
+      const GROUNDING_CONCURRENCY = 3;
+      const grounded: Array<{ clauseId: (typeof clauseIds)[number]; input: ScoreClauseInput }> = new Array(
+        segmented.length,
+      );
 
+      for (let i = 0; i < segmented.length; i += GROUNDING_CONCURRENCY) {
+        const chunk = segmented.slice(i, i + GROUNDING_CONCURRENCY);
         await Promise.all(
           chunk.map(async (clause, chunkOffset) => {
             const index = i + chunkOffset;
@@ -321,42 +336,69 @@ export const run = internalAction({
               provisions = [];
             }
 
-            try {
-              const result = await scoreClause({
+            grounded[index] = {
+              clauseId,
+              input: {
                 modelId: activeModel,
                 clauseText: clause.text,
                 clauseLabel: clause.label,
                 suggestedType: clause.suggestedType,
                 provisions,
                 groundingArm: arm,
-              });
+              },
+            };
+          }),
+        );
+      }
 
-              await ctx.runMutation(internal.clauses.insertScore, {
-                clauseId,
-                runId,
-                riskLevel: result.riskLevel ?? undefined,
-                confidence: result.confidence ?? undefined,
-                rationale: result.rationale ?? undefined,
-                deviation: result.deviation ?? undefined,
-                provisionsReliedOn: result.provisionsReliedOn,
-                injectionSuspected: result.injectionSuspected,
-                highlightedPhrases: result.highlightedPhrases,
-                outcome: result.outcome,
-                tokensIn: result.tokensIn ?? undefined,
-                tokensOut: result.tokensOut ?? undefined,
-                latencyMs: result.latencyMs,
-                retrievalHit: provisions.length > 0,
-              });
+      // ---- Score in batches of SCORE_BATCH_SIZE, BATCH_CONCURRENCY batches
+      // in flight at once. A failure inside one clause's write (insertScore
+      // throwing) is caught per-clause so it can't take down the rest of
+      // its own batch's results, let alone other batches.
+      const batches: Array<typeof grounded> = [];
+      for (let i = 0; i < grounded.length; i += SCORE_BATCH_SIZE) {
+        batches.push(grounded.slice(i, i + SCORE_BATCH_SIZE));
+      }
 
-              if (result.tokensIn) totalTokensIn += result.tokensIn;
-              if (result.tokensOut) totalTokensOut += result.tokensOut;
+      for (let i = 0; i < batches.length; i += BATCH_CONCURRENCY) {
+        const concurrentBatches = batches.slice(i, i + BATCH_CONCURRENCY);
 
-              if (result.outcome === "ok") scoredCount++;
-              else failedCount++;
-            } catch (clauseScoreErr) {
-              console.error(`[score] clause ${index} error:`, clauseScoreErr);
-              failedCount++;
-            }
+        await Promise.all(
+          concurrentBatches.map(async (batch) => {
+            const results = await scoreClauseBatch(batch.map((b) => b.input));
+
+            await Promise.all(
+              results.map(async (result, offset) => {
+                const { clauseId, input } = batch[offset];
+                try {
+                  await ctx.runMutation(internal.clauses.insertScore, {
+                    clauseId,
+                    runId,
+                    riskLevel: result.riskLevel ?? undefined,
+                    confidence: result.confidence ?? undefined,
+                    rationale: result.rationale ?? undefined,
+                    deviation: result.deviation ?? undefined,
+                    provisionsReliedOn: result.provisionsReliedOn,
+                    injectionSuspected: result.injectionSuspected,
+                    highlightedPhrases: result.highlightedPhrases,
+                    outcome: result.outcome,
+                    tokensIn: result.tokensIn ?? undefined,
+                    tokensOut: result.tokensOut ?? undefined,
+                    latencyMs: result.latencyMs,
+                    retrievalHit: input.provisions.length > 0,
+                  });
+
+                  if (result.tokensIn) totalTokensIn += result.tokensIn;
+                  if (result.tokensOut) totalTokensOut += result.tokensOut;
+
+                  if (result.outcome === "ok") scoredCount++;
+                  else failedCount++;
+                } catch (writeErr) {
+                  console.error(`[score] failed to write result for clause ${clauseId}:`, writeErr);
+                  failedCount++;
+                }
+              }),
+            );
           }),
         );
       }
