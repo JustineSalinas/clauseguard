@@ -14,7 +14,7 @@ import type { ReviewedDocument, ScoredClause } from "@/lib/types";
  */
 
 /** Marks by substring, so offsets cannot drift when the text is edited. */
-function mark(text: string, ...phrases: string[]) {
+export function mark(text: string, ...phrases: string[]) {
   const marks: { start: number; end: number }[] = [];
   for (const p of phrases) {
     const start = text.indexOf(p);
@@ -23,7 +23,7 @@ function mark(text: string, ...phrases: string[]) {
   return marks;
 }
 
-function clause(
+export function clause(
   partial: Omit<ScoredClause, "marks"> & { markPhrases?: string[] },
 ): ScoredClause {
   const { markPhrases, ...rest } = partial;

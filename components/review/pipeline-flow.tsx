@@ -1,5 +1,4 @@
 import { UploadCloud, ScanSearch, ListChecks, BookOpenCheck, Scale, Check, Loader2 } from "lucide-react";
-import { SCORE_STAGE_DEFAULT_MODEL } from "@/lib/models";
 import type { DocumentStatus } from "@/lib/types";
 
 /**
@@ -7,9 +6,9 @@ import type { DocumentStatus } from "@/lib/types";
  * instead of a plain "still reading" box. Doing this honestly means not
  * inventing a stage that doesn't exist: grounding genuinely runs as its own
  * step (lib/pipeline/ground) before every scoring call, so it gets its own
- * node here rather than being folded silently into "Score" -- this is also
- * the one place in the product that makes Objective 4's grounding step, and
- * Objective 3's active model, visible to the user at all.
+ * node here rather than being folded silently into scoring -- this is the
+ * one place in the product that makes Objective 4's grounding step visible.
+ * Labels are plain language on purpose; the model ID is deliberately not shown.
  */
 
 type NodeKey = "upload" | "extract" | "segment" | "ground" | "score";
@@ -17,9 +16,9 @@ type NodeKey = "upload" | "extract" | "segment" | "ground" | "score";
 const NODES: { key: NodeKey; label: string; detail: string; icon: typeof UploadCloud }[] = [
   { key: "upload", label: "Uploaded", detail: "Received your file", icon: UploadCloud },
   { key: "extract", label: "Reading", detail: "Pulling text from the PDF", icon: ScanSearch },
-  { key: "segment", label: "Segmenting", detail: "Splitting into clauses", icon: ListChecks },
-  { key: "ground", label: "Grounding", detail: "Matching Civil & Labor Code", icon: BookOpenCheck },
-  { key: "score", label: "Scoring", detail: `Checking risk · ${SCORE_STAGE_DEFAULT_MODEL}`, icon: Scale },
+  { key: "segment", label: "Finding clauses", detail: "Splitting the contract into clauses", icon: ListChecks },
+  { key: "ground", label: "Checking the law", detail: "Comparing with the Civil & Labor Code", icon: BookOpenCheck },
+  { key: "score", label: "Rating risk", detail: "Rating each clause", icon: Scale },
 ];
 
 // Document status -> how far through NODES we are. "scoring" lights both

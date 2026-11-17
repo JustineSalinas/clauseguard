@@ -41,9 +41,9 @@ const PIPELINE_STAGES = [
 const STATUS_LABELS: Record<string, { label: string; tone: string; icon: typeof CheckCircle2 }> = {
   uploaded: { label: "Queued", tone: "bg-raised text-ink-2 border-rule", icon: Clock },
   extracting: { label: "Reading text", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
-  extracted: { label: "Read complete", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
+  extracted: { label: "Reading done", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
   segmenting: { label: "Finding clauses", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
-  segmented: { label: "Clauses indexed", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
+  segmented: { label: "Clauses found", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
   scoring: { label: "Checking risks", tone: "bg-[#fbeee4] text-[#b04000] border-[#e8c6a8]", icon: Clock },
   partial: { label: "Partly checked", tone: "bg-caution-wash text-caution border-amber-200", icon: AlertTriangle },
   complete: { label: "Reviewed", tone: "bg-clear-wash text-clear border-emerald-200", icon: CheckCircle2 },

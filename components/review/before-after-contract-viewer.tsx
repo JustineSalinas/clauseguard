@@ -72,21 +72,21 @@ function Summary({
         />
         <SummaryStat
           n={s.low}
-          label="Look standard"
+          label="Looks standard"
           tone="text-[#0c8c5e]"
           active={activeFilter === "low"}
           onClick={() => onSelectFilter(activeFilter === "low" ? "all" : "low")}
         />
         <SummaryStat
           n={s.review}
-          label="Need human review"
+          label="Need a second opinion"
           tone="text-[#d97706]"
           active={activeFilter === "review"}
           onClick={() => onSelectFilter(activeFilter === "review" ? "all" : "review")}
         />
         <SummaryStat
           n={s.unreadable}
-          label="Unanalyzed / refusal"
+          label="Couldn't check"
           tone="text-[#868c98]"
           active={activeFilter === "unreadable"}
           onClick={() => onSelectFilter(activeFilter === "unreadable" ? "all" : "unreadable")}
@@ -96,16 +96,22 @@ function Summary({
       {s.incomplete ? (
         <p className="border-t border-[#f2f2f2] bg-[#f8f9fa] px-5 py-3 text-xs sm:text-sm leading-relaxed text-[#525866]">
           <span className="font-semibold text-[#08090a]">
-            Incomplete verification threshold:
+            Some clauses weren&rsquo;t fully checked:
           </span>{" "}
-          {s.review + s.unreadable} of {s.total} clauses were routed to manual review or unparsed because model confidence fell below the calibrated threshold. Silence on those is never treated as approval.
+          {s.review + s.unreadable} of {s.total} clauses are marked &ldquo;second opinion&rdquo; or &ldquo;couldn&rsquo;t check&rdquo; because we weren&rsquo;t sure enough to rate them. Don&rsquo;t read the lack of a warning on those as approval.
         </p>
       ) : null}
     </div>
   );
 }
 
-function DocumentView({ clauses }: { clauses: ScoredClause[] }) {
+function DocumentView({
+  clauses,
+  title,
+}: {
+  clauses: ScoredClause[];
+  title: string;
+}) {
   const inOrder = [...clauses].sort((a, b) => a.ordinal - b.ordinal);
 
   return (
@@ -113,10 +119,10 @@ function DocumentView({ clauses }: { clauses: ScoredClause[] }) {
       <div className="font-sans mx-auto max-w-[68ch] space-y-6 text-[15px] leading-[1.8] text-[#08090a]">
         <div className="border-b border-[#f2f2f2] pb-4 mb-6">
           <p className="text-[11px] font-mono text-[#b04000] uppercase tracking-wider font-semibold">
-            In-Situ Contract Heat-Map &middot; Grounded in Philippine Law
+            Your contract, colour-coded by risk
           </p>
           <h3 className="text-lg font-semibold text-[#08090a] mt-1">
-            Independent Contractor &amp; Intellectual Property Services Agreement
+            {title}
           </h3>
         </div>
 
@@ -217,7 +223,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-[0.05em] text-[#08090a]">
-              Audit State:
+              View:
             </span>
             <span
               className={`text-xs font-mono font-medium px-2 py-0.5 rounded-[3px] border ${
@@ -227,8 +233,8 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
               }`}
             >
               {viewMode === "after"
-                ? "AUDITED BY CLAUSEGUARD"
-                : "RAW CLIENT DRAFT (UNAUDITED)"}
+                ? "CHECKED BY CLAUSEGUARD"
+                : "ORIGINAL (NOT CHECKED)"}
             </span>
           </div>
           <p className="text-xs text-[#525866] mt-1">
@@ -253,7 +259,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                   : "text-[#525866] hover:text-[#08090a]"
               }`}
             >
-              Before (Raw Draft)
+              Before
             </button>
             <button
               onClick={() => {
@@ -267,7 +273,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
               }`}
             >
               <span className="size-1.5 rounded-full bg-[#b04000]" />
-              After (Audited)
+              After (Checked)
             </button>
           </div>
 
@@ -282,7 +288,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
             ) : (
               <Play className="size-3 text-[#b04000] fill-current" />
             )}
-            <span>{isScanning ? "Scanning..." : "Run Audit Scan"}</span>
+            <span>{isScanning ? "Playing..." : "Replay the reveal"}</span>
           </button>
         </div>
       </div>
@@ -293,16 +299,11 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
           <div className="flex items-center gap-3">
             <span className="size-2 rounded-full bg-[#b04000] animate-ping" />
             <div className="text-xs font-mono font-medium text-[#08090a]">
-              {scanStage === 1 && "Stage 1/3: Extracting token bounding boxes & hierarchy..."}
-              {scanStage === 2 && "Stage 2/3: Querying Philippine Civil Code (R.A. 386) & Labor Code vectors..."}
-              {scanStage === 3 && "Stage 3/3: Calibrating confidence thresholds & generating heat-map overlay..."}
+              {scanStage === 1 && "Step 1 of 3: Reading your contract..."}
+              {scanStage === 2 && "Step 2 of 3: Comparing against Philippine law..."}
+              {scanStage === 3 && "Step 3 of 3: Marking up risky clauses..."}
             </div>
           </div>
-          <span className="text-xs font-mono text-[#b04000] font-semibold">
-            {scanStage === 1 && "33%"}
-            {scanStage === 2 && "68%"}
-            {scanStage === 3 && "95%"}
-          </span>
         </div>
       )}
 
@@ -313,10 +314,10 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
           <div className="rounded-[16px] border border-[#fde68a] bg-[#fffdf5] p-5">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#b45309]">
               <AlertTriangle className="size-4 text-[#d97706]" />
-              <span>UNAUDITED CONTRACT VIEW &middot; DANGEROUS TERMS HIDING IN PLAIN SIGHT</span>
+              <span>ORIGINAL CONTRACT &middot; RISKY TERMS ARE HARD TO SPOT</span>
             </div>
             <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#78350f]">
-              This is the agreement exactly as sent by the client. Notice that Section 14.2 (unilateral fee forfeiture) and Section 9.4 (unlimited one-way indemnification) appear as regular black text with zero visual distinction. Click <strong>&ldquo;After (Audited)&rdquo;</strong> or click <strong>&ldquo;Run Audit Scan&rdquo;</strong> to watch ClauseGuard identify, flag, and ground every statutory violation.
+              This is the agreement exactly as it was sent to you. Risky terms look the same as everything else. Click <strong>&ldquo;After (Checked)&rdquo;</strong> to see what ClauseGuard found.
             </p>
           </div>
 
@@ -335,10 +336,10 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
             <div className="font-sans mx-auto max-w-[68ch] space-y-6 text-[15px] leading-[1.85] text-[#08090a]">
               <div className="border-b border-[#f2f2f2] pb-4 mb-6">
                 <p className="text-[11px] font-mono text-[#868c98] uppercase tracking-wider">
-                  Contract Excerpt &middot; Raw Client Draft (Before ClauseGuard Audit)
+                  Original contract, before ClauseGuard
                 </p>
                 <h3 className="text-lg font-semibold text-[#08090a] mt-1">
-                  Independent Contractor &amp; Intellectual Property Services Agreement
+                  {doc.filename}
                 </h3>
               </div>
 
@@ -382,7 +383,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                     : "text-[#525866] hover:text-[#08090a]"
                 }`}
               >
-                By Severity ({ranked.length})
+                Most serious first ({ranked.length})
               </button>
               <button
                 type="button"
@@ -393,12 +394,12 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                     : "text-[#525866] hover:text-[#08090a]"
                 }`}
               >
-                Whole Document (In-Situ)
+                Whole contract
               </button>
             </div>
 
             <p className="text-xs text-[#868c98] font-mono">
-              {doc.clauses.length} clauses analyzed &middot; {doc.pageCount ?? 12} pages &middot; Grounded in Civil Code &amp; Labor Code
+              {doc.clauses.length} clauses checked{doc.pageCount ? <> &middot; {doc.pageCount} pages</> : null} &middot; Based on the Civil Code &amp; Labor Code
             </p>
           </div>
 
@@ -454,7 +455,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                         : "border border-amber-200 bg-amber-50/60 text-amber-900 hover:bg-amber-100"
                     }`}
                   >
-                    Human Review ({summary.review})
+                    Second opinion ({summary.review})
                   </button>
                 )}
                 {summary.low > 0 && (
@@ -467,7 +468,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                         : "border border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
                     }`}
                   >
-                    Standard ({summary.low})
+                    Looks standard ({summary.low})
                   </button>
                 )}
               </div>
@@ -482,12 +483,12 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
                   {copiedAll ? (
                     <>
                       <Check className="size-3.5 text-emerald-600" />
-                      <span>Copied Redlines!</span>
+                      <span>Copied!</span>
                     </>
                   ) : (
                     <>
                       <Copy className="size-3.5" />
-                      <span>Copy All Redlines ({flaggedRedlinesCount})</span>
+                      <span>Copy all suggested wording ({flaggedRedlinesCount})</span>
                     </>
                   )}
                 </button>
@@ -517,7 +518,7 @@ export function BeforeAfterContractViewer({ doc }: BeforeAfterContractViewerProp
 
           {/* Content Pane 2: Whole Document In-Situ */}
           {afterSubTab === "document" && (
-            <DocumentView clauses={doc.clauses} />
+            <DocumentView clauses={doc.clauses} title={doc.filename} />
           )}
         </div>
       )}

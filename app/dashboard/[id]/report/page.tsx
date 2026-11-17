@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { ScoredClause } from "@/lib/types";
 import { computeContractHealth } from "@/lib/scoring/health-score";
+import { clauseTypeLabel } from "@/lib/pipeline/taxonomy";
 import { Logo } from "@/components/brand/logo";
 import { PrintReportButton } from "@/components/review/print-report-button";
 import { ArrowLeft, Scale, ShieldCheck } from "lucide-react";
@@ -105,16 +106,16 @@ export default async function AuditReportPage({
           <div className="text-right">
             <div className="inline-flex flex-col items-end rounded-lg border border-rule bg-[#fafbfc] p-3 print:border-black">
               <span className="font-mono text-[0.6875rem] text-ink-3 uppercase font-semibold">
-                Contract Health Index
+                Overall rating
               </span>
               <div className="mt-0.5 flex items-baseline gap-1">
                 <span className="font-display text-3xl font-bold text-ink">
-                  {health.score}
+                  {health.rated ? health.score : "—"}
                 </span>
-                <span className="text-xs text-ink-3">/ 100</span>
+                <span className="text-xs text-ink-3">{health.rated ? "/ 100" : "not rated"}</span>
               </div>
               <span className="text-[0.6875rem] font-bold text-[#b04000] uppercase">
-                Grade {health.grade} · {health.label}
+                {health.rated ? `Grade ${health.grade} · ` : ""}{health.label}
               </span>
             </div>
           </div>
@@ -123,13 +124,13 @@ export default async function AuditReportPage({
         {/* Executive Summary Section */}
         <section className="mt-6">
           <h2 className="font-display text-xs font-bold uppercase tracking-wider text-ink-3">
-            01 · Executive Summary &amp; Legal Stance
+            01 · Summary
           </h2>
           <div className="mt-2 rounded-lg border border-rule bg-[#fafbfc] p-4 text-xs leading-relaxed text-ink print:bg-transparent print:border-gray-300">
             <p>{health.summary}</p>
             <p className="mt-2 text-ink-2">
-              Analyzed {health.totalClauses} distinct covenants against Republic Act No. 386 (Civil Code of the Philippines)
-              and Presidential Decree No. 442 (Labor Code of the Philippines).
+              We checked {health.totalClauses} clauses against the Civil Code (Republic Act No. 386) and the Labor Code
+              (Presidential Decree No. 442) of the Philippines.
             </p>
           </div>
         </section>
@@ -138,31 +139,33 @@ export default async function AuditReportPage({
         <div className="mt-4 grid grid-cols-4 gap-3 text-center">
           <div className="rounded-lg border border-rule p-2.5">
             <div className="font-display text-xl font-bold text-red-600">{health.highRiskCount}</div>
-            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Critical Flags</div>
+            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">High risk</div>
           </div>
           <div className="rounded-lg border border-rule p-2.5">
             <div className="font-display text-xl font-bold text-amber-600">{health.mediumRiskCount}</div>
-            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Worth Checking</div>
+            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Worth checking</div>
           </div>
           <div className="rounded-lg border border-rule p-2.5">
             <div className="font-display text-xl font-bold text-emerald-600">{health.lowRiskCount}</div>
-            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Standard Terms</div>
+            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Looks standard</div>
           </div>
           <div className="rounded-lg border border-rule p-2.5">
             <div className="font-display text-xl font-bold text-ink">{health.reviewCount}</div>
-            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Uncertain / Review</div>
+            <div className="text-[0.6875rem] text-ink-3 uppercase font-medium">Get a second opinion</div>
           </div>
         </div>
 
         {/* Key Findings & Statutory Violations Table */}
         <section className="mt-8">
           <h2 className="font-display text-xs font-bold uppercase tracking-wider text-ink-3">
-            02 · Key Flagged Provisions &amp; Recommended Redlines
+            02 · Clauses to raise, with suggested wording
           </h2>
 
           {flaggedClauses.length === 0 ? (
             <p className="mt-3 text-xs text-ink-3 italic">
-              No severe or moderate risks detected. All clauses conform to baseline statutory requirements.
+              {health.reviewCount + health.unreadableCount > 0
+                ? `No clause was rated high risk or worth checking, but ${health.reviewCount + health.unreadableCount} could not be rated with confidence. Have someone look at those before you sign.`
+                : "No high-risk or worth-checking clauses found."}
             </p>
           ) : (
             <div className="mt-3 flex flex-col gap-4">
@@ -182,7 +185,7 @@ export default async function AuditReportPage({
                         </span>
                         {c.clauseType && (
                           <span className="font-mono text-[0.625rem] text-ink-3 uppercase">
-                            · {c.clauseType}
+                            · {clauseTypeLabel(c.clauseType)}
                           </span>
                         )}
                         <span className="text-[0.625rem] font-mono text-ink-3">p. {c.page}</span>
@@ -192,12 +195,12 @@ export default async function AuditReportPage({
                           isHigh ? "bg-red-50 text-red-700" : "bg-amber-50 text-amber-700"
                         }`}
                       >
-                        {isHigh ? "High Risk" : "Moderate Risk"}
+                        {isHigh ? "High risk" : "Worth checking"}
                       </span>
                     </div>
 
                     <div className="mt-2.5">
-                      <span className="text-[0.6875rem] font-semibold text-ink-3 uppercase">Original Term:</span>
+                      <span className="text-[0.6875rem] font-semibold text-ink-3 uppercase">Original wording:</span>
                       <p className="mt-1 font-contract text-xs italic leading-relaxed text-ink bg-[#fafbfc] p-2.5 rounded border border-rule print:bg-transparent">
                         &ldquo;{c.text}&rdquo;
                       </p>

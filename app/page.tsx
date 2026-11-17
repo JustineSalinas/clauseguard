@@ -6,6 +6,7 @@ import { InteractiveContractInspector } from "@/components/brand/interactive-con
 import { Reveal } from "@/components/brand/reveal";
 import { HeroUploadCta } from "@/components/brand/hero-upload-cta";
 import { Logo } from "@/components/brand/logo";
+import { PublicMobileNav } from "@/components/brand/public-mobile-nav";
 import {
   ShieldCheck,
   Scale,
@@ -62,16 +63,17 @@ export default function Home() {
           <div className="flex items-center gap-2.5 justify-self-end">
             <Link
               href="/login"
-              className="text-[14px] font-medium text-[#08090a] px-3 py-1.5 rounded-[4px] hover:bg-[#f2f2f2] transition-colors"
+              className="hidden sm:inline-block text-[14px] font-medium text-[#08090a] px-3 py-1.5 rounded-[4px] hover:bg-[#f2f2f2] transition-colors"
             >
               Sign in
             </Link>
-            <Button asChild size="default" variant="default">
+            <Button asChild size="default" variant="default" className="hidden sm:inline-flex">
               <Link href="/signup">
                 Start for free
                 <ArrowRight className="size-3.5 ml-1.5" />
               </Link>
             </Button>
+            <PublicMobileNav triggerClassName="md:hidden" />
           </div>
         </div>
       </header>

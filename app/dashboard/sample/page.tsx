@@ -4,7 +4,9 @@ import Link from "next/link";
 import { fetchQuery } from "convex/nextjs";
 import { convexAuthNextjsToken, isAuthenticatedNextjs } from "@convex-dev/auth/nextjs/server";
 import { api } from "@/convex/_generated/api";
-import { SAMPLE_DOCUMENT } from "@/lib/fixtures/sample-review";
+import { getSample } from "@/lib/fixtures/sample-contracts";
+import { SamplePicker } from "@/components/review/sample-picker";
+import { SampleMethodology } from "@/components/review/sample-methodology";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { ReviewView } from "@/components/review/review-view";
 import { ContractHealthCard } from "@/components/review/contract-health-card";
@@ -15,7 +17,12 @@ export const metadata: Metadata = {
   description: "A reference freelance contract review grounded in Philippine statutory law.",
 };
 
-export default async function DashboardSamplePage() {
+export default async function DashboardSamplePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ c?: string }>;
+}) {
+  const { c } = await searchParams;
   if (!(await isAuthenticatedNextjs())) {
     redirect("/login?next=/dashboard/sample");
   }
@@ -23,7 +30,8 @@ export default async function DashboardSamplePage() {
   const token = await convexAuthNextjsToken();
   const user = await fetchQuery(api.users.me, {}, { token });
   const email = user?.email ?? "your account";
-  const doc = SAMPLE_DOCUMENT;
+  const sample = getSample(c);
+  const doc = sample.doc;
 
   return (
     <div className="min-h-screen bg-[#fafbfc] lg:flex">
@@ -36,16 +44,16 @@ export default async function DashboardSamplePage() {
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-rule bg-surface px-2.5 py-0.5 text-[0.6875rem] font-medium text-ink-2">
                 <FileSearch className="size-3 text-[#b04000]" />
-                Reference Agreement
+                Reference Agreement · {sample.category}
               </span>
               <span className="font-mono text-[0.6875rem] text-ink-3">
-                7 Clauses · Full Statutory Annotation
+                {doc.clauses.length} Clauses · Full Statutory Annotation
               </span>
             </div>
 
             <div className="mt-2.5 flex flex-col justify-between gap-3 sm:flex-row sm:items-baseline">
               <h1 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-                Freelance Design Agreement
+                {sample.title}
               </h1>
               <Link
                 href="/dashboard"
@@ -56,9 +64,10 @@ export default async function DashboardSamplePage() {
               </Link>
             </div>
 
-            <p className="mt-1 text-sm text-ink-2 max-w-3xl leading-relaxed">
-              Seven clauses from a real-world contractor agreement. Two shift severe legal and financial risk onto the designer (Arts. 1308 and 1306), one is routed to human review due to calibrated confidence thresholds, and one demonstrates unreadable OCR handling.
-            </p>
+            <p className="mt-1 max-w-3xl text-sm leading-relaxed text-ink-2">{sample.summary}</p>
+            <div className="mt-4">
+              <SamplePicker basePath="/dashboard/sample" activeSlug={sample.slug} />
+            </div>
           </div>
 
           {/* Interactive Review with Health Card */}
@@ -67,34 +76,9 @@ export default async function DashboardSamplePage() {
             <ReviewView doc={doc} />
           </div>
 
-          {/* Transparent Edge Case Explanation */}
-          <section className="mt-12 rounded-xl border border-rule bg-surface p-6 sm:p-8 shadow-xs">
-            <h2 className="font-display text-base font-semibold tracking-tight text-ink">
-              Methodology: Why two clauses have no automated verdict
-            </h2>
-            <div className="mt-4 grid gap-5 md:grid-cols-2">
-              <div className="rounded-lg border border-amber-200 bg-[#fffbeb] p-4.5">
-                <p className="text-xs font-semibold tracking-wider text-amber-800 uppercase">
-                  Routed to Human Review
-                </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-amber-900">
-                  Clause 9.1 scored 42% confidence and 12.3 scored 55%. Both are below the calibrated
-                  threshold where we are willing to put a verdict on screen. We route them to human
-                  review rather than pretending certainty.
-                </p>
-              </div>
-              <div className="rounded-lg border border-rule-2 bg-[#fafbfc] p-4.5">
-                <p className="text-xs font-semibold tracking-wider text-ink-3 uppercase">
-                  Couldn&rsquo;t Be Analysed
-                </p>
-                <p className="mt-1.5 text-xs leading-relaxed text-ink-2">
-                  Clause 16 was flagged for an OCR parse failure on a malformed signature block. Rather
-                  than silently dropping the text or guessing a verdict, it is retained on the document
-                  with an honest explanation so you know it was not checked.
-                </p>
-              </div>
-            </div>
-          </section>
+          <div className="mt-12">
+            <SampleMethodology doc={doc} />
+          </div>
 
           {/* Footer note */}
           <footer className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-6 text-xs text-ink-3">

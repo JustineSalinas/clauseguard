@@ -97,6 +97,16 @@ const PIPELINE_STAGE = v.union(
 
 const STAGE_RUN_OUTCOME = v.union(v.literal("ok"), v.literal("partial"), v.literal("failed"));
 
+// Activity-log event kinds (convex/auditLogs.ts). Kept here, with the other
+// validators, so the schema never imports from a function module.
+export const AUDIT_EVENT = v.union(
+  v.literal("uploaded"),
+  v.literal("analyzed"),
+  v.literal("failed"),
+  v.literal("reviewed"),
+  v.literal("retried"),
+);
+
 const PROVISION_CODE = v.union(v.literal("CIVIL"), v.literal("LABOR"));
 
 export default defineSchema({
@@ -283,4 +293,27 @@ export default defineSchema({
     similarity: v.optional(v.number()),
     createdAt: v.number(),
   }).index("by_clause_run_rank", ["clauseId", "runId", "rank"]),
+
+  // ----------------------------------------------------------- auditLogs --
+  // Per-user activity trail (see convex/auditLogs.ts). Owner-scoped: every
+  // public reader filters on ownerId. Holds filenames and counts only, never
+  // contract text. `documentId` is a plain string, not an id reference;
+  // rows are deleted together with their document (documents.remove).
+  auditLogs: defineTable({
+    ownerId: v.id("users"),
+    event: AUDIT_EVENT,
+    documentId: v.string(),
+    filename: v.string(),
+    detail: v.optional(
+      v.object({
+        clauses: v.optional(v.number()),
+        flagged: v.optional(v.number()),
+        needsReview: v.optional(v.number()),
+        status: v.optional(v.string()),
+        stage: v.optional(v.string()),
+      }),
+    ),
+    createdAt: v.number(),
+  }).index("by_owner_created", ["ownerId", "createdAt"])
+    .index("by_owner_document", ["ownerId", "documentId"]),
 });

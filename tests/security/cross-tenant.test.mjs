@@ -89,6 +89,45 @@ test("stageRuns.listForDocument returns empty for another user's document", asyn
   assert.deepEqual(runs, [], "stage runs of another user's document leaked");
 });
 
+test("auditLogs.listMine never includes another user's events, and the owner sees their own", async () => {
+  const [logsA, logsB] = await Promise.all([
+    clientA.query(api.auditLogs.listMine, {}),
+    clientB.query(api.auditLogs.listMine, {}),
+  ]);
+  assert.ok(
+    logsA.some((l) => l.documentId === docIdOwnedByA && l.event === "uploaded"),
+    "the owner's upload should be in their own activity log",
+  );
+  assert.equal(
+    logsB.find((l) => l.documentId === docIdOwnedByA),
+    undefined,
+    "auditLogs.listMine leaked another user's activity",
+  );
+});
+
+test("auditLogs.recordReview refuses another user's document and writes nothing", async () => {
+  const before = await clientB.query(api.auditLogs.summaryMine, {});
+  const wrote = await clientB.mutation(api.auditLogs.recordReview, { documentId: docIdOwnedByA });
+  assert.equal(wrote, false, "a non-owner must not be able to log activity against someone else's document");
+  const after = await clientB.query(api.auditLogs.summaryMine, {});
+  assert.deepEqual(after, before, "a refused recordReview must not change the caller's summary");
+});
+
+test("deleting a document also deletes its activity rows", async () => {
+  const docId = await createOwnedDocument(clientA);
+  const before = await clientA.query(api.auditLogs.listMine, {});
+  assert.ok(before.some((l) => l.documentId === docId), "upload should have been logged");
+
+  await clientA.mutation(api.documents.remove, { id: docId });
+
+  const after = await clientA.query(api.auditLogs.listMine, {});
+  assert.equal(
+    after.find((l) => l.documentId === docId),
+    undefined,
+    "audit rows for a deleted document must be deleted with it",
+  );
+});
+
 test("an unauthenticated client gets the same denial shape as a wrong-tenant client", async () => {
   const { ConvexHttpClient } = await import("convex/browser");
   const anon = new ConvexHttpClient(clientA.url ?? clientA.backendUrl);
@@ -98,6 +137,9 @@ test("an unauthenticated client gets the same denial shape as a wrong-tenant cli
 
   const docs = await anon.query(api.documents.listMine, {});
   assert.deepEqual(docs, [], "an unauthenticated caller must not get any document list");
+
+  const logs = await anon.query(api.auditLogs.listMine, {});
+  assert.deepEqual(logs, [], "an unauthenticated caller must not get any activity log");
 
   await assert.rejects(
     () => anon.mutation(api.documents.remove, { id: docIdOwnedByA }),

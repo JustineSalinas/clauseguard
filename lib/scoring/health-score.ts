@@ -4,6 +4,8 @@ import { verdictFor } from "@/lib/types";
 export interface ContractHealthReport {
   score: number; // 0 - 100
   grade: "A" | "B" | "C" | "D";
+  /** False when no clause got a confident rating, so score/grade mean nothing. */
+  rated: boolean;
   label: string;
   tone: "clear" | "caution" | "flag";
   summary: string;
@@ -18,11 +20,12 @@ export interface ContractHealthReport {
 export function computeContractHealth(clauses: ScoredClause[]): ContractHealthReport {
   if (!clauses || clauses.length === 0) {
     return {
-      score: 100,
-      grade: "A",
-      label: "No clauses to evaluate",
-      tone: "clear",
-      summary: "No clauses have been evaluated for this document yet.",
+      score: 0,
+      grade: "D",
+      rated: false,
+      label: "Not rated yet",
+      tone: "caution",
+      summary: "We haven't checked any clauses in this document yet.",
       totalClauses: 0,
       highRiskCount: 0,
       mediumRiskCount: 0,
@@ -62,33 +65,52 @@ export function computeContractHealth(clauses: ScoredClause[]): ContractHealthRe
 
   const score = Math.max(0, Math.min(100, rawScore));
 
+  if (highRiskCount + mediumRiskCount + lowRiskCount === 0) {
+    return {
+      score: 0,
+      grade: "D",
+      rated: false,
+      label: "Not rated",
+      tone: "caution",
+      summary:
+        "We couldn't confidently rate any clause in this document, so there's no overall score. Check each clause below or ask a lawyer to look it over.",
+      totalClauses: clauses.length,
+      highRiskCount,
+      mediumRiskCount,
+      lowRiskCount,
+      reviewCount,
+      unreadableCount,
+    };
+  }
+
   let grade: "A" | "B" | "C" | "D" = "A";
-  let label = "Favorable Terms";
+  let label = "Looks fair";
   let tone: "clear" | "caution" | "flag" = "clear";
-  let summary = "The contract stipulations appear balanced and conform to standard Philippine contracting norms.";
+  let summary = "The terms we could check look balanced and in line with common practice in the Philippines.";
 
   if (score < 50 || highRiskCount >= 2) {
     grade = "D";
-    label = "High Risk / Predatory Covenants";
+    label = "High risk";
     tone = "flag";
-    summary = `This agreement shifts significant legal and financial liability onto you (${highRiskCount} high-risk clause${
+    summary = `This contract puts a lot of legal and financial risk on you (${highRiskCount} high-risk clause${
       highRiskCount > 1 ? "s" : ""
-    } flagged). Critical terms violate mutuality under Civil Code Art. 1308. Renegotiation strongly advised.`;
+    }). Some terms are one-sided, which Philippine contract law (Civil Code Art. 1308) doesn't allow. We strongly suggest asking for changes before you sign.`;
   } else if (score < 75 || highRiskCount === 1) {
     grade = "C";
-    label = "Unfavorable / Needs Revision";
+    label = "Needs changes";
     tone = "caution";
-    summary = `The contract contains ${highRiskCount > 0 ? "1 high-risk covenant" : `${mediumRiskCount} non-standard terms`} that should be amended before signing. Use our counter-proposal drafts to adjust liability.`;
+    summary = `The contract contains ${highRiskCount > 0 ? "1 high-risk clause" : `${mediumRiskCount} unusual clause${mediumRiskCount > 1 ? "s" : ""}`} that should be changed before you sign. Use the suggested wording on each clause to ask for a fairer version.`;
   } else if (score < 90 || mediumRiskCount > 0) {
     grade = "B";
-    label = "Moderate Risk / Review Covenants";
+    label = "Worth a closer look";
     tone = "caution";
-    summary = `Overall balanced with ${mediumRiskCount} clause${mediumRiskCount > 1 ? "s" : ""} worth reviewing. Standard protections are in place with minor ambiguities.`;
+    summary = `Overall balanced with ${mediumRiskCount} clause${mediumRiskCount > 1 ? "s" : ""} worth reviewing. Nothing alarming, but some wording is unclear.`;
   }
 
   return {
     score,
     grade,
+    rated: true,
     label,
     tone,
     summary,

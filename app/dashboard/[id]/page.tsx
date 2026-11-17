@@ -10,6 +10,7 @@ import { computeMarks } from "@/lib/types";
 import { ReviewView } from "@/components/review/review-view";
 import { ContractHealthCard } from "@/components/review/contract-health-card";
 import { PipelineFlow } from "@/components/review/pipeline-flow";
+import { ReviewedBeacon } from "@/components/review/reviewed-beacon";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/logo";
 import { FileDown, ArrowLeft } from "lucide-react";
@@ -86,9 +87,16 @@ export default async function DocumentReview({
   return (
     <div className="min-h-screen bg-[#fafbfc]">
       <header className="border-b border-rule bg-surface sticky top-0 z-40">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Logo size="md" href="/" />
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <Link
+              href="/dashboard"
+              aria-label="Back to your contracts"
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-md border border-rule text-ink-2 transition-colors hover:bg-raised sm:hidden"
+            >
+              <ArrowLeft className="size-4" />
+            </Link>
+            <Logo size="md" href="/dashboard" />
             <span className="hidden sm:inline-block h-4 w-px bg-rule" />
             <Link
               href="/dashboard"
@@ -104,18 +112,19 @@ export default async function DocumentReview({
               <Button asChild variant="outline" size="sm" className="gap-1.5 text-xs font-medium">
                 <Link href={`/dashboard/${id}/report`}>
                   <FileDown className="size-3.5 text-[#b04000]" />
-                  <span>Export Audit Report</span>
+                  <span className="hidden sm:inline">Export Audit Report</span>
+                  <span className="sm:hidden">Report</span>
                 </Link>
               </Button>
             )}
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
               <Link href="/dashboard">All contracts</Link>
             </Button>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-10">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <div className="mb-6">
           <h1 className="font-display text-3xl font-bold tracking-tight text-ink text-balance sm:text-4xl">
             {doc.filename}
@@ -156,6 +165,7 @@ export default async function DocumentReview({
           </div>
         ) : (
           <div className="mt-8 flex flex-col gap-8">
+            <ReviewedBeacon documentId={doc._id} />
             {/* Health Scorecard Summary */}
             <ContractHealthCard clauses={clauses} documentId={doc._id} />
 

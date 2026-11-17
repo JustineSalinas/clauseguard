@@ -2,25 +2,11 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { TourButton } from "@/components/dashboard/product-tour";
-import {
-  FileText,
-  FileSearch,
-  CreditCard,
-  Settings,
-  Scale,
-  Shield,
-  BookOpen,
-  BookMarked,
-} from "lucide-react";
+import { MobileNav } from "@/components/dashboard/mobile-nav";
+import { NAV_ITEMS } from "@/components/dashboard/nav-items";
+import { Shield, Settings } from "lucide-react";
 
-export const NAV_ITEMS = [
-  { href: "/dashboard", label: "Your contracts", icon: FileText, tourId: "nav-contracts" },
-  { href: "/dashboard/sample", label: "Sample review", icon: FileSearch, tourId: "nav-sample" },
-  { href: "/dashboard/corpus", label: "Legal corpus", icon: BookOpen, tourId: "nav-corpus" },
-  { href: "/dashboard/playbook", label: "Pushback playbook", icon: BookMarked, tourId: "nav-playbook" },
-  { href: "/dashboard/billing", label: "Plan & billing", icon: CreditCard, tourId: "nav-billing" },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings, tourId: "nav-settings" },
-] as const;
+export { NAV_ITEMS };
 
 export function Sidebar({ email, activeHref }: { email: string; activeHref: string }) {
   const initial = email ? email.charAt(0).toUpperCase() : "U";
@@ -63,25 +49,6 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
             })}
           </nav>
 
-          {/* Statutory Corpus Info Card with clickable link */}
-          <Link
-            href="/dashboard/corpus"
-            data-tour="corpus-badge"
-            className="group mx-3 mt-2 block rounded-lg border border-rule bg-[#fafbfc] p-3.5 transition-colors hover:border-[#b04000]/40"
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-[0.75rem] font-semibold text-ink group-hover:text-[#b04000]">
-                <Scale className="size-3.5 text-[#b04000]" />
-                <span>PH Legal Corpus</span>
-              </div>
-              <span className="rounded bg-[#0c8c5e]/10 px-1.5 py-0.5 font-mono text-[0.625rem] font-medium text-[#0c8c5e]">
-                320 Arts.
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-ink-3 leading-relaxed">
-              Civil Code &amp; Labor Code indexed for live RAG grounding.
-            </p>
-          </Link>
         </div>
 
         {/* User profile & session footer */}
@@ -115,19 +82,10 @@ export function Sidebar({ email, activeHref }: { email: string; activeHref: stri
         </div>
       </aside>
 
-      {/* Mobile-only header navigation */}
-      <header className="flex items-center justify-between border-b border-rule bg-surface px-5 py-3.5 lg:hidden">
-        <Logo size="sm" href="/" />
-        <div className="flex items-center gap-2">
-          <Link
-            href="/dashboard/settings"
-            className="inline-flex size-8 items-center justify-center rounded-md border border-rule text-ink-2 hover:bg-raised"
-            title="Settings"
-          >
-            <Settings className="size-4" />
-          </Link>
-          <SignOutButton size="xs" variant="outline" />
-        </div>
+      {/* Mobile/tablet header: logo, hamburger drawer with the full nav. */}
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-rule bg-surface px-4 py-2.5 lg:hidden">
+        <Logo size="sm" href="/dashboard" />
+        <MobileNav email={email} activeHref={activeHref} />
       </header>
     </>
   );

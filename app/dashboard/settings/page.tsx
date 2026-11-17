@@ -49,7 +49,7 @@ export default async function SettingsPage() {
               Settings &amp; Preferences
             </h1>
             <p className="mt-1 text-[0.875rem] text-ink-2">
-              Manage your account, privacy controls, and statutory review parameters.
+              Manage your account, privacy, and the laws we check your contracts against.
             </p>
           </div>
 
@@ -117,9 +117,9 @@ export default async function SettingsPage() {
                 </div>
                 <div>
                   <h2 className="font-display text-base font-semibold text-ink">
-                    Philippine Statutory RAG Corpus
+                    The laws we check against
                   </h2>
-                  <p className="text-xs text-ink-3">Grounding vector database and citation rules</p>
+                  <p className="text-xs text-ink-3">Where the legal citations on your clauses come from</p>
                 </div>
               </div>
 
@@ -134,7 +134,7 @@ export default async function SettingsPage() {
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-ink-2 leading-relaxed">
-                      Covers mutuality of contracts (Art. 1308), autonomy of will (Art. 1306), indemnity limits, and void covenants (Art. 1409).
+                      Covers fairness between both sides of a contract (Art. 1308), freedom to set your own terms within limits (Art. 1306), limits on who pays for damages, and clauses that are void (Art. 1409).
                     </p>
                   </div>
                   <span className="shrink-0 text-xs font-semibold text-[#0c8c5e]">Active</span>
@@ -150,7 +150,7 @@ export default async function SettingsPage() {
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-ink-2 leading-relaxed">
-                      Covers independent contractor classification, non-compete restraint of trade boundaries, and payment withholding standards.
+                      Covers whether someone counts as an employee or an independent contractor, limits on non-compete clauses, and rules on withholding pay.
                     </p>
                   </div>
                   <span className="shrink-0 text-xs font-semibold text-[#0c8c5e]">Active</span>
@@ -160,16 +160,16 @@ export default async function SettingsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <Cpu className="size-4 text-[#b04000]" />
-                      <span className="text-sm font-semibold text-ink">Retrieval &amp; Inference Pipeline</span>
+                      <span className="text-sm font-semibold text-ink">How we match laws to clauses</span>
                       <span className="rounded bg-raised px-2 py-0.5 font-mono text-[0.625rem] font-medium text-ink-2">
-                        Cosine Vector Search
+                        Automatic matching
                       </span>
                     </div>
                     <p className="mt-1 text-xs text-ink-2 leading-relaxed">
-                      Powered by 768-dimensional statutory embeddings (`gemini-embedding-001`) with strict 0.65 similarity cutoffs to prevent hallucinations.
+                      We only attach a law to a clause when it closely matches, so you don&rsquo;t see citations that don&rsquo;t really apply.
                     </p>
                   </div>
-                  <span className="shrink-0 text-xs font-semibold text-[#0c8c5e]">Calibrated</span>
+                  <span className="shrink-0 text-xs font-semibold text-[#0c8c5e]">On</span>
                 </div>
               </div>
             </section>
@@ -192,9 +192,9 @@ export default async function SettingsPage() {
                 <div className="flex items-start gap-3 rounded-lg border border-rule bg-[#fafbfc] p-3.5">
                   <Lock className="size-4 shrink-0 text-[#0c8c5e] mt-0.5" />
                   <div>
-                    <p className="font-semibold text-ink">Zero Public Model Training</p>
+                    <p className="font-semibold text-ink">Your contracts aren&rsquo;t used to train AI</p>
                     <p className="mt-0.5 text-ink-3">
-                      Your uploaded contracts and extracts are never retained or used to train Google, OpenAI, or any third-party foundation models.
+                      Your uploaded contracts are never retained or used to train AI models from Google, OpenAI, or anyone else.
                     </p>
                   </div>
                 </div>
@@ -202,9 +202,9 @@ export default async function SettingsPage() {
                 <div className="flex items-start gap-3 rounded-lg border border-rule bg-[#fafbfc] p-3.5">
                   <CheckCircle2 className="size-4 shrink-0 text-[#0c8c5e] mt-0.5" />
                   <div>
-                    <p className="font-semibold text-ink">Tenant Storage Isolation</p>
+                    <p className="font-semibold text-ink">Only you can see your files</p>
                     <p className="mt-0.5 text-ink-3">
-                      All files and segmented clause vectors are cryptographically tied to your Convex account ID and inaccessible to any other user.
+                      Your files and results are tied to your account and can&rsquo;t be opened by any other user.
                     </p>
                   </div>
                 </div>
