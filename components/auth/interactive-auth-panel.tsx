@@ -32,6 +32,14 @@ export function InteractiveAuthPanel({
       : null
   );
   const [pending, setPending] = useState(false);
+  // "credentials" is the normal form; "code" only appears when the account
+  // needs email verification (Password's verify option in convex/auth.ts,
+  // enabled only once AUTH_RESEND_KEY is set) and signIn resolved with
+  // signingIn: false, meaning a code was emailed instead of a session being
+  // created. Until that key is set, signingIn is always true and this step
+  // never shows -- signup/signin behave exactly as before.
+  const [step, setStep] = useState<"credentials" | "code">("credentials");
+  const [code, setCode] = useState("");
 
   const { signIn } = useAuthActions();
   const router = useRouter();
@@ -70,18 +78,42 @@ export function InteractiveAuthPanel({
     setPending(true);
 
     try {
-      await signIn("password", {
+      const result = await signIn("password", {
         email,
         password,
         flow: isSignUp ? "signUp" : "signIn",
       });
-      router.push(next);
+      if (result.signingIn) {
+        router.push(next);
+      } else {
+        setStep("code");
+        setPending(false);
+      }
     } catch {
       setError(
         isSignUp
           ? "Unable to create account. This email may already be registered."
           : "Invalid email or password combination. Please double-check your credentials."
       );
+      setPending(false);
+    }
+  }
+
+  async function handleVerifyCode(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setPending(true);
+
+    try {
+      const result = await signIn("password", { email, code, flow: "email-verification" });
+      if (result.signingIn) {
+        router.push(next);
+      } else {
+        setError("That code didn't work. Please try again.");
+        setPending(false);
+      }
+    } catch {
+      setError("That code is invalid or has expired. Please try again.");
       setPending(false);
     }
   }
@@ -97,6 +129,84 @@ export function InteractiveAuthPanel({
       );
       setPending(false);
     }
+  }
+
+  if (step === "code") {
+    return (
+      <div className="w-full max-w-[440px] rounded-2xl border border-[#e5e7eb] bg-white p-6 sm:p-9 shadow-xs">
+        <div className="w-full">
+          <div className="mb-6 flex justify-center">
+            <Logo size="md" theme="light" />
+          </div>
+
+          <div className="mb-6">
+            <h1 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#08090a]">
+              Check your email
+            </h1>
+            <p className="mt-1.5 text-sm text-[#525866]">
+              We sent a 6-digit code to <span className="font-medium text-[#08090a]">{email}</span>. Enter it below
+              to continue.
+            </p>
+          </div>
+
+          {error && (
+            <Alert
+              variant="destructive"
+              className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3 text-red-900"
+            >
+              <AlertCircle className="size-4 shrink-0 text-red-600" />
+              <AlertDescription className="text-xs leading-relaxed">{error}</AlertDescription>
+            </Alert>
+          )}
+
+          <form onSubmit={handleVerifyCode} className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="auth-code" className="text-xs font-semibold text-[#374151]">
+                Verification code
+              </label>
+              <input
+                id="auth-code"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                required
+                maxLength={6}
+                placeholder="123456"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="h-10.5 w-full rounded-lg border border-[#d1d5db] bg-white px-3.5 text-center text-lg tracking-[0.3em] text-[#08090a] placeholder:text-[#9ca3af] transition-all focus:border-[#b04000] focus:outline-none focus:ring-1 focus:ring-[#b04000] hover:border-[#9ca3af]"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={pending}
+              className="mt-1 flex h-10.5 w-full cursor-pointer items-center justify-center rounded-lg bg-[#b04000] px-4 text-sm font-semibold text-white shadow-2xs transition-all hover:bg-[#8a3300] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {pending ? (
+                <span className="inline-flex items-center gap-2">
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Verifying…</span>
+                </span>
+              ) : (
+                <span>Verify and continue</span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setStep("credentials");
+                setCode("");
+                setError(null);
+              }}
+              className="text-center text-xs font-medium text-[#b04000] hover:underline cursor-pointer"
+            >
+              Use a different email
+            </button>
+          </form>
+        </div>
+      </div>
+    );
   }
 
   return (
