@@ -26,8 +26,13 @@ const TOUR_STEPS = [
   },
   {
     target: "nav-sample",
-    title: "Sample Review",
-    body: "A ready-made example contract, already fully checked. Perfect for a demo when you don't want to wait for a real upload to finish.",
+    title: "Sample Reviews",
+    body: "Four ready-made example contracts, already fully checked: a freelance agreement, a loan, a home rental and a cash-loan app.",
+  },
+  {
+    target: "nav-activity",
+    title: "Activity Log",
+    body: "A dated record of what you uploaded, what was analysed and flagged, and what you opened for review. Delete a contract and its activity goes with it.",
   },
   {
     target: "nav-corpus",
@@ -50,11 +55,6 @@ const TOUR_STEPS = [
     body: "Your account details and preferences live here.",
   },
   {
-    target: "corpus-badge",
-    title: "The Law Library Is Live",
-    body: "This badge means the statutory database is loaded and ready -- 320 real articles ClauseGuard can cite the moment it flags something risky in your contract.",
-  },
-  {
     target: "profile",
     title: "That's You",
     body: "Your signed-in account. Click here any time to manage your profile or sign out.",
@@ -65,19 +65,9 @@ const TOUR_STEPS = [
     body: "How many contracts you've uploaded, how many are still being checked, how many need your attention right now, and how many are fully reviewed and clear.",
   },
   {
-    target: "quick-tools",
-    title: "Three One-Click Shortcuts",
-    body: "Jump straight to the law library, the pushback playbook, or a finished sample review -- no need to dig through menus.",
-  },
-  {
     target: "upload",
     title: "This Is Where It Starts",
     body: "Drop in a PDF or even a photo of a contract. ClauseGuard reads the text, splits it into individual clauses, and checks each one on its own -- so nothing risky hides between paragraphs.",
-  },
-  {
-    target: "methodology",
-    title: "What Happens Behind the Scenes",
-    body: "Three steps, every time: (1) every clause is pulled out individually, (2) each one is checked against real Philippine law, (3) you get an honest, confidence-scored risk rating -- never vague legal jargon, and never a guess dressed up as certainty.",
   },
   {
     target: "contracts-list",

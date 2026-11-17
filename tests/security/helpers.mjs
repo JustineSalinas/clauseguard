@@ -28,6 +28,7 @@ export const OWNED_TABLES = [
   "clauseScores",
   "stageRuns",
   "clauseRetrievals",
+  "auditLogs",
 ];
 
 import { readFileSync } from "node:fs";

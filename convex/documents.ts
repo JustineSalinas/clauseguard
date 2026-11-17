@@ -16,6 +16,7 @@
 import { v } from "convex/values";
 import { query, mutation, internalMutation, internalQuery } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
+import { recordAudit, removeForDocument, summariseDocument } from "./auditLogs";
 
 const PROCESSING_STATUSES = new Set([
   "uploaded",
@@ -95,7 +96,7 @@ export const create = mutation({
     if (!userId) throw new Error("Not signed in.");
 
     const now = Date.now();
-    return await ctx.db.insert("documents", {
+    const documentId = await ctx.db.insert("documents", {
       ownerId: userId,
       filename,
       storagePath: storageId,
@@ -103,6 +104,8 @@ export const create = mutation({
       createdAt: now,
       updatedAt: now,
     });
+    await recordAudit(ctx, { ownerId: userId, event: "uploaded", documentId, filename });
+    return documentId;
   },
 });
 
@@ -117,6 +120,10 @@ export const remove = mutation({
       // Same shape as get(): don't reveal whether the id exists at all.
       throw new Error("Document not found.");
     }
+
+    // The activity log goes with the document -- nothing about a deleted
+    // contract, not even its filename, is kept.
+    await removeForDocument(ctx, userId, id);
 
     // 1. Delete associated storage file
     if (doc.storagePath) {
@@ -200,6 +207,13 @@ export const sweepStuck = mutation({
           failedReason: "Processing timed out. Please retry the review.",
           updatedAt: Date.now(),
         });
+        await recordAudit(ctx, {
+          ownerId: doc.ownerId,
+          event: "failed",
+          documentId: doc._id,
+          filename: doc.filename,
+          detail: { stage: doc.status },
+        });
         recovered++;
       }
     }
@@ -235,6 +249,26 @@ export const advanceStatus = internalMutation({
       stageStartedAt: Date.now(),
       updatedAt: Date.now(),
     });
+
+    // Terminal outcomes of a run go in the activity log. Counts are derived
+    // from the stored scores here, in the same transaction as the transition.
+    if (to === "complete" || to === "partial") {
+      await recordAudit(ctx, {
+        ownerId: doc.ownerId,
+        event: "analyzed",
+        documentId: id,
+        filename: doc.filename,
+        detail: { ...(await summariseDocument(ctx, id)), status: to },
+      });
+    } else if (to === "failed") {
+      await recordAudit(ctx, {
+        ownerId: doc.ownerId,
+        event: "failed",
+        documentId: id,
+        filename: doc.filename,
+        detail: { stage: doc.status },
+      });
+    }
     return true;
   },
 });
@@ -246,12 +280,23 @@ export const failStage = internalMutation({
     reason: v.string(),
   },
   handler: async (ctx, { id, stage, reason }) => {
+    const doc = await ctx.db.get(id);
     await ctx.db.patch(id, {
       status: "failed",
       failedStage: stage,
       failedReason: reason,
       updatedAt: Date.now(),
     });
+    // The reason is not logged: it can echo document content.
+    if (doc) {
+      await recordAudit(ctx, {
+        ownerId: doc.ownerId,
+        event: "failed",
+        documentId: id,
+        filename: doc.filename,
+        detail: { stage },
+      });
+    }
   },
 });
 
@@ -291,6 +336,13 @@ export const resetForRetry = internalMutation({
     for (const ex of extractions) {
       await ctx.db.delete(ex._id);
     }
+
+    await recordAudit(ctx, {
+      ownerId: doc.ownerId,
+      event: "retried",
+      documentId: id,
+      filename: doc.filename,
+    });
 
     await ctx.db.patch(id, {
       status: "uploaded",
