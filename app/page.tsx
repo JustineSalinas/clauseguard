@@ -733,7 +733,7 @@ export default function Home() {
             <Reveal delay={0.1} y={12}>
               <div className="py-6">
                 <h3 className="text-base font-semibold text-[#08090a]">
-                  What if it's not sure about a clause?
+                  What if it&rsquo;s not sure about a clause?
                 </h3>
                 <p className="mt-2 text-sm text-[#525866] leading-relaxed">
                   It says so, instead of guessing. If a clause is genuinely hard to judge, ClauseGuard flags it for you to look at yourself rather than forcing it into a &ldquo;safe&rdquo; or &ldquo;risky&rdquo; label it isn&rsquo;t confident about.

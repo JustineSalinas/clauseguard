@@ -36,7 +36,9 @@ export function DragCompare({
   const handleRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
   const onPercentChangeRef = useRef(onPercentChange);
-  onPercentChangeRef.current = onPercentChange;
+  useEffect(() => {
+    onPercentChangeRef.current = onPercentChange;
+  }, [onPercentChange]);
 
   useEffect(() => {
     const rail = railRef.current;

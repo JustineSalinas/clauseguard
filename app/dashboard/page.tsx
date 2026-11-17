@@ -109,7 +109,7 @@ export default async function Dashboard() {
             <h2 className="mb-4 font-display text-lg font-semibold tracking-tight text-ink">
               Review history
             </h2>
-            <ContractsList documents={rows as any[]} />
+            <ContractsList documents={rows} />
           </section>
 
           <footer className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-6 text-[0.75rem] text-ink-3">

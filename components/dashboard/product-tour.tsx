@@ -111,7 +111,17 @@ function measure(el: Element): Rect {
 }
 
 export function ProductTour() {
-  const [open, setOpen] = useState(false);
+  // Lazy initializer, not an effect + setState: reading and clearing the
+  // autostart flag once, synchronously, during the component's first render
+  // is both correct (it's a one-time read of a value that can't change
+  // under us before mount) and avoids the wasted extra render that an
+  // effect-based setState on mount causes.
+  const [open, setOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const shouldAutostart = sessionStorage.getItem(AUTOSTART_KEY) === "1";
+    if (shouldAutostart) sessionStorage.removeItem(AUTOSTART_KEY);
+    return shouldAutostart;
+  });
   const [stepIndex, setStepIndex] = useState(0);
   const [rect, setRect] = useState<Rect | null>(null);
   const frame = useRef<number | null>(null);
@@ -139,22 +149,21 @@ export function ProductTour() {
       setOpen(true);
     }
     window.addEventListener("clauseguard:start-tour", onStart);
-
-    if (sessionStorage.getItem(AUTOSTART_KEY) === "1") {
-      sessionStorage.removeItem(AUTOSTART_KEY);
-      setStepIndex(0);
-      setOpen(true);
-    }
-
     return () => window.removeEventListener("clauseguard:start-tour", onStart);
   }, []);
 
   useEffect(() => {
     if (!open) return;
-    recompute();
+    // Deferred, not a direct call: recompute() can call setRect(null)
+    // synchronously when the target isn't found yet, and a synchronous
+    // setState inside an effect body forces an extra render before paint.
+    // One rAF defers it past that, consistent with recompute()'s own
+    // found-element path, which already defers its setRect through rAF.
+    const id = requestAnimationFrame(recompute);
     window.addEventListener("resize", recompute);
     window.addEventListener("scroll", recompute, true);
     return () => {
+      cancelAnimationFrame(id);
       window.removeEventListener("resize", recompute);
       window.removeEventListener("scroll", recompute, true);
     };

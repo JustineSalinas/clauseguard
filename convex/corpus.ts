@@ -6,9 +6,9 @@
  */
 
 import { v } from "convex/values";
-import { query, internalQuery, internalMutation, action, internalAction } from "./_generated/server";
+import { query, internalQuery, internalMutation, action } from "./_generated/server";
 import { internal } from "./_generated/api";
-import type { Id } from "./_generated/dataModel";
+import type { Id, Doc } from "./_generated/dataModel";
 import { CLAUSE_TYPE } from "./schema";
 
 export const listForClauseType = query({
@@ -239,11 +239,11 @@ export const searchProvisions = action({
     const filtered = matches.filter((m) => m._score >= minSimilarity).slice(0, limit);
     if (filtered.length === 0) return [];
 
-    const provisions: any[] = await ctx.runQuery(internal.corpus.getManyByIds, {
+    const provisions: Doc<"provisions">[] = await ctx.runQuery(internal.corpus.getManyByIds, {
       ids: filtered.map((m) => m._id),
     });
 
-    const provisionMap = new Map<string, any>(provisions.map((p: any) => [p._id, p]));
+    const provisionMap = new Map<string, Doc<"provisions">>(provisions.map((p) => [p._id, p]));
 
     return filtered
       .map((match, idx): SearchMatch | null => {
@@ -269,7 +269,15 @@ export const embedAllProvisions = action({
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
     if (!apiKey) throw new Error("GOOGLE_GENERATIVE_AI_API_KEY is not set.");
 
-    const provisions: any[] = await ctx.runQuery(internal.corpus.listNeedingEmbeddings);
+    type EmbeddingCandidate = {
+      _id: Id<"provisions">;
+      code: "CIVIL" | "LABOR";
+      article: string;
+      heading?: string;
+      text: string;
+    };
+
+    const provisions: EmbeddingCandidate[] = await ctx.runQuery(internal.corpus.listNeedingEmbeddings);
     if (provisions.length === 0) {
       return { total: 0, embedded: 0, message: "All provisions already have embeddings." };
     }
@@ -278,8 +286,8 @@ export const embedAllProvisions = action({
     let totalEmbedded = 0;
 
     for (let i = 0; i < provisions.length; i += batchSize) {
-      const chunk: any[] = provisions.slice(i, i + batchSize);
-      const requests = chunk.map((p: any) => ({
+      const chunk: EmbeddingCandidate[] = provisions.slice(i, i + batchSize);
+      const requests = chunk.map((p) => ({
         model: `models/${EMBEDDING_MODEL}`,
         content: {
           parts: [{ text: `${p.code} Code Article ${p.article}${p.heading ? ` (${p.heading})` : ""}: ${p.text}` }],
@@ -303,7 +311,7 @@ export const embedAllProvisions = action({
       }
 
       const data = (await res.json()) as { embeddings: Array<{ values: number[] }> };
-      const updates = chunk.map((p: any, idx: number) => ({
+      const updates = chunk.map((p, idx) => ({
         id: p._id as Id<"provisions">,
         embedding: data.embeddings[idx].values,
         embeddingModel: EMBEDDING_RECIPE_VERSION,

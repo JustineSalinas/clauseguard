@@ -23,6 +23,7 @@ import { extractImageOcr, isOcrSupportedImage, OcrUnreadableError } from "../lib
 import { segmentClauses } from "../lib/pipeline/segment";
 import { locateClauses } from "../lib/pipeline/boxes";
 import { scoreClause } from "../lib/pipeline/score";
+import type { SearchMatch } from "./corpus";
 import { SCORE_STAGE_DEFAULT_MODEL } from "../lib/models";
 import { PROMPT_VERSION } from "../lib/prompts/score.v1";
 
@@ -289,7 +290,7 @@ export const run = internalAction({
 
             try {
               if (arm === "rag") {
-                const matches: any[] = await ctx.runAction(api.corpus.searchProvisions, {
+                const matches: SearchMatch[] = await ctx.runAction(api.corpus.searchProvisions, {
                   text: clause.text,
                   limit: 2,
                   minSimilarity: 0.55,
@@ -305,7 +306,7 @@ export const run = internalAction({
                   });
                 }
 
-                provisions = matches.map((m: any) => ({
+                provisions = matches.map((m) => ({
                   code: m.code,
                   article: m.article,
                   text: m.text,

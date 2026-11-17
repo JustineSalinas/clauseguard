@@ -1,0 +1,71 @@
+name: CI
+
+# Blocks a merge on typecheck, lint, and unit test failure. Nothing here was
+# run automatically before this file existed -- every check on every PR up
+# to this point was a human (or an AI session) running commands by hand.
+#
+# test:security is intentionally NOT unconditional: it signs in two real
+# accounts against a live Convex deployment (tests/security/README.md), so
+# it needs CONVEX_DEPLOY_KEY and NEXT_PUBLIC_CONVEX_URL as real secrets, not
+# values this workflow can invent. It runs only when those secrets exist in
+# the repo (Settings -> Secrets and variables -> Actions), so this workflow
+# is safe to merge before that secret is added -- the job just skips instead
+# of failing on a missing credential.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  typecheck-lint-unit:
+    name: Typecheck, lint, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npx tsc --noEmit -p .
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test:unit
+
+  security:
+    name: Cross-tenant security suite
+    runs-on: ubuntu-latest
+    # Only runs once CONVEX_DEPLOY_KEY is configured as a repo secret --
+    # see this file's header comment. secrets.CONVEX_DEPLOY_KEY != '' is the
+    # documented way to gate a job on a secret's presence without the step
+    # itself failing when it's absent.
+    if: ${{ vars.CONVEX_SECURITY_TESTS_ENABLED == 'true' }}
+    needs: typecheck-lint-unit
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Write .env.local from secrets
+        run: |
+          echo "NEXT_PUBLIC_CONVEX_URL=${{ secrets.NEXT_PUBLIC_CONVEX_URL }}" >> .env.local
+          echo "CONVEX_DEPLOY_KEY=${{ secrets.CONVEX_DEPLOY_KEY }}" >> .env.local
+
+      - name: Cross-tenant security tests
+        run: npm run test:security

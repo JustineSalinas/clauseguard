@@ -53,7 +53,7 @@ export default async function CorpusPage() {
           </div>
 
           <div className="mt-7">
-            <CorpusExplorer provisions={provisions as any[]} />
+            <CorpusExplorer provisions={provisions} />
           </div>
 
           {/* Footer citation note */}

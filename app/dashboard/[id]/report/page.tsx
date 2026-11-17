@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { fetchQuery } from "convex/nextjs";
+import type { FunctionReturnType } from "convex/server";
 import { convexAuthNextjsToken, isAuthenticatedNextjs } from "@convex-dev/auth/nextjs/server";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
@@ -38,8 +39,10 @@ export default async function AuditReportPage({
     redirect("/dashboard");
   }
 
-  const clauses: ScoredClause[] = (rows as any[]).map(
-    ({ clause, score, provisions }: any) => ({
+  type ClauseRow = FunctionReturnType<typeof api.clauses.listScoresForDocument>[number];
+
+  const clauses: ScoredClause[] = rows.map(
+    ({ clause, score, provisions }: ClauseRow) => ({
       id: clause._id,
       ordinal: clause.ordinal,
       label: clause.label ?? null,

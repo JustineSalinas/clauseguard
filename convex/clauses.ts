@@ -7,9 +7,11 @@
 
 import { v } from "convex/values";
 import { query, internalMutation } from "./_generated/server";
+import type { QueryCtx } from "./_generated/server";
+import type { Id } from "./_generated/dataModel";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
-async function assertOwnsDocument(ctx: { db: any }, userId: string, documentId: any) {
+async function assertOwnsDocument(ctx: QueryCtx, userId: string, documentId: Id<"documents">) {
   const doc = await ctx.db.get(documentId);
   return !!doc && doc.ownerId === userId;
 }
@@ -44,10 +46,10 @@ export const listScoresForDocument = query({
       .collect();
 
     const clauseData = await Promise.all(
-      clauses.map(async (c: any) => {
+      clauses.map(async (c) => {
         const score = await ctx.db
           .query("clauseScores")
-          .withIndex("by_clause", (q: any) => q.eq("clauseId", c._id))
+          .withIndex("by_clause", (q) => q.eq("clauseId", c._id))
           .order("desc")
           .first();
 
@@ -57,24 +59,24 @@ export const listScoresForDocument = query({
           // 1. Check if there are RAG retrievals for this clause & run
           const retrievals = await ctx.db
             .query("clauseRetrievals")
-            .withIndex("by_clause_run_rank", (q: any) => q.eq("clauseId", c._id).eq("runId", score.runId))
+            .withIndex("by_clause_run_rank", (q) => q.eq("clauseId", c._id).eq("runId", score.runId))
             .collect();
 
           if (retrievals.length > 0) {
-            const fetched = await Promise.all(retrievals.map((r: any) => ctx.db.get(r.provisionId)));
+            const fetched = await Promise.all(retrievals.map((r) => ctx.db.get(r.provisionId)));
             provisions = fetched
-              .filter((p: any) => p !== null)
-              .map((p: any) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
+              .filter((p): p is NonNullable<typeof p> => p !== null)
+              .map((p) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
           } else if (c.clauseType && c.clauseType !== "other") {
             // 2. Static mapping fallback
             const mappings = await ctx.db
               .query("provisionMappings")
-              .withIndex("by_type_rank", (q: any) => q.eq("clauseType", c.clauseType))
+              .withIndex("by_type_rank", (q) => q.eq("clauseType", c.clauseType!))
               .collect();
-            const fetched = await Promise.all(mappings.map((m: any) => ctx.db.get(m.provisionId)));
+            const fetched = await Promise.all(mappings.map((m) => ctx.db.get(m.provisionId)));
             provisions = fetched
-              .filter((p: any) => p !== null)
-              .map((p: any) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
+              .filter((p): p is NonNullable<typeof p> => p !== null)
+              .map((p) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
           }
         }
 
