@@ -33,6 +33,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Convex codegen
+        # convex/_generated/ is gitignored by design (CLAUDE.md: regenerated
+        # by `npx convex dev` / `npx convex codegen`), so a fresh checkout
+        # has no generated types at all until this runs -- codegen needs a
+        # real deployment to pull the schema from, hence the deploy key.
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+        run: npx convex codegen
+
       - name: Typecheck
         run: npx tsc --noEmit -p .
 
