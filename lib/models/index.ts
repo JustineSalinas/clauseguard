@@ -30,23 +30,36 @@
  *     Not a Llama model -- note this substitution in the Objective 3
  *     methodology writeup, since it changes what the ablation's third leg
  *     actually is, not just its version number.
+ *
+ * UPDATED 2026-11-18: production scoring/OCR moved off Gemini onto Claude
+ * (Haiku 5.5 / Sonnet 5.5) -- SCORE_STAGE_DEFAULT_MODEL,
+ * SCORE_STAGE_CASCADE_MODEL and OCR_MODEL below, by explicit instruction.
+ * ABLATION_MODELS is deliberately UNCHANGED: Objective 3's three-model
+ * comparison (Gemini Flash / Flash-Lite / the Groq-hosted model) is one of
+ * the five committed objectives in the approved proposal -- per CLAUDE.md,
+ * changing which models it ablates needs adviser sign-off, which this
+ * change doesn't have. Gemini stays wired up and working for that reason,
+ * not because it was left behind by accident.
  */
 
 import { google } from "@ai-sdk/google";
 import { groq } from "@ai-sdk/groq";
+import { anthropic } from "@ai-sdk/anthropic";
 import type { LanguageModel } from "ai";
 
 export type ModelId =
   | "google/gemini-3.5-flash"
   | "google/gemini-3.5-flash-lite"
-  | "groq/gpt-oss-120b";
+  | "groq/gpt-oss-120b"
+  | "anthropic/claude-haiku-5-5"
+  | "anthropic/claude-sonnet-5-5";
 
 export type ModelDef = {
   id: ModelId;
   label: string;
   /** Which env var must be set for this model's provider to work. Checked at
    *  startup by requireApiKeyFor(), not scattered across call sites. */
-  envVar: "GOOGLE_GENERATIVE_AI_API_KEY" | "GROQ_API_KEY";
+  envVar: "GOOGLE_GENERATIVE_AI_API_KEY" | "GROQ_API_KEY" | "ANTHROPIC_API_KEY";
 };
 
 export const MODELS: Record<ModelId, ModelDef> = {
@@ -65,10 +78,21 @@ export const MODELS: Record<ModelId, ModelDef> = {
     label: "GPT-OSS 120B (Groq)",
     envVar: "GROQ_API_KEY",
   },
+  "anthropic/claude-haiku-5-5": {
+    id: "anthropic/claude-haiku-5-5",
+    label: "Claude Haiku 5.5",
+    envVar: "ANTHROPIC_API_KEY",
+  },
+  "anthropic/claude-sonnet-5-5": {
+    id: "anthropic/claude-sonnet-5-5",
+    label: "Claude Sonnet 5.5",
+    envVar: "ANTHROPIC_API_KEY",
+  },
 };
 
-/** The three models Objective 3 ablates across. Order matters only for
- *  display; the harness runs all three regardless of order. */
+/** The three models Objective 3 ablates across -- frozen, see the 2026-11-18
+ *  note above. Order matters only for display; the harness runs all three
+ *  regardless of order. */
 export const ABLATION_MODELS: readonly ModelId[] = [
   "google/gemini-3.5-flash",
   "google/gemini-3.5-flash-lite",
@@ -81,15 +105,23 @@ export const ABLATION_MODELS: readonly ModelId[] = [
  * clauses with the stronger model is the caller's job (lib/pipeline/score),
  * not this config's -- this constant names only the first pass.
  */
-export const SCORE_STAGE_DEFAULT_MODEL: ModelId = "google/gemini-3.5-flash-lite";
+export const SCORE_STAGE_DEFAULT_MODEL: ModelId = "anthropic/claude-haiku-5-5";
 
 /** The stronger model used for the cascade's second pass. */
-export const SCORE_STAGE_CASCADE_MODEL: ModelId = "google/gemini-3.5-flash";
+export const SCORE_STAGE_CASCADE_MODEL: ModelId = "anthropic/claude-sonnet-5-5";
 
 /**
  * Vision OCR fallback for a photographed or otherwise image-only upload --
  * never for a normal PDF, which always goes through the text-layer path in
  * lib/pipeline/extract instead.
+ *
+ * Stays on Gemini, not Claude, on purpose: the upload flow explicitly
+ * accepts HEIC/HEIF photos (lib/pipeline/extract/ocr.ts's
+ * SUPPORTED_IMAGE_TYPES), and Claude's vision input only accepts
+ * image/jpeg, image/png, image/gif and image/webp -- a HEIC/HEIF photo
+ * would 400 on every call. Converting HEIC to JPEG before this call would
+ * fix that, but that's a real pipeline change, not a model-config swap;
+ * flagging it rather than silently breaking iPhone photo uploads.
  */
 export const OCR_MODEL: ModelId = "google/gemini-3.5-flash";
 
@@ -113,7 +145,11 @@ export function resolveLanguageModel(modelId: ModelId): LanguageModel {
       return google("gemini-3.5-flash-lite") as unknown as LanguageModel;
     case "groq/gpt-oss-120b":
       return groq("openai/gpt-oss-120b") as unknown as LanguageModel;
+    case "anthropic/claude-haiku-5-5":
+      return anthropic("claude-haiku-5-5") as unknown as LanguageModel;
+    case "anthropic/claude-sonnet-5-5":
+      return anthropic("claude-sonnet-5-5") as unknown as LanguageModel;
     default:
-      return google("gemini-3.5-flash-lite") as unknown as LanguageModel;
+      return anthropic("claude-haiku-5-5") as unknown as LanguageModel;
   }
 }

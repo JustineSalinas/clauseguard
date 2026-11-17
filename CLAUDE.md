@@ -110,11 +110,16 @@ overrides it; ask Salinas before treating either as settled.
   `convex/schema.ts` is a hand-kept duplicate of `lib/pipeline/taxonomy.ts`
   (nothing enforces they match) — edit both.
 
-Model providers: Gemini (Google Generative AI) and Groq, server-side only. Per
-the header of `lib/models/index.ts`, the original ablation models were retired
-in Nov 2026 (`gemini-2.0-*` 404; Groq dropped Llama), and the third leg is now
-`openai/gpt-oss-120b` — not Llama. Note this substitution in Objective 3
-write-ups.
+Model providers: Gemini (Google Generative AI), Groq, and Anthropic, server-side
+only. Per the header of `lib/models/index.ts`, the original ablation models
+were retired in Nov 2026 (`gemini-2.0-*` 404; Groq dropped Llama), and the
+third leg is now `openai/gpt-oss-120b` — not Llama. Note this substitution in
+Objective 3 write-ups. Objective 3's ablation trio itself (Gemini Flash /
+Flash-Lite / the Groq model) is frozen — a committed objective, changing which
+models it ablates needs adviser sign-off. Production scoring (`score` stage)
+moved to Claude (Haiku 5.5 default, Sonnet 5.5 cascade) on 2026-11-18, outside
+the ablation; OCR stays on Gemini because Claude's vision input doesn't accept
+HEIC/HEIF, which the upload flow explicitly supports.
 
 ### Pipeline state machine
 
@@ -231,7 +236,8 @@ cross-tenant leak and nothing catches it. Concretely:
 - Uploads go through `convex/upload.ts` (`generateUploadUrl`) into Convex
   storage; `documents.storagePath` holds the storage id. Don't hand out
   storage URLs without an ownership check.
-- Provider keys (`GOOGLE_GENERATIVE_AI_API_KEY`, `GROQ_API_KEY`) are
+- Provider keys (`GOOGLE_GENERATIVE_AI_API_KEY`, `GROQ_API_KEY`,
+  `ANTHROPIC_API_KEY`) are
   server-side only — never `NEXT_PUBLIC_`-prefixed, never in `app/` client
   code or `components/`.
 - Prompt injection: document text is data, delimited, never instruction;
