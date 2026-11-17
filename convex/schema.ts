@@ -109,6 +109,8 @@ export const AUDIT_EVENT = v.union(
 
 const PROVISION_CODE = v.union(v.literal("CIVIL"), v.literal("LABOR"));
 
+const PLAN_ID = v.union(v.literal("starter"), v.literal("professional"), v.literal("agency"));
+
 export default defineSchema({
   // Convex Auth's own tables (users, authAccounts, authSessions, ...).
   // `users` is what documents.ownerId references below.
@@ -316,4 +318,19 @@ export default defineSchema({
     createdAt: v.number(),
   }).index("by_owner_created", ["ownerId", "createdAt"])
     .index("by_owner_document", ["ownerId", "documentId"]),
+
+  // ----------------------------------------------------------- userPlans --
+  // One row per account that has an ACTUAL subscription. No row = plan
+  // defaults to "professional" (lib/plans.ts's DEFAULT_PLAN) -- the research
+  // preview's promise that every account is unlocked, free, until billing
+  // ships. Written only by billing once PayMongo exists (internalMutation
+  // only, same reasoning as scoringRuns/stageRuns -- never a public update).
+  userPlans: defineTable({
+    ownerId: v.id("users"),
+    plan: PLAN_ID,
+    // Set by the billing webhook once it exists; absent for a plan assigned
+    // by hand (e.g. a comped account) rather than a real subscription.
+    subscriptionId: v.optional(v.string()),
+    updatedAt: v.number(),
+  }).index("by_owner", ["ownerId"]),
 });

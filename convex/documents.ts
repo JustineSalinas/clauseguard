@@ -17,6 +17,7 @@ import { v } from "convex/values";
 import { query, mutation, internalMutation, internalQuery } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 import { recordAudit, removeForDocument, summariseDocument } from "./auditLogs";
+import { assertUploadAllowed } from "./plans";
 
 const PROCESSING_STATUSES = new Set([
   "uploaded",
@@ -94,6 +95,8 @@ export const create = mutation({
   handler: async (ctx, { filename, storageId }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not signed in.");
+
+    await assertUploadAllowed(ctx, userId);
 
     const now = Date.now();
     const documentId = await ctx.db.insert("documents", {
