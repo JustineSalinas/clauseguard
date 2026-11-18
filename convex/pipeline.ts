@@ -8,8 +8,14 @@
  * as-is. Stage execution metrics are recorded to `stageRuns` for audit
  * telemetry and research evaluation.
  *
- * Scoring runs with controlled concurrency (chunks of 3-4 parallel LLM calls)
- * to prevent sequential request timeouts while respecting provider rate limits.
+ * Scoring runs with controlled concurrency (BATCH_CONCURRENCY batches of
+ * SCORE_BATCH_SIZE clauses in flight at once) to prevent sequential request
+ * timeouts while respecting provider rate limits.
+ *
+ * Segmentation has two modes (the `segmenter` arg, default from the
+ * SEGMENTER_DEFAULT Convex env var, else "rules"): the rule-based segmenter,
+ * or the optional Muse Spark LLM segmenter, which falls back to rules on any
+ * failure so it can never fail a document.
  */
 
 import { v } from "convex/values";
@@ -19,8 +25,9 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { createHash } from "node:crypto";
 
 import { extractPdf, EncryptedDocumentError, NoTextDetectedError } from "../lib/pipeline/extract";
-import { extractImageOcr, isOcrSupportedImage, OcrUnreadableError } from "../lib/pipeline/extract/ocr";
+import { extractImageOcr, extractImagesOcr, extractPdfOcr, isOcrSupportedImage, OcrUnreadableError } from "../lib/pipeline/extract/ocr";
 import { segmentClauses } from "../lib/pipeline/segment";
+import { segmentClausesLlm } from "../lib/pipeline/segment/llm";
 import { locateClauses } from "../lib/pipeline/boxes";
 import { scoreClauseBatch, SCORE_BATCH_SIZE } from "../lib/pipeline/score";
 import type { ScoreClauseInput } from "../lib/pipeline/score";
@@ -39,6 +46,17 @@ const DEFAULT_GROUNDING_ARM = "static" as const;
 // loop had, while cutting total call count by ~4x.
 const BATCH_CONCURRENCY = 2;
 
+// Which segmenter runs. "rules" is the long-standing regex segmenter; "llm" is
+// the optional Muse Spark segmenter (lib/pipeline/segment/llm.ts) with rules as
+// its fallback. Anything other than "llm" in SEGMENTER_DEFAULT means "rules".
+const SEGMENTER_ARG = v.optional(v.union(v.literal("rules"), v.literal("llm")));
+type SegmenterMode = "rules" | "llm";
+
+function resolveSegmenter(requested: SegmenterMode | undefined): SegmenterMode {
+  if (requested) return requested;
+  return process.env.SEGMENTER_DEFAULT === "llm" ? "llm" : "rules";
+}
+
 /**
  * Public entry point: called from the upload form once the file is in
  * Convex storage. Schedules background pipeline execution.
@@ -48,8 +66,9 @@ export const start = action({
     documentId: v.id("documents"),
     groundingArm: v.optional(v.union(v.literal("none"), v.literal("static"), v.literal("rag"))),
     modelId: v.optional(v.string()),
+    segmenter: SEGMENTER_ARG,
   },
-  handler: async (ctx, { documentId, groundingArm, modelId }) => {
+  handler: async (ctx, { documentId, groundingArm, modelId, segmenter }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not signed in.");
 
@@ -60,6 +79,7 @@ export const start = action({
       documentId,
       groundingArm: groundingArm ?? DEFAULT_GROUNDING_ARM,
       modelId: modelId ?? SCORE_STAGE_DEFAULT_MODEL,
+      segmenter,
     });
   },
 });
@@ -72,8 +92,9 @@ export const retry = action({
     documentId: v.id("documents"),
     groundingArm: v.optional(v.union(v.literal("none"), v.literal("static"), v.literal("rag"))),
     modelId: v.optional(v.string()),
+    segmenter: SEGMENTER_ARG,
   },
-  handler: async (ctx, { documentId, groundingArm, modelId }) => {
+  handler: async (ctx, { documentId, groundingArm, modelId, segmenter }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not signed in.");
 
@@ -86,6 +107,7 @@ export const retry = action({
       documentId,
       groundingArm: groundingArm ?? DEFAULT_GROUNDING_ARM,
       modelId: modelId ?? SCORE_STAGE_DEFAULT_MODEL,
+      segmenter,
     });
   },
 });
@@ -95,9 +117,11 @@ export const run = internalAction({
     documentId: v.id("documents"),
     groundingArm: v.optional(v.union(v.literal("none"), v.literal("static"), v.literal("rag"))),
     modelId: v.optional(v.string()),
+    segmenter: SEGMENTER_ARG,
   },
-  handler: async (ctx, { documentId, groundingArm, modelId }) => {
+  handler: async (ctx, { documentId, groundingArm, modelId, segmenter }) => {
     const arm = groundingArm ?? DEFAULT_GROUNDING_ARM;
+    const segmenterMode = resolveSegmenter(segmenter);
     const activeModel = (modelId as typeof SCORE_STAGE_DEFAULT_MODEL) ?? SCORE_STAGE_DEFAULT_MODEL;
 
     const doc = await ctx.runQuery(internal.documents.getForPipeline, { id: documentId });
@@ -112,12 +136,25 @@ export const run = internalAction({
     });
     if (!claimed) return; // another worker already claimed this document
 
-    const blob = await ctx.storage.get(doc.storagePath as never);
-    if (!blob) {
+    const pageIds = doc.pageStoragePaths ?? [];
+    const isMultiPage = pageIds.length > 0;
+    const pageBlobs: Array<Blob | null> = [];
+    let missingPage = 0;
+    if (isMultiPage) {
+      for (let i = 0; i < pageIds.length; i++) {
+        const b = await ctx.storage.get(pageIds[i] as never);
+        pageBlobs.push(b);
+        if (!b && !missingPage) missingPage = i + 1;
+      }
+    }
+    const blob = isMultiPage ? pageBlobs[0] : await ctx.storage.get(doc.storagePath as never);
+    if (!blob || missingPage) {
       await ctx.runMutation(internal.documents.failStage, {
         id: documentId,
         stage: "extract",
-        reason: "The uploaded file could not be read back from storage.",
+        reason: missingPage
+          ? `Page ${missingPage} could not be read back from storage. Please upload the pages again.`
+          : "The uploaded file could not be read back from storage.",
       });
       await ctx.runMutation(internal.stageRuns.insert, {
         documentId,
@@ -130,18 +167,34 @@ export const run = internalAction({
       return;
     }
 
-    const bytes = new Uint8Array(await blob.arrayBuffer());
-    const isImage = isOcrSupportedImage(blob.type);
+    const isImage = !isMultiPage && isOcrSupportedImage(blob.type);
 
     let extraction;
     try {
-      extraction = isImage ? await extractImageOcr(bytes, blob.type) : await extractPdf(bytes);
+      if (isMultiPage) {
+        const pages = [];
+        for (const b of pageBlobs) {
+          pages.push({ bytes: new Uint8Array(await b!.arrayBuffer()), contentType: b!.type });
+        }
+        extraction = await extractImagesOcr(pages);
+      } else if (isImage) {
+        extraction = await extractImageOcr(new Uint8Array(await blob.arrayBuffer()), blob.type);
+      } else {
+        const bytes = new Uint8Array(await blob.arrayBuffer());
+        try {
+          extraction = await extractPdf(bytes);
+        } catch (pdfError) {
+          // Image-only PDF: no text layer, so OCR is the only route.
+          if (!(pdfError instanceof NoTextDetectedError)) throw pdfError;
+          extraction = await extractPdfOcr(bytes);
+        }
+      }
     } catch (error) {
       const reason =
         error instanceof EncryptedDocumentError
           ? "This PDF is password protected. Remove the password and upload it again."
           : error instanceof NoTextDetectedError
-          ? "No readable text found. This PDF looks like an unlayered scan. Try uploading it as a photo (JPG/PNG) instead."
+          ? "No readable text found in this PDF."
           : error instanceof OcrUnreadableError
           ? error.message
           : "This file could not be read.";
@@ -167,7 +220,11 @@ export const run = internalAction({
     const extractionId = await ctx.runMutation(internal.extractions.insert, {
       documentId,
       ocrEngine: extraction.engine,
-      settings: { grounding_arm: arm },
+      // `segmenter_requested` is what was asked for; whether the LLM actually
+      // produced the clauses (vs. falling back to rules) is on the segment
+      // stageRuns row: modelId is set only when it did, outcome is "partial"
+      // when it fell back.
+      settings: { grounding_arm: arm, segmenter_requested: segmenterMode },
       pageSizes: extraction.pageSizes,
       suppressedTokenCount: extraction.suppressedTokenCount,
     });
@@ -204,7 +261,21 @@ export const run = internalAction({
       to: "segmenting",
     });
 
-    const segmented = segmentClauses(extraction.text);
+    // The LLM segmenter returns null on any failure (or an oversized
+    // document), and then the rule-based segmenter runs. It can never fail the
+    // document, only change which segmenter produced the clauses.
+    const llmSegmentation = segmenterMode === "llm" ? await segmentClausesLlm(extraction.text) : null;
+    const segmentFellBack = segmenterMode === "llm" && llmSegmentation === null;
+    if (segmentFellBack) console.warn(`[segment] ${documentId} fell back to rule-based segmentation`);
+    const segmented = llmSegmentation?.clauses ?? segmentClauses(extraction.text);
+    // Model metadata only when the LLM actually produced the clauses.
+    const segmentMetrics = {
+      modelId: llmSegmentation?.modelId,
+      promptVersion: llmSegmentation?.promptVersion,
+      tokensIn: llmSegmentation?.tokensIn,
+      tokensOut: llmSegmentation?.tokensOut,
+      outcome: segmentFellBack ? ("partial" as const) : ("ok" as const),
+    };
     const locations = locateClauses(segmented.map((c) => c.text), extraction.tokens);
 
     if (segmented.length === 0) {
@@ -216,7 +287,7 @@ export const run = internalAction({
       await ctx.runMutation(internal.stageRuns.insert, {
         documentId,
         stage: "segment",
-        outcome: "ok",
+        ...segmentMetrics,
         startedAt: segmentStart,
         finishedAt: Date.now(),
         latencyMs: Date.now() - segmentStart,
@@ -255,7 +326,7 @@ export const run = internalAction({
     await ctx.runMutation(internal.stageRuns.insert, {
       documentId,
       stage: "segment",
-      outcome: "ok",
+      ...segmentMetrics,
       startedAt: segmentStart,
       finishedAt: segmentEnd,
       latencyMs: segmentEnd - segmentStart,

@@ -27,10 +27,13 @@ invisible to the pipeline as well as to the reader:
 `suppressed_token_count` would sit at zero forever and `eval/adversarial/` would
 have nothing to detect. The text layer is the only route that sees them.
 
-The cost is scanned documents. An image-only PDF has no text layer, throws
-`NoTextDetectedError`, and is rejected with an actionable message. An OCR
-fallback slots in behind the same interface later without changing callers —
-`OCR_PROVIDER` / `OCR_API_KEY` stay in `.env.example` for that.
+The cost is scanned documents, which have no text layer. These now fall back to
+vision OCR (`ocr.ts`): photos (JPG/PNG/WebP/HEIC) go through `extractImageOcr`,
+and image-only PDFs, after pdfjs throws `NoTextDetectedError`, go through
+`extractPdfOcr` (Gemini reads the PDF natively, page by page). OCR paths return
+no per-token boxes (no heat-map overlay) and `suppressedTokenCount` is always 0,
+since OCR only sees visibly painted text. The pdfjs path remains primary for any
+PDF that has a text layer.
 
 ## How each hidden-text technique is caught
 

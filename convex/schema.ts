@@ -120,7 +120,10 @@ export default defineSchema({
   documents: defineTable({
     ownerId: v.id("users"),
     filename: v.string(),
-    storagePath: v.string(), // Convex storage id as a string, set after upload
+    storagePath: v.string(), // Convex storage id as a string, set after upload (first page for multi-image docs)
+    // Multi-image (photographed) contracts: ordered storage ids, one per page.
+    // Absent for single-file documents.
+    pageStoragePaths: v.optional(v.array(v.string())),
     contentHash: v.optional(v.string()),
     contractType: v.optional(v.string()),
     pageCount: v.optional(v.number()),

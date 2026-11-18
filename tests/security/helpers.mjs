@@ -35,11 +35,16 @@ import { readFileSync } from "node:fs";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "../../convex/_generated/api.js";
 
-const EMAIL_A = "clauseguard-sectest-a@example.com";
-const EMAIL_B = "clauseguard-sectest-b@example.com";
-const PASSWORD = "SecTest-ClauseGuard-2026!";
+// Overridable so a run can use throwaway accounts on a chosen deployment
+// instead of the fixed, persistent ones (which are never deleted):
+//   SECTEST_CONVEX_URL  deployment to test (defaults to .env.local's NEXT_PUBLIC_CONVEX_URL)
+//   SECTEST_EMAIL_A / SECTEST_EMAIL_B / SECTEST_PASSWORD  account credentials
+const EMAIL_A = process.env.SECTEST_EMAIL_A ?? "clauseguard-sectest-a@example.com";
+const EMAIL_B = process.env.SECTEST_EMAIL_B ?? "clauseguard-sectest-b@example.com";
+const PASSWORD = process.env.SECTEST_PASSWORD ?? "SecTest-ClauseGuard-2026!";
 
 function readConvexUrl() {
+  if (process.env.SECTEST_CONVEX_URL?.trim()) return process.env.SECTEST_CONVEX_URL.trim();
   const envText = readFileSync(new URL("../../.env.local", import.meta.url), "utf8");
   const match = envText.match(/^NEXT_PUBLIC_CONVEX_URL=(.*)$/m);
   if (!match || !match[1].trim()) {
