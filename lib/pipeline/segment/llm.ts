@@ -42,6 +42,16 @@ export const MAX_LLM_SEGMENT_CHARS = 60_000;
 /** A hung preview API must not hold the pipeline action open. */
 export const SEGMENT_TIMEOUT_MS = 60_000;
 
+/**
+ * Muse Spark is a reasoning model and bills reasoning tokens as output.
+ * Measured live (2026-11-18, two synthetic contracts, 2 runs per cell): every
+ * effort level produced the identical, valid segmentation, while output tokens
+ * climbed with effort -- roughly 0.9k (minimal), 1.0-1.2k (low), 1.7-2.0k
+ * (medium), 3.0-3.4k (high, up to ~19s). Segmentation is mechanical, so use
+ * the cheapest level. Re-measure on long, messy OCR text before raising it.
+ */
+export const SEGMENT_REASONING_EFFORT = "minimal";
+
 /** Clauses must account for at least this share of the non-empty lines.
  *  Title, preamble and signature blocks are legitimately skipped, but a result
  *  that skips most of the document is a bad result. */
@@ -164,10 +174,10 @@ export async function segmentClausesLlm(text: string): Promise<LlmSegmentResult 
       model: resolveLanguageModel(SEGMENT_STAGE_MODEL),
       schema: SegmentResponseSchema,
       prompt: buildSegmentPrompt({ lines }),
-      // Segmentation is mechanical; reasoning tokens bill as output, so keep
-      // the effort low. The provider-name key is how @ai-sdk/openai-compatible
-      // routes this to the request's reasoning_effort.
-      providerOptions: { [META_PROVIDER_NAME]: { reasoningEffort: "low" } },
+      // See SEGMENT_REASONING_EFFORT. The provider-name key is how
+      // @ai-sdk/openai-compatible routes this to the request's
+      // reasoning_effort (confirmed on the wire).
+      providerOptions: { [META_PROVIDER_NAME]: { reasoningEffort: SEGMENT_REASONING_EFFORT } },
       abortSignal: AbortSignal.timeout(SEGMENT_TIMEOUT_MS),
     });
 

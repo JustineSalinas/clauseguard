@@ -41,6 +41,21 @@ The `llm` mode also needs `META_MODEL_API_KEY` set on the Convex deployment.
 - **Prompt injection:** document lines are delimited data in `segment.v1`. The
   worst an obeyed injected line can do is produce ranges that fail validation.
 
+### Measured live (2026-11-18)
+
+Two synthetic contracts (numbered; lettered "Article I-IV" with an injected
+instruction line), real Meta Model API calls:
+
+- `json_schema` response format works and is used (`supportsStructuredOutputs`).
+- Segmentation was identical and valid at every reasoning effort; output tokens
+  rose from ~0.9k (`minimal`) to ~3.0-3.4k (`high`, up to ~19s). The segmenter
+  uses `minimal` (`SEGMENT_REASONING_EFFORT` in `llm.ts`). About 580 input +
+  ~900 output tokens per small contract.
+- On the lettered contract it beat the rule-based segmenter (no phantom title
+  clause, kept "Article I-IV" labels); on the numbered one the two agreed.
+- This is a tiny sample of easy documents, not an evaluation. Compare on
+  `eval/datasets/ph/` before making `llm` the default.
+
 ### What gets recorded
 
 The `segment` `stageRuns` row carries `modelId`, `promptVersion` (`segment.v1`)

@@ -148,8 +148,10 @@ export const SEGMENT_STAGE_MODEL: ModelId = "meta/muse-spark-1-1";
 
 /** Provider name registered with the OpenAI-compatible client. It is also the
  *  key callers must use in `providerOptions` (e.g. `{ [META_PROVIDER_NAME]:
- *  { reasoningEffort: "low" } }`), so it is exported rather than repeated. */
-export const META_PROVIDER_NAME = "meta-model-api";
+ *  { reasoningEffort: "minimal" } }`), so it is exported rather than repeated.
+ *  camelCase on purpose: the AI SDK deprecates the kebab-case form
+ *  ("meta-model-api") and tells you to use "metaModelApi" instead. */
+export const META_PROVIDER_NAME = "metaModelApi";
 
 export function requireApiKeyFor(modelId: ModelId): string {
   const { envVar, label } = MODELS[modelId];
@@ -176,15 +178,16 @@ export function resolveLanguageModel(modelId: ModelId): LanguageModel {
     case "anthropic/claude-sonnet-5-5":
       return anthropic("claude-sonnet-5-5") as unknown as LanguageModel;
     case "meta/muse-spark-1-1":
-      // Meta Model API is OpenAI-compatible. supportsStructuredOutputs is left
-      // false on purpose: json_schema response_format support on this preview
-      // API is unverified, so the SDK uses plain json_object mode and zod
-      // validates the shape either way. Flip it after the Step 0 spike if
-      // Meta confirms json_schema works.
+      // Meta Model API is OpenAI-compatible. supportsStructuredOutputs is true
+      // because json_schema response_format was verified live on 2026-11-18
+      // (valid output on every call, and steadier token use than plain
+      // json_object mode, which the SDK warns can't carry the schema). zod
+      // still validates the shape either way.
       return createOpenAICompatible({
         name: META_PROVIDER_NAME,
         baseURL: "https://api.meta.ai/v1",
         apiKey: process.env.META_MODEL_API_KEY,
+        supportsStructuredOutputs: true,
       })("muse-spark-1.1") as unknown as LanguageModel;
     default:
       return anthropic("claude-haiku-5-5") as unknown as LanguageModel;
