@@ -1,12 +1,14 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CameraCapture } from "@/components/upload/camera-capture";
 import {
+  Camera,
   UploadCloud,
   FileText,
   Image as ImageIcon,
@@ -15,11 +17,20 @@ import {
   AlertCircle,
   Loader2,
   Shield,
+  ArrowUp,
+  ArrowDown,
+  Plus,
 } from "lucide-react";
 
-const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+const MAX_BYTES = 10 * 1024 * 1024; // 10 MB per file
+const MAX_TOTAL_BYTES = 20 * 1024 * 1024; // 20 MB across a multi-page set
+const MAX_PAGES = 20;
 const ACCEPT =
   "application/pdf,.pdf,image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif";
+
+function isPdfFile(f: File): boolean {
+  return f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf");
+}
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -33,21 +44,62 @@ export function UploadForm() {
   const startPipeline = useAction(api.pipeline.start);
   const router = useRouter();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [pending, setPending] = useState(false);
   const [uploadStep, setUploadStep] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [cameraOpen, setCameraOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = useCallback((file: File) => {
-    if (file.size > MAX_BYTES) {
-      setError(`File is ${formatFileSize(file.size)}. ClauseGuard accepts contracts up to 10 MB.`);
-      setSelectedFile(null);
-      return;
-    }
+  const selectedFile = files[0] ?? null;
+
+  // Thumbnails for page images; revoked whenever the set changes or on unmount.
+  const previews = useMemo(
+    () => files.map((f) => (isPdfFile(f) ? "" : URL.createObjectURL(f))),
+    [files],
+  );
+  useEffect(() => () => previews.forEach((u) => u && URL.revokeObjectURL(u)), [previews]);
+
+  const addFiles = useCallback((incoming: File[]) => {
+    if (incoming.length === 0) return;
     setError(null);
-    setSelectedFile(file);
+    setFiles((current) => {
+      const next = [...current, ...incoming];
+      const hasPdf = next.some(isPdfFile);
+      if (hasPdf && next.length > 1) {
+        setError("A PDF is uploaded on its own. Photos of pages can be combined, but not with a PDF.");
+        return current;
+      }
+      if (next.length > MAX_PAGES) {
+        setError(`You can combine up to ${MAX_PAGES} page photos.`);
+        return current;
+      }
+      const tooBig = next.find((f) => f.size > MAX_BYTES);
+      if (tooBig) {
+        setError(`${tooBig.name} is ${formatFileSize(tooBig.size)}. ClauseGuard accepts files up to 10 MB each.`);
+        return current;
+      }
+      if (next.reduce((n, f) => n + f.size, 0) > MAX_TOTAL_BYTES) {
+        setError("These photos total more than 20 MB. Remove some or use smaller images.");
+        return current;
+      }
+      return next;
+    });
+  }, []);
+
+  const removeAt = useCallback((i: number) => {
+    setFiles((c) => c.filter((_, idx) => idx !== i));
+  }, []);
+
+  const move = useCallback((i: number, dir: -1 | 1) => {
+    setFiles((c) => {
+      const j = i + dir;
+      if (j < 0 || j >= c.length) return c;
+      const next = [...c];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
   }, []);
 
   const onDragOver = useCallback((e: React.DragEvent) => {
@@ -68,42 +120,53 @@ export function UploadForm() {
       e.stopPropagation();
       setIsDragging(false);
 
-      const files = e.dataTransfer.files;
-      if (files && files.length > 0) {
-        handleFile(files[0]);
-      }
+      addFiles(Array.from(e.dataTransfer.files ?? []));
     },
-    [handleFile]
+    [addFiles]
   );
 
+  async function uploadOne(file: File): Promise<string> {
+    const uploadUrl = await generateUploadUrl();
+    const result = await fetch(uploadUrl, {
+      method: "POST",
+      headers: { "Content-Type": file.type || "application/pdf" },
+      body: file,
+    });
+    if (!result.ok) throw new Error("Upload failed.");
+    const { storageId } = await result.json();
+    return storageId as string;
+  }
+
   async function handleUpload() {
-    if (!selectedFile) return;
+    if (files.length === 0) return;
 
     setPending(true);
     setError(null);
-    setUploadStep("Saving your file…");
 
     try {
-      const uploadUrl = await generateUploadUrl();
-
-      setUploadStep("Uploading file…");
-      const result = await fetch(uploadUrl, {
-        method: "POST",
-        headers: { "Content-Type": selectedFile.type || "application/pdf" },
-        body: selectedFile,
-      });
-
-      if (!result.ok) throw new Error("Upload failed.");
-      const { storageId } = await result.json();
-
-      setUploadStep("Starting the review…");
-      const documentId = await createDocument({
-        filename: selectedFile.name,
-        storageId,
-      });
+      let documentId;
+      if (files.length === 1) {
+        setUploadStep("Uploading file…");
+        const storageId = await uploadOne(files[0]);
+        setUploadStep("Starting the review…");
+        documentId = await createDocument({
+          filename: files[0].name,
+          storageId: storageId as never,
+        });
+      } else {
+        const storageIds: string[] = [];
+        for (let i = 0; i < files.length; i++) {
+          setUploadStep(`Uploading page ${i + 1} of ${files.length}…`);
+          storageIds.push(await uploadOne(files[i]));
+        }
+        setUploadStep("Starting the review…");
+        documentId = await createDocument({
+          filename: `${files[0].name} (${files.length} pages)`,
+          storageIds: storageIds as never,
+        });
+      }
 
       await startPipeline({ documentId });
-
       router.push(`/dashboard/${documentId}`);
     } catch {
       setError("Unable to process the document upload. Please try again.");
@@ -112,9 +175,8 @@ export function UploadForm() {
     }
   }
 
-  const isPdf =
-    selectedFile?.type === "application/pdf" ||
-    selectedFile?.name.toLowerCase().endsWith(".pdf");
+  const isMulti = files.length > 1;
+  const isPdf = selectedFile ? isPdfFile(selectedFile) : false;
 
   return (
     <div className="flex flex-col gap-4">
@@ -123,15 +185,16 @@ export function UploadForm() {
         ref={inputRef}
         type="file"
         accept={ACCEPT}
+        multiple
         className="sr-only"
         onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleFile(file);
+          addFiles(Array.from(e.target.files ?? []));
+          e.target.value = "";
         }}
       />
 
       {/* Main Drag-and-Drop Area */}
-      {!selectedFile ? (
+      {files.length === 0 && (
         <div
           onDragOver={onDragOver}
           onDragLeave={onDragLeave}
@@ -160,7 +223,7 @@ export function UploadForm() {
           </h3>
 
           <p className="mt-1 text-[0.875rem] text-ink-2">
-            or <span className="font-medium text-[#b04000] underline underline-offset-4">browse files</span> from your computer
+            or <span className="font-medium text-[#b04000] underline underline-offset-4">browse files</span> from your computer. Photographing pages? Select them all at once.
           </p>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
@@ -177,7 +240,23 @@ export function UploadForm() {
             </span>
           </div>
         </div>
-      ) : (
+      )}
+
+      {/* Camera entry point: laptop webcam, USB camera, or a phone's camera. */}
+      {files.length === 0 && (
+        <Button
+          type="button"
+          variant="outline"
+          size="hero"
+          className="gap-2 self-center"
+          onClick={() => setCameraOpen(true)}
+        >
+          <Camera className="size-4" />
+          Scan with your camera
+        </Button>
+      )}
+
+      {files.length > 0 && (
         /* Selected File Card */
         <div className="rounded-xl border border-rule bg-surface p-5 shadow-xs">
           <div className="flex flex-wrap items-center justify-between gap-4">
@@ -186,13 +265,15 @@ export function UploadForm() {
                 {isPdf ? <FileText className="size-6" /> : <ImageIcon className="size-6" />}
               </div>
               <div className="min-w-0">
-                <p className="truncate font-semibold text-ink">{selectedFile.name}</p>
+                <p className="truncate font-semibold text-ink">
+                  {isMulti ? `${files.length} page photos` : selectedFile!.name}
+                </p>
                 <div className="mt-0.5 flex items-center gap-2 text-[0.75rem] text-ink-3">
-                  <span>{formatFileSize(selectedFile.size)}</span>
+                  <span>{formatFileSize(files.reduce((n, f) => n + f.size, 0))}</span>
                   <span>·</span>
                   <span className="inline-flex items-center gap-1 text-[#0c8c5e]">
                     <CheckCircle2 className="size-3" />
-                    {isPdf ? "PDF document" : "Scanned image"}
+                    {isPdf ? "PDF document" : isMulti ? "One contract, in page order" : "Scanned image"}
                   </span>
                 </div>
               </div>
@@ -205,7 +286,7 @@ export function UploadForm() {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                    setSelectedFile(null);
+                    setFiles([]);
                     if (inputRef.current) inputRef.current.value = "";
                   }}
                   className="text-ink-3 hover:text-ink"
@@ -236,8 +317,59 @@ export function UploadForm() {
               </Button>
             </div>
           </div>
+
+          {!isPdf && (
+            <div className="mt-4 border-t border-rule pt-4">
+              <ol className="flex flex-col gap-2">
+                {files.map((f, i) => (
+                  <li key={`${f.name}-${f.size}-${i}`} className="flex items-center gap-3 rounded-lg border border-rule bg-[#fafbfc] p-2">
+                    <span className="w-6 text-center font-mono text-[0.75rem] text-ink-3">{i + 1}</span>
+                    {previews[i] && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={previews[i]} alt={`Page ${i + 1} preview`} className="size-12 rounded object-cover" />
+                    )}
+                    <span className="min-w-0 flex-1 truncate text-[0.8125rem] text-ink">{f.name}</span>
+                    {!pending && (
+                      <div className="flex items-center gap-1">
+                        <Button type="button" variant="ghost" size="sm" disabled={i === 0} onClick={() => move(i, -1)} aria-label={`Move page ${i + 1} up`}>
+                          <ArrowUp className="size-4" />
+                        </Button>
+                        <Button type="button" variant="ghost" size="sm" disabled={i === files.length - 1} onClick={() => move(i, 1)} aria-label={`Move page ${i + 1} down`}>
+                          <ArrowDown className="size-4" />
+                        </Button>
+                        <Button type="button" variant="ghost" size="sm" onClick={() => removeAt(i)} aria-label={`Remove page ${i + 1}`}>
+                          <X className="size-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ol>
+              {!pending && files.length < MAX_PAGES && (
+                <div className="mt-3 flex flex-wrap items-center gap-2 sm:gap-1">
+                  {/* max-sm:h-11 -> 44px touch targets on phones; the compact 28px size stays on desktop. */}
+                  <Button type="button" variant="ghost" size="sm" className="gap-1.5 text-[#b04000] max-sm:h-11 max-sm:px-3 max-sm:text-[0.875rem]" onClick={() => inputRef.current?.click()}>
+                    <Plus className="size-4" />
+                    Add another page
+                  </Button>
+                  <Button type="button" variant="ghost" size="sm" className="gap-1.5 text-[#b04000] max-sm:h-11 max-sm:px-3 max-sm:text-[0.875rem]" onClick={() => setCameraOpen(true)}>
+                    <Camera className="size-4" />
+                    Scan with camera
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
+
+      <CameraCapture
+        open={cameraOpen}
+        onOpenChange={setCameraOpen}
+        onCapture={(file) => addFiles([file])}
+        pageCount={files.length}
+        maxPages={MAX_PAGES}
+      />
 
       {/* Error alert */}
       {error && (

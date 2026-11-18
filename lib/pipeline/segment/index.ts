@@ -26,7 +26,7 @@ export type SegmentedClause = {
 // Matches a clause number at the start of a line: "14.2", "9.1", "5", "12.3.1".
 // Requires at least one space/tab after the number so it doesn't match a
 // page number or a currency figure like "5.2" mid-sentence.
-const CLAUSE_NUMBER = /^(\d{1,3}(?:\.\d{1,3}){0,3})[.)]?[ \t]+/;
+export const CLAUSE_NUMBER = /^(\d{1,3}(?:\.\d{1,3}){0,3})[.)]?[ \t]+/;
 
 /** Keyword -> clause type. Order matters: more specific patterns first, so
  *  "may terminate ... for any reason" matches unilateral before a generic

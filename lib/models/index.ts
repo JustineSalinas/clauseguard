@@ -40,11 +40,19 @@
  * changing which models it ablates needs adviser sign-off, which this
  * change doesn't have. Gemini stays wired up and working for that reason,
  * not because it was left behind by accident.
+ *
+ * ADDED 2026-11-18: Muse Spark 1.1 (Meta Model API, public preview, US-only,
+ * OpenAI-compatible) as the optional LLM clause SEGMENTER -- SEGMENT_STAGE_MODEL
+ * below. Like the Claude move above it is a production-stage model and is
+ * deliberately NOT in ABLATION_MODELS: Objective 3's trio is frozen without
+ * adviser sign-off. Contract text sent to it leaves for a third external
+ * provider (after Google and Anthropic) -- see lib/pipeline/segment/README.md.
  */
 
 import { google } from "@ai-sdk/google";
 import { groq } from "@ai-sdk/groq";
 import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import type { LanguageModel } from "ai";
 
 export type ModelId =
@@ -52,14 +60,15 @@ export type ModelId =
   | "google/gemini-3.5-flash-lite"
   | "groq/gpt-oss-120b"
   | "anthropic/claude-haiku-5-5"
-  | "anthropic/claude-sonnet-5-5";
+  | "anthropic/claude-sonnet-5-5"
+  | "meta/muse-spark-1-1";
 
 export type ModelDef = {
   id: ModelId;
   label: string;
   /** Which env var must be set for this model's provider to work. Checked at
    *  startup by requireApiKeyFor(), not scattered across call sites. */
-  envVar: "GOOGLE_GENERATIVE_AI_API_KEY" | "GROQ_API_KEY" | "ANTHROPIC_API_KEY";
+  envVar: "GOOGLE_GENERATIVE_AI_API_KEY" | "GROQ_API_KEY" | "ANTHROPIC_API_KEY" | "META_MODEL_API_KEY";
 };
 
 export const MODELS: Record<ModelId, ModelDef> = {
@@ -87,6 +96,11 @@ export const MODELS: Record<ModelId, ModelDef> = {
     id: "anthropic/claude-sonnet-5-5",
     label: "Claude Sonnet 5.5",
     envVar: "ANTHROPIC_API_KEY",
+  },
+  "meta/muse-spark-1-1": {
+    id: "meta/muse-spark-1-1",
+    label: "Muse Spark 1.1",
+    envVar: "META_MODEL_API_KEY",
   },
 };
 
@@ -125,6 +139,20 @@ export const SCORE_STAGE_CASCADE_MODEL: ModelId = "anthropic/claude-sonnet-5-5";
  */
 export const OCR_MODEL: ModelId = "google/gemini-3.5-flash";
 
+/**
+ * Model for the optional LLM clause segmenter (lib/pipeline/segment/llm.ts).
+ * Off by default -- convex/pipeline.ts only calls it when the `segmenter`
+ * mode is "llm", and falls back to the rule-based segmenter on any failure.
+ */
+export const SEGMENT_STAGE_MODEL: ModelId = "meta/muse-spark-1-1";
+
+/** Provider name registered with the OpenAI-compatible client. It is also the
+ *  key callers must use in `providerOptions` (e.g. `{ [META_PROVIDER_NAME]:
+ *  { reasoningEffort: "minimal" } }`), so it is exported rather than repeated.
+ *  camelCase on purpose: the AI SDK deprecates the kebab-case form
+ *  ("meta-model-api") and tells you to use "metaModelApi" instead. */
+export const META_PROVIDER_NAME = "metaModelApi";
+
 export function requireApiKeyFor(modelId: ModelId): string {
   const { envVar, label } = MODELS[modelId];
   const key = process.env[envVar];
@@ -149,6 +177,18 @@ export function resolveLanguageModel(modelId: ModelId): LanguageModel {
       return anthropic("claude-haiku-5-5") as unknown as LanguageModel;
     case "anthropic/claude-sonnet-5-5":
       return anthropic("claude-sonnet-5-5") as unknown as LanguageModel;
+    case "meta/muse-spark-1-1":
+      // Meta Model API is OpenAI-compatible. supportsStructuredOutputs is true
+      // because json_schema response_format was verified live on 2026-11-18
+      // (valid output on every call, and steadier token use than plain
+      // json_object mode, which the SDK warns can't carry the schema). zod
+      // still validates the shape either way.
+      return createOpenAICompatible({
+        name: META_PROVIDER_NAME,
+        baseURL: "https://api.meta.ai/v1",
+        apiKey: process.env.META_MODEL_API_KEY,
+        supportsStructuredOutputs: true,
+      })("muse-spark-1.1") as unknown as LanguageModel;
     default:
       return anthropic("claude-haiku-5-5") as unknown as LanguageModel;
   }

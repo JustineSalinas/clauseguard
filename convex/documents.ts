@@ -19,6 +19,11 @@ import { getAuthUserId } from "@convex-dev/auth/server";
 import { recordAudit, removeForDocument, summariseDocument } from "./auditLogs";
 import { assertUploadAllowed } from "./plans";
 
+const MAX_PAGES = 20;
+const MAX_PAGE_BYTES = 10 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 20 * 1024 * 1024;
+const IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"]);
+
 const PROCESSING_STATUSES = new Set([
   "uploaded",
   "extracting",
@@ -90,11 +95,37 @@ export const get = query({
 export const create = mutation({
   args: {
     filename: v.string(),
-    storageId: v.id("_storage"),
+    storageId: v.optional(v.id("_storage")),
+    // Ordered page images of one photographed contract (2-20).
+    storageIds: v.optional(v.array(v.id("_storage"))),
   },
-  handler: async (ctx, { filename, storageId }) => {
+  handler: async (ctx, { filename, storageId, storageIds }) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not signed in.");
+
+    if ((storageId === undefined) === (storageIds === undefined)) {
+      throw new Error("Provide either one file or a set of page images.");
+    }
+
+    if (storageIds) {
+      if (storageIds.length < 2 || storageIds.length > MAX_PAGES) {
+        throw new Error(`A multi-page upload needs between 2 and ${MAX_PAGES} images.`);
+      }
+      if (new Set(storageIds).size !== storageIds.length) {
+        throw new Error("The same image was included more than once.");
+      }
+      // Validate server-side; never trust the client's claims about the files.
+      let total = 0;
+      for (const id of storageIds) {
+        const meta = await ctx.db.system.get(id);
+        if (!meta || !IMAGE_TYPES.has((meta.contentType ?? "").toLowerCase())) {
+          throw new Error("Multi-page uploads accept images only (JPG, PNG, WebP, HEIC).");
+        }
+        if (meta.size > MAX_PAGE_BYTES) throw new Error("An image exceeds the 10 MB limit.");
+        total += meta.size;
+      }
+      if (total > MAX_TOTAL_BYTES) throw new Error("These images total more than 20 MB.");
+    }
 
     await assertUploadAllowed(ctx, userId);
 
@@ -102,7 +133,8 @@ export const create = mutation({
     const documentId = await ctx.db.insert("documents", {
       ownerId: userId,
       filename,
-      storagePath: storageId,
+      storagePath: (storageId ?? storageIds![0]) as string,
+      ...(storageIds ? { pageStoragePaths: storageIds as string[] } : {}),
       status: "uploaded",
       createdAt: now,
       updatedAt: now,
@@ -129,11 +161,13 @@ export const remove = mutation({
     await removeForDocument(ctx, userId, id);
 
     // 1. Delete associated storage file
-    if (doc.storagePath) {
+    const storageIdsToDelete = new Set<string>(doc.pageStoragePaths ?? []);
+    if (doc.storagePath) storageIdsToDelete.add(doc.storagePath);
+    for (const sid of storageIdsToDelete) {
       try {
-        await ctx.storage.delete(doc.storagePath as never);
+        await ctx.storage.delete(sid as never);
       } catch (err) {
-        console.warn(`[documents.remove] Could not delete storage file ${doc.storagePath}`, err);
+        console.warn(`[documents.remove] Could not delete storage file ${sid}`, err);
       }
     }
 
