@@ -1,6 +1,6 @@
 # Segmentation study: rule-based vs LLM (Muse Spark) segmenter
 
-**Date:** 2026-11-18
+**Date:** 2026-11-19
 **Data:** `eval/datasets/ph/benchmark.json` (15 annotated clauses, 14 sources)
 **Harness:** `eval/harness/segmentation-study.mjs`
 
@@ -35,14 +35,14 @@ independent. n=15 unique clauses; read gaps as indicative, not significant.
 | E numbered + page footers | rules | 100% | 100% | 100% | 80% | 1.00x | 22% |
 | E numbered + page footers | LLM (raw; 0/6 fell back) | 100% | 100% | 100% | 100% | 1.00x | 100% |
 | B headed, unnumbered | rules | 94% | 100% | 97% | 0% | 1.07x | 67% |
-| B headed, unnumbered | LLM (raw; 0/6 fell back) | 100% | 100% | 100% | 1% | 1.00x | 100% |
+| B headed, unnumbered | LLM (raw; 0/6 fell back) | 100% | 100% | 100% | 0% | 1.00x | 100% |
 | D Article headings | rules | 94% | 100% | 97% | 0% | 1.07x | 67% |
 | D Article headings | LLM (raw; 0/6 fell back) | 100% | 100% | 100% | 0% | 1.00x | 100% |
 | C unnumbered run-together | rules | 0% | 0% | 0% | 0% | 0.07x | 0% |
-| C unnumbered run-together | LLM (raw; 0/6 fell back) | 100% | 100% | 100% | 100% | 1.00x | 100% |
+| C unnumbered run-together | LLM (raw; 0/6 fell back) | 100% | 100% | 100% | 100% | 1.00x | 99% |
 
 ## LLM cost and latency
 
 30 successful LLM calls (0 of 30 fell back to rules): avg 1309 input /
-1068 output tokens, 2643 ms per document (15 clauses, ~4k chars).
-Total spend for this run at list prices ($1.25 / $4.25 per M tokens): about $0.185.
+1097 output tokens, 2752 ms per document (15 clauses, ~4k chars).
+Total spend for this run at list prices ($1.25 / $4.25 per M tokens): about $0.189.
