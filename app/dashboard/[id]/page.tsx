@@ -12,6 +12,7 @@ import { ReviewView } from "@/components/review/review-view";
 import { ContractHealthCard } from "@/components/review/contract-health-card";
 import { PipelineFlow } from "@/components/review/pipeline-flow";
 import { ReviewedBeacon } from "@/components/review/reviewed-beacon";
+import { AutoRefresh } from "@/components/review/auto-refresh";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/brand/logo";
 import { FileDown, ArrowLeft } from "lucide-react";
@@ -85,10 +86,12 @@ export default async function DocumentReview({
     clauses,
   };
 
-  const isProcessing = PROCESSING.includes(doc.status) && clauses.length === 0;
+  const inFlight = PROCESSING.includes(doc.status);
+  const isProcessing = inFlight && clauses.length === 0;
 
   return (
     <div className="min-h-screen bg-[#fafbfc]">
+      {inFlight && <AutoRefresh />}
       <header className="border-b border-rule bg-surface sticky top-0 z-40">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
           <div className="flex min-w-0 items-center gap-3 sm:gap-4">
@@ -149,7 +152,7 @@ export default async function DocumentReview({
           <div className="mt-8">
             <PipelineFlow status={doc.status} />
             <p className="mt-4 text-center text-xs text-ink-3">
-              Clauses appear here as they&rsquo;re found. Reload in a moment.
+              Clauses appear here as they&rsquo;re found. This page updates automatically.
             </p>
           </div>
         ) : clauses.length === 0 ? (
