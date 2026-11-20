@@ -1,0 +1,13 @@
+@page { size: Letter; margin: 1in; }
+body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.35; text-align: justify; color: #000; }
+.c { text-align: center; margin: 0; }
+h1 { text-align: center; font-size: 17pt; text-decoration: underline; margin: 34px 0 26px; letter-spacing: 1px; }
+.hdr { text-align: center; margin-bottom: 4px; }
+p { margin: 0 0 12px; text-indent: 0.5in; }
+p.n { text-indent: 0; }
+ol { margin: 0 0 12px; padding-left: 0.5in; } ol li { margin-bottom: 10px; padding-left: 4px; }
+.w { text-align: center; letter-spacing: 4px; font-weight: bold; margin: 18px 0; }
+.sig { display: flex; justify-content: space-between; margin-top: 40px; text-indent: 0; page-break-inside: avoid; }
+.sig div { width: 46%; text-align: center; } .line { border-top: 1px solid #000; margin-top: 38px; padding-top: 3px; }
+.ack { page-break-inside: avoid; margin-top: 26px; text-indent: 0; }
+.ack p { text-indent: 0.5in; }
