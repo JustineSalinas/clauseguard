@@ -7,6 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CameraCapture } from "@/components/upload/camera-capture";
+import { prepareImage } from "@/lib/image-prep";
 import {
   Camera,
   UploadCloud,
@@ -50,6 +51,8 @@ export function UploadForm() {
   const [uploadStep, setUploadStep] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [cameraOpen, setCameraOpen] = useState(false);
+  // Quality warnings (blurry / dark) by prepared File; advisory, never blocks.
+  const [warnings, setWarnings] = useState<Map<File, string>>(new Map());
   const inputRef = useRef<HTMLInputElement>(null);
 
   const selectedFile = files[0] ?? null;
@@ -61,9 +64,17 @@ export function UploadForm() {
   );
   useEffect(() => () => previews.forEach((u) => u && URL.revokeObjectURL(u)), [previews]);
 
-  const addFiles = useCallback((incoming: File[]) => {
-    if (incoming.length === 0) return;
+  const addFiles = useCallback(async (picked: File[]) => {
+    if (picked.length === 0) return;
     setError(null);
+    // Downscale/compress page photos and check them before the size limits
+    // apply, so an oversized phone photo no longer has to be rejected.
+    const prepared = await Promise.all(
+      picked.map((f) => (isPdfFile(f) ? { file: f, warning: null } : prepareImage(f))),
+    );
+    const incoming = prepared.map((p) => p.file);
+    const newWarnings = prepared.filter((p) => p.warning).map((p) => [p.file, p.warning!] as const);
+    if (newWarnings.length) setWarnings((w) => new Map([...w, ...newWarnings]));
     setFiles((current) => {
       const next = [...current, ...incoming];
       const hasPdf = next.some(isPdfFile);
@@ -328,7 +339,15 @@ export function UploadForm() {
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={previews[i]} alt={`Page ${i + 1} preview`} className="size-12 rounded object-cover" />
                     )}
-                    <span className="min-w-0 flex-1 truncate text-[0.8125rem] text-ink">{f.name}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[0.8125rem] text-ink">{f.name}</span>
+                      {warnings.get(f) && (
+                        <span className="flex items-start gap-1 text-[0.75rem] text-amber-700">
+                          <AlertCircle className="mt-0.5 size-3 shrink-0" />
+                          {warnings.get(f)}
+                        </span>
+                      )}
+                    </span>
                     {!pending && (
                       <div className="flex items-center gap-1">
                         <Button type="button" variant="ghost" size="sm" disabled={i === 0} onClick={() => move(i, -1)} aria-label={`Move page ${i + 1} up`}>
