@@ -1,55 +1,19 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { fetchQuery } from "convex/nextjs";
+import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { convexAuthNextjsToken, isAuthenticatedNextjs } from "@convex-dev/auth/nextjs/server";
 import { api } from "@/convex/_generated/api";
 import { UploadForm } from "@/components/upload/upload-form";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { ContractsList } from "@/components/dashboard/contracts-list";
+import { LiveContracts } from "@/components/dashboard/live-contracts";
 import { ProductTour } from "@/components/dashboard/product-tour";
-import { FileText, Clock, AlertTriangle, CheckCircle2, ShieldCheck, Scale } from "lucide-react";
+import { ShieldCheck, Scale } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Dashboard | ClauseGuard",
   description: "Review and manage freelance contracts grounded in Philippine statutory law.",
 };
-
-function StatTile({
-  icon: Icon,
-  label,
-  value,
-  accent = false,
-}: {
-  icon: typeof FileText;
-  label: string;
-  value: number;
-  accent?: boolean;
-}) {
-  return (
-    <div
-      className={`flex items-center gap-3.5 rounded-xl border p-4 shadow-xs transition-colors ${
-        accent
-          ? "border-[#e8c6a8] bg-[#fbeee4]/30"
-          : "border-rule bg-surface hover:bg-raised"
-      }`}
-    >
-      <div
-        className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
-          accent ? "bg-[#b04000] text-white" : "bg-[#fbeee4] text-[#b04000]"
-        }`}
-      >
-        <Icon className="size-5" />
-      </div>
-      <div className="min-w-0">
-        <div className="font-display text-2xl font-bold tracking-tight text-ink">
-          {value}
-        </div>
-        <div className="text-[0.75rem] font-medium text-ink-3">{label}</div>
-      </div>
-    </div>
-  );
-}
 
 export default async function Dashboard() {
   if (!(await isAuthenticatedNextjs())) {
@@ -57,10 +21,9 @@ export default async function Dashboard() {
   }
 
   const token = await convexAuthNextjsToken();
-  const [user, rows, stats] = await Promise.all([
+  const [user, preloadedDocs] = await Promise.all([
     fetchQuery(api.users.me, {}, { token }),
-    fetchQuery(api.documents.listMine, {}, { token }),
-    fetchQuery(api.documents.statsForMine, {}, { token }),
+    preloadQuery(api.documents.listMine, {}, { token }),
   ]);
 
   const email = user?.email ?? "your account";
@@ -96,21 +59,7 @@ export default async function Dashboard() {
             <UploadForm />
           </section>
 
-          {rows.length > 0 && (
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4" data-tour="stats">
-              <StatTile icon={FileText} label="Total Contracts" value={stats.total} />
-              <StatTile icon={Clock} label="In Progress" value={stats.inProgress} accent={stats.inProgress > 0} />
-              <StatTile icon={AlertTriangle} label="Needs Attention" value={stats.needsReview} />
-              <StatTile icon={CheckCircle2} label="Reviewed" value={stats.complete} />
-            </div>
-          )}
-
-          <section className="mt-8" data-tour="contracts-list">
-            <h2 className="mb-4 font-display text-lg font-semibold tracking-tight text-ink">
-              Review history
-            </h2>
-            <ContractsList documents={rows} />
-          </section>
+          <LiveContracts preloaded={preloadedDocs} />
 
           <footer className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-6 text-[0.75rem] text-ink-3">
             <div className="flex items-center gap-1.5">
