@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
-import { fetchQuery } from "convex/nextjs";
+import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { convexAuthNextjsToken, isAuthenticatedNextjs } from "@convex-dev/auth/nextjs/server";
 import { api } from "@/convex/_generated/api";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { ActivityLog } from "@/components/dashboard/activity-log";
+import { LiveActivity } from "@/components/dashboard/live-activity";
 
 export const metadata: Metadata = {
   title: "Activity log | ClauseGuard",
@@ -19,8 +19,8 @@ export default async function ActivityPage() {
   const token = await convexAuthNextjsToken();
   const [user, summary, rows] = await Promise.all([
     fetchQuery(api.users.me, {}, { token }),
-    fetchQuery(api.auditLogs.summaryMine, {}, { token }),
-    fetchQuery(api.auditLogs.listMine, {}, { token }),
+    preloadQuery(api.auditLogs.summaryMine, {}, { token }),
+    preloadQuery(api.auditLogs.listMine, {}, { token }),
   ]);
   const email = user?.email ?? "your account";
 
@@ -29,7 +29,7 @@ export default async function ActivityPage() {
       <Sidebar email={email} activeHref="/dashboard/activity" />
       <div className="flex-1">
         <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
-          <ActivityLog summary={summary} events={rows} />
+          <LiveActivity summary={summary} events={rows} />
         </main>
       </div>
     </div>

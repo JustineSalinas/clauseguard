@@ -45,6 +45,28 @@ export const listScoresForDocument = query({
       .withIndex("by_document_ordinal", (q) => q.eq("documentId", documentId))
       .collect();
 
+    // Static-mapping provisions depend only on clauseType; many clauses share
+    // one, so resolve each type once per query instead of once per clause.
+    type Provisions = Array<{ code: "CIVIL" | "LABOR"; article: string; heading?: string; text: string }>;
+    const staticByType = new Map<string, Promise<Provisions>>();
+    const staticFor = (clauseType: string) => {
+      let hit = staticByType.get(clauseType);
+      if (!hit) {
+        hit = (async () => {
+          const mappings = await ctx.db
+            .query("provisionMappings")
+            .withIndex("by_type_rank", (q) => q.eq("clauseType", clauseType as never))
+            .collect();
+          const fetched = await Promise.all(mappings.map((m) => ctx.db.get(m.provisionId)));
+          return fetched
+            .filter((p): p is NonNullable<typeof p> => p !== null)
+            .map((p) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
+        })();
+        staticByType.set(clauseType, hit);
+      }
+      return hit;
+    };
+
     const clauseData = await Promise.all(
       clauses.map(async (c) => {
         const score = await ctx.db
@@ -69,14 +91,7 @@ export const listScoresForDocument = query({
               .map((p) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
           } else if (c.clauseType && c.clauseType !== "other") {
             // 2. Static mapping fallback
-            const mappings = await ctx.db
-              .query("provisionMappings")
-              .withIndex("by_type_rank", (q) => q.eq("clauseType", c.clauseType!))
-              .collect();
-            const fetched = await Promise.all(mappings.map((m) => ctx.db.get(m.provisionId)));
-            provisions = fetched
-              .filter((p): p is NonNullable<typeof p> => p !== null)
-              .map((p) => ({ code: p.code, article: p.article, heading: p.heading, text: p.text }));
+            provisions = await staticFor(c.clauseType);
           }
         }
 

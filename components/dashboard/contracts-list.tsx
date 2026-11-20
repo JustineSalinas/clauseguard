@@ -93,7 +93,18 @@ export function ContractsList({ documents }: { documents: DocumentItem[] }) {
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
 
   const sweepStuck = useMutation(api.documents.sweepStuck);
-  const removeDocument = useMutation(api.documents.remove);
+  const removeDocument = useMutation(api.documents.remove).withOptimisticUpdate(
+    (localStore, { id }) => {
+      const current = localStore.getQuery(api.documents.listMine, {});
+      if (current !== undefined) {
+        localStore.setQuery(
+          api.documents.listMine,
+          {},
+          current.filter((d) => d._id !== id),
+        );
+      }
+    },
+  );
   const retryPipeline = useAction(api.pipeline.retry);
 
   useEffect(() => {
